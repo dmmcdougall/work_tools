@@ -1,0 +1,6 @@
+#
+#git config --global core.excludesfile ~/.gitignore_global
+#
+
+#ignore config files
+config.py
