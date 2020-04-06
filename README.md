@@ -10,10 +10,3 @@ This overhaul has been done for several reasons.
 __________________________________________________
 __________________________________________________
 __________________________________________________
-
-
-# timesheet_scrapper_2019
-
-This has been built to scrape the data from the Salaried Heads timesheets.  
-
-At last post, only the scrapper is being used from this folder
