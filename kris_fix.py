@@ -1,3 +1,5 @@
+#NOT CURRENTLY USED
+
 #imported from standard library
 
 #imported from third party repos
@@ -7,12 +9,12 @@
 # write time in...
 def kris_fix1():
     
-    kf_num = head_num #changing the namespace so I can adjust it.
-    kf_row = ts_row #changing the namespace so I can adjust it.
-    kf_rrow = r_row #changing the namespace so I can adjust it.
+    head_num = head_num #changing the namespace so I can adjust it.
+    ts_row = ts_row #changing the namespace so I can adjust it.
+    r_row = r_row #changing the namespace so I can adjust it.
     
-    if kf_num == 3:
-        data = read_sheet.cell_value(kf_rrow, 2)
+    if head_num == 3:
+        data = read_sheet.cell_value(r_row, 2)
         kris_str = str(data)
         count_int = len(kris_str)
 
@@ -27,9 +29,9 @@ def kris_fix1():
 
         time = str(kris_tuple[0]) + str(kris_tuple[1]) + ":" + str(kris_tuple[2]) + str(kris_tuple[3])
         print(time)
-        new_sheet.write(kf_row, 4, time)
+        new_sheet.write(ts_row, 4, time)
     else:
-        data = read_sheet.cell_value(kf_rrow, 2)
+        data = read_sheet.cell_value(r_row, 2)
         if data == '':
             shift_in_tuple = (0, 0, 0, 0, 0, 0)
         else:
@@ -44,17 +46,17 @@ def kris_fix1():
             half2_time = "%s" % (shift_in_tuple[4])
         time = half1_time + ":" + half2_time
         print(time)
-        new_sheet.write(kf_row, 4, time)
+        new_sheet.write(ts_row, 4, time)
 
 # and time out...
 def kris_fix2():
 
-    kf_num = head_num #changing the namespace so I can adjust it.
-    kf_row = ts_row #changing the namespace so I can adjust it.
-    kf_rrow = r_row #changing the namespace so I can adjust it.
+    head_num = head_num #changing the namespace so I can adjust it.
+    ts_row = ts_row #changing the namespace so I can adjust it.
+    r_row = r_row #changing the namespace so I can adjust it.
 
     if config.head_num == 3:
-        data = read_sheet.cell_value(kf_rrow, 3)
+        data = read_sheet.cell_value(r_row, 3)
         kris_str = str(data)
         count_int = len(kris_str)
 
@@ -69,10 +71,10 @@ def kris_fix2():
 
         time = str(kris_tuple[0]) + str(kris_tuple[1]) + ":" + str(kris_tuple[2]) + str(kris_tuple[3])
         print(time)
-        new_sheet.write(kf_row, 5, time)
+        new_sheet.write(ts_row, 5, time)
 
     else:
-        data = read_sheet.cell_value(kf_rrow, 3)
+        data = read_sheet.cell_value(r_row, 3)
         if data == '':
             shift_out_tuple = (0, 0, 0, 0, 0, 0)
         else:
@@ -87,9 +89,9 @@ def kris_fix2():
             half2_time = "%s" % (shift_out_tuple[4])
         time = half1_time + ":" + half2_time
         print(time)
-        new_sheet.write(kf_row, 5, time)
+        new_sheet.write(ts_row, 5, time)
 
-if __name == '__main__':
+if __name__ == '__main__':
     print()
     print('------------')
     print("METHOD CHECK")

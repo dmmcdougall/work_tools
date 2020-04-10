@@ -1,5 +1,6 @@
-#imported from standard library
+# NOT CURRENTLY USED
 
+#imported from standard library
 
 #imported from third party repos
 
@@ -97,49 +98,9 @@ def timesheet2015():
 
             # write time in
 
-            kris_fix1()
-
-
-                # else:
-                #     data = read_sheet.cell_value(r_row, 2)
-                #     if data == '':
-                #         shift_in_tuple = (0, 0, 0, 0, 0, 0)
-                #     else:
-                #         shift_in_tuple = xlrd.xldate_as_tuple(data, 1)
-                #     if shift_in_tuple[3] < 10:
-                #         half1_time = "0%s" % (shift_in_tuple[3])
-                #     else:
-                #         half1_time = "%s" % (shift_in_tuple[3])
-                #     if shift_in_tuple[4] == 0:
-                #         half2_time = "%s0" % (shift_in_tuple[4])
-                #     else:
-                #         half2_time = "%s" % (shift_in_tuple[4])
-                #     time = half1_time + ":" + half2_time
-                #     print(time)
-                #     new_sheet.write(ts_row, 4, time)
-
-                ## ...and time   out
+                kris_fix1()
 
                 kris_fix2()
-
-                # else:
-                #     data = read_sheet.cell_value(r_row, 3)
-                #     if data == '':
-                #         shift_out_tuple = (0, 0, 0, 0, 0, 0)
-                #     else:
-                #         shift_out_tuple = xlrd.xldate_as_tuple(data, 1)
-                #     if shift_out_tuple[3] < 10:
-                #         half1_time = "0%s" % (shift_out_tuple[3])
-                #     else:
-                #         half1_time = "%s" % (shift_out_tuple[3])
-                #     if shift_out_tuple[4] == 0:
-                #         half2_time = "%s0" % (shift_out_tuple[4])
-                #     else:
-                #         half2_time = "%s" % (shift_out_tuple[4])
-                #     time = half1_time + ":" + half2_time
-                #     print(time)
-                #     new_sheet.write(ts_row, 5, time)
-
 
                 # write reg time, ot, dt
                 w_col = 8
@@ -192,7 +153,7 @@ def timesheet2015():
             else:
                 print("no data in cel E" + str((r_row) + 1))  # move on to the next time slot
 
-if __name == '__main__':
+if __name__ == '__main__':
     print()
     print('------------')
     print("METHOD CHECK")

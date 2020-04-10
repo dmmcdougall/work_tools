@@ -3,6 +3,9 @@
   <component name="ChangeListManager">
     <list default="true" id="f517df6b-abc2-45fb-8c1c-df503ff9fbb8" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app.py" beforeDir="false" afterPath="$PROJECT_DIR$/app.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/kris_fix.py" beforeDir="false" afterPath="$PROJECT_DIR$/kris_fix.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/timesheet2015.py" beforeDir="false" afterPath="$PROJECT_DIR$/timesheet2015.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -15,17 +18,6 @@
         <option value="Python Script" />
       </list>
     </option>
-  </component>
-  <component name="FindInProjectRecents">
-    <findStrings>
-      <find>ts_row</find>
-      <find>w_row</find>
-      <find>r_row</find>
-    </findStrings>
-    <replaceStrings>
-      <replace>kf_row</replace>
-      <replace>kf_rrow</replace>
-    </replaceStrings>
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -130,9 +122,25 @@
       <screen x="0" y="0" width="1680" height="1020" />
     </state>
     <state x="620" y="265" key="FileChooserDialogImpl/-900.-133.900.1410/1680.0.1440.870/0.0.1680.1020@0.0.1680.1020" timestamp="1586293218530" />
-    <state x="536" y="334" key="com.intellij.ide.util.TipDialog" timestamp="1586293195089">
+    <state width="1659" height="413" key="GridCell.Tab.0.bottom" timestamp="1586548490662">
       <screen x="0" y="0" width="1680" height="1020" />
     </state>
-    <state x="536" y="334" key="com.intellij.ide.util.TipDialog/-900.-133.900.1410/1680.0.1440.870/0.0.1680.1020@0.0.1680.1020" timestamp="1586293195089" />
+    <state width="1659" height="413" key="GridCell.Tab.0.bottom/-900.-133.900.1410/1680.0.1440.870/0.0.1680.1020@0.0.1680.1020" timestamp="1586548490662" />
+    <state width="1659" height="413" key="GridCell.Tab.0.center" timestamp="1586548490662">
+      <screen x="0" y="0" width="1680" height="1020" />
+    </state>
+    <state width="1659" height="413" key="GridCell.Tab.0.center/-900.-133.900.1410/1680.0.1440.870/0.0.1680.1020@0.0.1680.1020" timestamp="1586548490662" />
+    <state width="1659" height="413" key="GridCell.Tab.0.left" timestamp="1586548490662">
+      <screen x="0" y="0" width="1680" height="1020" />
+    </state>
+    <state width="1659" height="413" key="GridCell.Tab.0.left/-900.-133.900.1410/1680.0.1440.870/0.0.1680.1020@0.0.1680.1020" timestamp="1586548490662" />
+    <state width="1659" height="413" key="GridCell.Tab.0.right" timestamp="1586548490662">
+      <screen x="0" y="0" width="1680" height="1020" />
+    </state>
+    <state width="1659" height="413" key="GridCell.Tab.0.right/-900.-133.900.1410/1680.0.1440.870/0.0.1680.1020@0.0.1680.1020" timestamp="1586548490662" />
+    <state x="536" y="334" key="com.intellij.ide.util.TipDialog" timestamp="1586546867378">
+      <screen x="0" y="0" width="1680" height="1020" />
+    </state>
+    <state x="536" y="334" key="com.intellij.ide.util.TipDialog/-900.-133.900.1410/1680.0.1440.870/0.0.1680.1020@0.0.1680.1020" timestamp="1586546867378" />
   </component>
 </project>
