@@ -3,8 +3,6 @@
   <component name="ChangeListManager">
     <list default="true" id="f517df6b-abc2-45fb-8c1c-df503ff9fbb8" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/kris_fix.py" beforeDir="false" afterPath="$PROJECT_DIR$/kris_fix.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/myClasses.py" beforeDir="false" afterPath="$PROJECT_DIR$/myClasses.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -29,6 +27,7 @@
     <option name="showLibraryContents" value="true" />
   </component>
   <component name="PropertiesComponent">
+    <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$/../ODBCconnect" />
   </component>
   <component name="RunManager" selected="Python.myClasses">
@@ -159,9 +158,9 @@
       <screen x="0" y="0" width="1680" height="1020" />
     </state>
     <state width="1659" height="413" key="GridCell.Tab.0.right/-900.-133.900.1410/1680.0.1440.870/0.0.1680.1020@0.0.1680.1020" timestamp="1586552807132" />
-    <state x="536" y="334" key="com.intellij.ide.util.TipDialog" timestamp="1586546867378">
+    <state x="536" y="334" key="com.intellij.ide.util.TipDialog" timestamp="1586554362291">
       <screen x="0" y="0" width="1680" height="1020" />
     </state>
-    <state x="536" y="334" key="com.intellij.ide.util.TipDialog/-900.-133.900.1410/1680.0.1440.870/0.0.1680.1020@0.0.1680.1020" timestamp="1586546867378" />
+    <state x="536" y="334" key="com.intellij.ide.util.TipDialog/-900.-133.900.1410/1680.0.1440.870/0.0.1680.1020@0.0.1680.1020" timestamp="1586554362291" />
   </component>
 </project>
