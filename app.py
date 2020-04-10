@@ -7,6 +7,7 @@ from xlutils.copy import copy
 
 #imported from local directories
 import config as cfg
+import kris_fix as kf
 from myClasses import searchDict
 
 print()
@@ -135,79 +136,12 @@ def main():
                         print(shift_date)
 
                     # the kris_fix1 is done to deal with KL's custom formatting'
+
                     # write time in
-
-                    if head_num == 3:
-                        data = read_sheet.cell_value(r_row, 2)
-                        kris_str = str(data)
-                        count_int = len(kris_str)
-
-                        if count_int == 1:
-                            kris_tuple = (0, data, 0, 0)
-                        elif count_int == 2:
-                            kris_tuple = (kris_str[0], kris_str[1], 0, 0)
-                        elif count_int == 3:
-                            kris_tuple = (0, kris_str[0], kris_str[1], kris_str[2])
-                        else:
-                            kris_tuple = (kris_str[0], kris_str[1], kris_str[2], kris_str[3])
-
-                        time = str(kris_tuple[0]) + str(kris_tuple[1]) + ":" + str(kris_tuple[2]) + str(kris_tuple[3])
-                        print(time)
-                        new_sheet.write(w_row, 4, time)
-                    else:
-                        data = read_sheet.cell_value(r_row, 2)
-                        if data == '':
-                            shift_in_tuple = (0, 0, 0, 0, 0, 0)
-                        else:
-                            shift_in_tuple = xlrd.xldate_as_tuple(data, 1)
-                        if shift_in_tuple[3] < 10:
-                            half1_time = "0%s" % (shift_in_tuple[3])
-                        else:
-                            half1_time = "%s" % (shift_in_tuple[3])
-                        if shift_in_tuple[4] == 0:
-                            half2_time = "%s0" % (shift_in_tuple[4])
-                        else:
-                            half2_time = "%s" % (shift_in_tuple[4])
-                        time = half1_time + ":" + half2_time
-                        print(time)
-                        new_sheet.write(w_row, 4, time)
+                    kf.kris_fix1(head_num,w_row,r_row,read_sheet,new_sheet) # kris_fix1(head, write_row, read_row, sheet)
 
                     # write time out - kris_fix2
-                    if head_num == 3:
-                        data = read_sheet.cell_value(r_row, 3)
-                        kris_str = str(data)
-                        count_int = len(kris_str)
-
-                        if count_int == 1:
-                            kris_tuple = (0, data, 0, 0)
-                        elif count_int == 2:
-                            kris_tuple = (kris_str[0], kris_str[1], 0, 0)
-                        elif count_int == 3:
-                            kris_tuple = (0, kris_str[0], kris_str[1], kris_str[2])
-                        else:
-                            kris_tuple = (kris_str[0], kris_str[1], kris_str[2], kris_str[3])
-
-                        time = str(kris_tuple[0]) + str(kris_tuple[1]) + ":" + str(kris_tuple[2]) + str(kris_tuple[3])
-                        print(time)
-                        new_sheet.write(w_row, 5, time)
-
-                    else:
-                        data = read_sheet.cell_value(r_row, 3)
-                        if data == '':
-                            shift_out_tuple = (0, 0, 0, 0, 0, 0)
-                        else:
-                            shift_out_tuple = xlrd.xldate_as_tuple(data, 1)
-                        if shift_out_tuple[3] < 10:
-                            half1_time = "0%s" % (shift_out_tuple[3])
-                        else:
-                            half1_time = "%s" % (shift_out_tuple[3])
-                        if shift_out_tuple[4] == 0:
-                            half2_time = "%s0" % (shift_out_tuple[4])
-                        else:
-                            half2_time = "%s" % (shift_out_tuple[4])
-                        time = half1_time + ":" + half2_time
-                        print(time)
-                        new_sheet.write(w_row, 5, time)
+                    kf.kris_fix2(head_num, w_row, r_row, read_sheet, new_sheet)
 
                     # write reg time, ot, dt
                     w_col = 8
