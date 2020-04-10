@@ -1,16 +1,19 @@
-#NOT CURRENTLY USED
+# Kris changed the formatting of his timesheet to make it more flexible and subsueqently
+# killed the scrapper.  This is the work around
+# this function is for writing the begin and end times of calls
 
-#imported from standard library
+# imported from standard library
 
-#imported from third party repos
+# imported from third party repos
 import xlrd
 
-#imported from local directories
+# imported from local directories
+
 
 # write time in...
 def kris_fix1(head, write_row, read_row, rsheet, wsheet):
     
-    if head == 3:
+    if head == 3: # if it's kris, then...
         data = rsheet.cell_value(read_row, 2)
         kris_str = str(data)
         count_int = len(kris_str)
@@ -27,7 +30,7 @@ def kris_fix1(head, write_row, read_row, rsheet, wsheet):
         time = str(kris_tuple[0]) + str(kris_tuple[1]) + ":" + str(kris_tuple[2]) + str(kris_tuple[3])
         print(time)
         wsheet.write(write_row, 4, time)
-    else:
+    else: # it's not kris, so....
         data = rsheet.cell_value(read_row, 2)
         if data == '':
             shift_in_tuple = (0, 0, 0, 0, 0, 0)

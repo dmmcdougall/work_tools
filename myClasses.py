@@ -1,4 +1,10 @@
+# imported from the standard library
 import re
+
+# imported from third party repos
+
+# imported from local directories
+import config as cfg
 
 class salariedHead:
 
@@ -11,7 +17,7 @@ class salariedHead:
         self.HeadID = headID
         self.lastName = lastName
         self. firstName = firstName
-        self.email = firstName[0].lower() + lastName.lower() + '@artscommons.ca'
+        self.email = firstName[0].lower() + lastName.lower() + cfg.domain
         self.dir_path = dir_path
         self.has_left = has_left
         salariedHead.headCount += 1 #this increments every time an employee is created
@@ -29,6 +35,7 @@ def testheads():
     Wi = salariedHead('z', 99, 'Wonka', 'Willy', 'N/A', False)
     print(Wi)
     print(Wi.fullName())
+    print(Wi.email)
     print(salariedHead.headCount)
 
 class searchDict(dict):
