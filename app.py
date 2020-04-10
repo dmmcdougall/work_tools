@@ -10,12 +10,6 @@ import config as cfg
 import kris_fix as kf
 from myClasses import searchDict
 
-print()
-print("++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++")
-print("         timesheetscrapper_python3.py file launched")
-print("++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++")
-print()
-
 def main():
 
     # load the write workbook
@@ -136,9 +130,10 @@ def main():
                         print(shift_date)
 
                     # the kris_fix1 is done to deal with KL's custom formatting'
+                    # kris_fix1(head, write row, read row, write sheet, read sheet)
 
                     # write time in
-                    kf.kris_fix1(head_num,w_row,r_row,read_sheet,new_sheet) # kris_fix1(head, write_row, read_row, sheet)
+                    kf.kris_fix1(head_num,w_row,r_row,read_sheet,new_sheet)
 
                     # write time out - kris_fix2
                     kf.kris_fix2(head_num, w_row, r_row, read_sheet, new_sheet)
@@ -200,6 +195,12 @@ def main():
     print(f"{cfg.home}\Desktop\scraped_by_python.xls")
     new_book.save(f"{cfg.home}\Desktop\scraped_by_python.xls")
     print()
+
+print()
+print("++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++")
+print("         timesheetscrapper_python3.py file launched")
+print("++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++")
+print()
 
 if __name__ == '__main__':
     main()
