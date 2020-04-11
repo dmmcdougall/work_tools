@@ -7,4 +7,5 @@
 # imported from local directories
 
 def timesheet2011():
-    print("I should probably write this one day")
+    print("If you are reading this, then I'm going to have to actually write this code.")
+    print("Sorry.  :(")
