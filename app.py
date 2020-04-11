@@ -28,16 +28,20 @@ def write_time(timeread_sheet, timer_row,timer_col, timenew_sheet, timew_row):
     else:
         shift_in_tuple = xlrd.xldate_as_tuple(data, 1)
     if shift_in_tuple[3] < 10:
-        half1_time = f"{shift_in_tuple[3]}"
+        half1_time = "0%s" % (shift_in_tuple[3])
     else:
-        half1_time = f"{shift_in_tuple[3]}"
+        half1_time = "%s" % (shift_in_tuple[3])
     if shift_in_tuple[4] == 0:
-        half2_time = f"{shift_in_tuple[4]}"
+        half2_time = "%s0" % (shift_in_tuple[4])
     else:
-        half2_time = f"{shift_in_tuple[4]}"
+        half2_time = "%s" % (shift_in_tuple[4])
     time = half1_time + ":" + half2_time
     print(time)
     timenew_sheet.write(timew_row, timer_col + 2, time)
+
+def write_hrs(hrsread_sheet, hrsr_row, hrsr_col, hrsnew_sheet, hrsw_row, hrsw_col):
+    data = hrsread_sheet.cell_value(hrsr_row, hrsr_col)
+    hrsnew_sheet.write(hrsw_row, hrsw_col, data)
 
 def main():
 
@@ -124,23 +128,20 @@ def main():
                         write_time(read_sheet, r_row, 2, new_sheet, w_row)
 
                     # write time out - kris_fix2
-                    if head_num == 3: # and again, if it's kris, then...
+                    if head_num == 3:
                         kf.kf_format(w_row, r_row, new_sheet, read_sheet, 3)
-                    else: # and if it's not kris....
-                        write_time(read_sheet, r_row, 4, new_sheet, w_row)
+                    else:
+                        write_time(read_sheet, r_row, 3, new_sheet, w_row)
 
                     # write reg time, ot, dt
                     w_col = 8
-                    data = read_sheet.cell_value(r_row, 4)
-                    new_sheet.write(w_row, w_col, data)
+                    write_hrs(read_sheet, r_row, 4, new_sheet, w_row, w_col)
                     w_col = w_col + 1
 
-                    data = read_sheet.cell_value(r_row, 5)
-                    new_sheet.write(w_row, w_col, data)
+                    write_hrs(read_sheet, r_row, 5, new_sheet, w_row, w_col)
                     w_col = w_col + 1
 
-                    data = read_sheet.cell_value(r_row, 6)
-                    new_sheet.write(w_row, w_col, data)
+                    write_hrs(read_sheet, r_row, 6, new_sheet, w_row, w_col)
 
                     # write accounting code
                     data = read_sheet.cell_value(r_row, 8)
