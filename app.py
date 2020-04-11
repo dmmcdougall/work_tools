@@ -28,13 +28,13 @@ def write_time(timeread_sheet, timer_row,timer_col, timenew_sheet, timew_row):
     else:
         shift_in_tuple = xlrd.xldate_as_tuple(data, 1)
     if shift_in_tuple[3] < 10:
-        half1_time = "0%s" % (shift_in_tuple[3])
+        half1_time = f"{shift_in_tuple[3]}"
     else:
-        half1_time = "%s" % (shift_in_tuple[3])
+        half1_time = f"{shift_in_tuple[3]}"
     if shift_in_tuple[4] == 0:
-        half2_time = "%s0" % (shift_in_tuple[4])
+        half2_time = f"{shift_in_tuple[4]}0"
     else:
-        half2_time = "%s" % (shift_in_tuple[4])
+        half2_time = f"{shift_in_tuple[4]}"
     time = half1_time + ":" + half2_time
     print(time)
     timenew_sheet.write(timew_row, timer_col + 2, time)
