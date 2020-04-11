@@ -9,6 +9,17 @@ from xlutils.copy import copy
 import config as cfg
 import kris_fix as kf
 from myClasses import searchDict
+import timesheet2011 as tf11
+
+def write_date(dateread_sheet, dater_row, datenew_sheet, datew_row):
+    data = dateread_sheet.cell_value(dater_row, 0)
+    shift_date_tuple = xlrd.xldate_as_tuple(data, 1)
+    day = "%s" % (shift_date_tuple[2])
+    month = "%s" % (shift_date_tuple[1])
+    year = "%s" % (shift_date_tuple[0])
+    shift_date = day + '/' + month + '/' + year
+    datenew_sheet.write(datew_row, 3, shift_date)
+    print(shift_date)
 
 def main():
 
@@ -41,7 +52,7 @@ def main():
         # is this actually a timesheet? And which one is it?
         if read_sheet.cell_value(7, 0) == 'SUNDAY':
             print("This timesheet was designed in 2011. Begin data scrape")
-            timesheet2011()
+            tf11.timesheet2011()
         elif read_sheet.cell_value(19, 0) == 'SUNDAY':
             print("This timesheet was designed in 2015. Begin data scrape")
 
@@ -63,71 +74,27 @@ def main():
                     for head_num in my_dict.search_for_match(data):
                         new_sheet.write(w_row, 2, head_num)
 
-                        # write date
+                    # write date
                     if ((r_row >= 19) and (r_row <= 25)):  # SUNDAY
-                        data = read_sheet.cell_value(20, 0)
-                        shift_date_tuple = xlrd.xldate_as_tuple(data, 1)
-                        day = "%s" % (shift_date_tuple[2])
-                        month = "%s" % (shift_date_tuple[1])
-                        year = "%s" % (shift_date_tuple[0])
-                        shift_date = day + '/' + month + '/' + year
-                        new_sheet.write(w_row, 3, shift_date)
-                        print(shift_date)
+                        write_date(read_sheet, 20, new_sheet, w_row)
+
                     elif ((r_row >= 26) and (r_row <= 32)):  # MONDAY
-                        data = read_sheet.cell_value(27, 0)
-                        shift_date_tuple = xlrd.xldate_as_tuple(data, 1)
-                        day = "%s" % (shift_date_tuple[2])
-                        month = "%s" % (shift_date_tuple[1])
-                        year = "%s" % (shift_date_tuple[0])
-                        shift_date = day + '/' + month + '/' + year
-                        new_sheet.write(w_row, 3, shift_date)
-                        print(shift_date)
+                        write_date(read_sheet, 27, new_sheet, w_row)
 
                     elif ((r_row >= 33) and (r_row <= 39)):  # TUESDAY
-                        data = read_sheet.cell_value(34, 0)
-                        shift_date_tuple = xlrd.xldate_as_tuple(data, 1)
-                        day = "%s" % (shift_date_tuple[2])
-                        month = "%s" % (shift_date_tuple[1])
-                        year = "%s" % (shift_date_tuple[0])
-                        shift_date = day + '/' + month + '/' + year
-                        new_sheet.write(w_row, 3, shift_date)
-                        print(shift_date)
+                        write_date(read_sheet, 34, new_sheet, w_row)
+
                     elif ((r_row >= 40) and (r_row <= 46)):  # WEDNESDAY
-                        data = read_sheet.cell_value(41, 0)
-                        shift_date_tuple = xlrd.xldate_as_tuple(data, 1)
-                        day = "%s" % (shift_date_tuple[2])
-                        month = "%s" % (shift_date_tuple[1])
-                        year = "%s" % (shift_date_tuple[0])
-                        shift_date = day + '/' + month + '/' + year
-                        new_sheet.write(w_row, 3, shift_date)
-                        print(shift_date)
+                        write_date(read_sheet, 41, new_sheet, w_row)
+
                     elif ((r_row >= 47) and (r_row <= 53)):  # THURSDAY
-                        data = read_sheet.cell_value(48, 0)
-                        shift_date_tuple = xlrd.xldate_as_tuple(data, 1)
-                        day = "%s" % (shift_date_tuple[2])
-                        month = "%s" % (shift_date_tuple[1])
-                        year = "%s" % (shift_date_tuple[0])
-                        shift_date = day + '/' + month + '/' + year
-                        new_sheet.write(w_row, 3, shift_date)
-                        print(shift_date)
+                        write_date(read_sheet, 48, new_sheet, w_row)
+
                     elif ((r_row >= 54) and (r_row <= 60)):  # FRIDAY
-                        data = read_sheet.cell_value(55, 0)
-                        shift_date_tuple = xlrd.xldate_as_tuple(data, 1)
-                        day = "%s" % (shift_date_tuple[2])
-                        month = "%s" % (shift_date_tuple[1])
-                        year = "%s" % (shift_date_tuple[0])
-                        shift_date = day + '/' + month + '/' + year
-                        new_sheet.write(w_row, 3, shift_date)
-                        print(shift_date)
+                        write_date(read_sheet, 55, new_sheet, w_row)
+
                     elif ((r_row >= 61) and (r_row <= 67)):  # SATURDAY
-                        data = read_sheet.cell_value(62, 0)
-                        shift_date_tuple = xlrd.xldate_as_tuple(data, 1)
-                        day = "%s" % (shift_date_tuple[2])
-                        month = "%s" % (shift_date_tuple[1])
-                        year = "%s" % (shift_date_tuple[0])
-                        shift_date = day + '/' + month + '/' + year
-                        new_sheet.write(w_row, 3, shift_date)
-                        print(shift_date)
+                        write_date(read_sheet, 62, new_sheet, w_row)
 
                     # the kris_fix is done to deal with KL's custom formatting'
                     # kf_format( write row, read row, write sheet, read sheet, read column)
