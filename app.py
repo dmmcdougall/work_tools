@@ -14,12 +14,30 @@ import timesheet2011 as tf11
 def write_date(dateread_sheet, dater_row, datenew_sheet, datew_row):
     data = dateread_sheet.cell_value(dater_row, 0)
     shift_date_tuple = xlrd.xldate_as_tuple(data, 1)
-    day = "%s" % (shift_date_tuple[2])
-    month = "%s" % (shift_date_tuple[1])
-    year = "%s" % (shift_date_tuple[0])
+    day = f"{shift_date_tuple[2]}"
+    month = f"{shift_date_tuple[1]}"
+    year = f"{shift_date_tuple[0]}"
     shift_date = day + '/' + month + '/' + year
     datenew_sheet.write(datew_row, 3, shift_date)
     print(shift_date)
+
+def write_time(timeread_sheet, timer_row,timer_col, timenew_sheet, timew_row):
+    data = timeread_sheet.cell_value(timer_row, timer_col)
+    if data == '':
+        shift_in_tuple = (0, 0, 0, 0, 0, 0)
+    else:
+        shift_in_tuple = xlrd.xldate_as_tuple(data, 1)
+    if shift_in_tuple[3] < 10:
+        half1_time = f"{shift_in_tuple[3]}"
+    else:
+        half1_time = f"{shift_in_tuple[3]}"
+    if shift_in_tuple[4] == 0:
+        half2_time = f"{shift_in_tuple[4]}"
+    else:
+        half2_time = f"{shift_in_tuple[4]}"
+    time = half1_time + ":" + half2_time
+    print(time)
+    timenew_sheet.write(timew_row, timer_col + 2, time)
 
 def main():
 
@@ -103,43 +121,13 @@ def main():
                     if head_num == 3:  # if it's kris, then...
                         kf.kf_format(w_row,r_row,new_sheet,read_sheet,2)
                     else:  # it's not kris, so....
-                        data = read_sheet.cell_value(r_row, 2)
-                        if data == '':
-                            shift_in_tuple = (0, 0, 0, 0, 0, 0)
-                        else:
-                            shift_in_tuple = xlrd.xldate_as_tuple(data, 1)
-                        if shift_in_tuple[3] < 10:
-                            half1_time = "0%s" % (shift_in_tuple[3])
-                        else:
-                            half1_time = "%s" % (shift_in_tuple[3])
-                        if shift_in_tuple[4] == 0:
-                            half2_time = "%s0" % (shift_in_tuple[4])
-                        else:
-                            half2_time = "%s" % (shift_in_tuple[4])
-                        time = half1_time + ":" + half2_time
-                        print(time)
-                        new_sheet.write(w_row, 4, time)
+                        write_time(read_sheet, r_row, 2, new_sheet, w_row)
 
                     # write time out - kris_fix2
-                    if head_num == 3:
+                    if head_num == 3: # and again, if it's kris, then...
                         kf.kf_format(w_row, r_row, new_sheet, read_sheet, 3)
-                    else:
-                        data = read_sheet.cell_value(r_row, 3)
-                        if data == '':
-                            shift_out_tuple = (0, 0, 0, 0, 0, 0)
-                        else:
-                            shift_out_tuple = xlrd.xldate_as_tuple(data, 1)
-                        if shift_out_tuple[3] < 10:
-                            half1_time = "0%s" % (shift_out_tuple[3])
-                        else:
-                            half1_time = "%s" % (shift_out_tuple[3])
-                        if shift_out_tuple[4] == 0:
-                            half2_time = "%s0" % (shift_out_tuple[4])
-                        else:
-                            half2_time = "%s" % (shift_out_tuple[4])
-                        time = half1_time + ":" + half2_time
-                        print(time)
-                        new_sheet.write(w_row, 5, time)
+                    else: # and if it's not kris....
+                        write_time(read_sheet, r_row, 4, new_sheet, w_row)
 
                     # write reg time, ot, dt
                     w_col = 8
