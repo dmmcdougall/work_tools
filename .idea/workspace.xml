@@ -3,7 +3,8 @@
   <component name="ChangeListManager">
     <list default="true" id="f517df6b-abc2-45fb-8c1c-df503ff9fbb8" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/timesheet2011.py" beforeDir="false" afterPath="$PROJECT_DIR$/timesheet2011.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app.py" beforeDir="false" afterPath="$PROJECT_DIR$/app.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/myClasses.py" beforeDir="false" afterPath="$PROJECT_DIR$/myClasses.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -30,7 +31,7 @@
   <component name="PropertiesComponent">
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="com.intellij.ide.scratch.LRUPopupBuilder$1/New Scratch File" value="Python" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/../ODBCconnect" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
   </component>
   <component name="RunManager" selected="Python.app">
     <configuration name="app" type="PythonConfigurationType" factoryName="Python" temporary="true">
@@ -75,7 +76,7 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
-    <configuration name="kris_fix" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+    <configuration name="file_mgmt" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="timesheetscrapper_python3" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -87,7 +88,7 @@
       <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/kris_fix.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/file_mgmt.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -117,12 +118,34 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
+    <configuration name="scratch_10" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="timesheetscrapper_python3" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$APPLICATION_CONFIG_DIR$/scratches" />
+      <option name="IS_MODULE_SDK" value="false" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$APPLICATION_CONFIG_DIR$/scratches/scratch_10.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
     <recent_temporary>
       <list>
         <item itemvalue="Python.app" />
-        <item itemvalue="Python.myClasses" />
+        <item itemvalue="Python.file_mgmt" />
         <item itemvalue="Python.config" />
-        <item itemvalue="Python.kris_fix" />
+        <item itemvalue="Python.myClasses" />
+        <item itemvalue="Python.scratch_10" />
       </list>
     </recent_temporary>
   </component>
@@ -140,46 +163,46 @@
     <servers />
   </component>
   <component name="WindowStateProjectService">
-    <state x="620" y="265" key="FileChooserDialogImpl" timestamp="1586293218530">
+    <state x="620" y="265" key="FileChooserDialogImpl" timestamp="1586649537648">
       <screen x="0" y="0" width="1680" height="1020" />
     </state>
-    <state x="620" y="265" key="FileChooserDialogImpl/-900.-133.900.1410/1680.0.1440.870/0.0.1680.1020@0.0.1680.1020" timestamp="1586293218530" />
-    <state width="1659" height="250" key="GridCell.Tab.0.bottom" timestamp="1586630405507">
+    <state x="620" y="265" key="FileChooserDialogImpl/-900.-133.900.1410/1680.0.1440.870/0.0.1680.1020@0.0.1680.1020" timestamp="1586649537648" />
+    <state width="1659" height="250" key="GridCell.Tab.0.bottom" timestamp="1587241580333">
       <screen x="0" y="0" width="1680" height="1020" />
     </state>
-    <state width="1659" height="250" key="GridCell.Tab.0.bottom/-900.-133.900.1410/1680.0.1440.870/0.0.1680.1020@0.0.1680.1020" timestamp="1586630405507" />
-    <state width="1659" height="250" key="GridCell.Tab.0.center" timestamp="1586630405507">
+    <state width="1659" height="250" key="GridCell.Tab.0.bottom/-900.-133.900.1410/1680.0.1440.870/0.0.1680.1020@0.0.1680.1020" timestamp="1587241580333" />
+    <state width="1659" height="250" key="GridCell.Tab.0.center" timestamp="1587241580333">
       <screen x="0" y="0" width="1680" height="1020" />
     </state>
-    <state width="1659" height="250" key="GridCell.Tab.0.center/-900.-133.900.1410/1680.0.1440.870/0.0.1680.1020@0.0.1680.1020" timestamp="1586630405507" />
-    <state width="1659" height="250" key="GridCell.Tab.0.left" timestamp="1586630405507">
+    <state width="1659" height="250" key="GridCell.Tab.0.center/-900.-133.900.1410/1680.0.1440.870/0.0.1680.1020@0.0.1680.1020" timestamp="1587241580333" />
+    <state width="1659" height="250" key="GridCell.Tab.0.left" timestamp="1587241580333">
       <screen x="0" y="0" width="1680" height="1020" />
     </state>
-    <state width="1659" height="250" key="GridCell.Tab.0.left/-900.-133.900.1410/1680.0.1440.870/0.0.1680.1020@0.0.1680.1020" timestamp="1586630405507" />
-    <state width="1659" height="250" key="GridCell.Tab.0.right" timestamp="1586630405507">
+    <state width="1659" height="250" key="GridCell.Tab.0.left/-900.-133.900.1410/1680.0.1440.870/0.0.1680.1020@0.0.1680.1020" timestamp="1587241580333" />
+    <state width="1659" height="250" key="GridCell.Tab.0.right" timestamp="1587241580333">
       <screen x="0" y="0" width="1680" height="1020" />
     </state>
-    <state width="1659" height="250" key="GridCell.Tab.0.right/-900.-133.900.1410/1680.0.1440.870/0.0.1680.1020@0.0.1680.1020" timestamp="1586630405507" />
-    <state width="1659" height="340" key="GridCell.Tab.1.bottom" timestamp="1586630405491">
+    <state width="1659" height="250" key="GridCell.Tab.0.right/-900.-133.900.1410/1680.0.1440.870/0.0.1680.1020@0.0.1680.1020" timestamp="1587241580333" />
+    <state width="1659" height="340" key="GridCell.Tab.1.bottom" timestamp="1587239511153">
       <screen x="0" y="0" width="1680" height="1020" />
     </state>
-    <state width="1659" height="340" key="GridCell.Tab.1.bottom/-900.-133.900.1410/1680.0.1440.870/0.0.1680.1020@0.0.1680.1020" timestamp="1586630405491" />
-    <state width="1659" height="340" key="GridCell.Tab.1.center" timestamp="1586630405491">
+    <state width="1659" height="340" key="GridCell.Tab.1.bottom/-900.-133.900.1410/1680.0.1440.870/0.0.1680.1020@0.0.1680.1020" timestamp="1587239511153" />
+    <state width="1659" height="340" key="GridCell.Tab.1.center" timestamp="1587239511152">
       <screen x="0" y="0" width="1680" height="1020" />
     </state>
-    <state width="1659" height="340" key="GridCell.Tab.1.center/-900.-133.900.1410/1680.0.1440.870/0.0.1680.1020@0.0.1680.1020" timestamp="1586630405491" />
-    <state width="1659" height="340" key="GridCell.Tab.1.left" timestamp="1586630405491">
+    <state width="1659" height="340" key="GridCell.Tab.1.center/-900.-133.900.1410/1680.0.1440.870/0.0.1680.1020@0.0.1680.1020" timestamp="1587239511152" />
+    <state width="1659" height="340" key="GridCell.Tab.1.left" timestamp="1587239511152">
       <screen x="0" y="0" width="1680" height="1020" />
     </state>
-    <state width="1659" height="340" key="GridCell.Tab.1.left/-900.-133.900.1410/1680.0.1440.870/0.0.1680.1020@0.0.1680.1020" timestamp="1586630405491" />
-    <state width="1659" height="340" key="GridCell.Tab.1.right" timestamp="1586630405491">
+    <state width="1659" height="340" key="GridCell.Tab.1.left/-900.-133.900.1410/1680.0.1440.870/0.0.1680.1020@0.0.1680.1020" timestamp="1587239511152" />
+    <state width="1659" height="340" key="GridCell.Tab.1.right" timestamp="1587239511152">
       <screen x="0" y="0" width="1680" height="1020" />
     </state>
-    <state width="1659" height="340" key="GridCell.Tab.1.right/-900.-133.900.1410/1680.0.1440.870/0.0.1680.1020@0.0.1680.1020" timestamp="1586630405491" />
-    <state x="536" y="334" key="com.intellij.ide.util.TipDialog" timestamp="1586612391483">
+    <state width="1659" height="340" key="GridCell.Tab.1.right/-900.-133.900.1410/1680.0.1440.870/0.0.1680.1020@0.0.1680.1020" timestamp="1587239511152" />
+    <state x="536" y="334" key="com.intellij.ide.util.TipDialog" timestamp="1587239930984">
       <screen x="0" y="0" width="1680" height="1020" />
     </state>
-    <state x="536" y="334" key="com.intellij.ide.util.TipDialog/-900.-133.900.1410/1680.0.1440.870/0.0.1680.1020@0.0.1680.1020" timestamp="1586612391483" />
+    <state x="536" y="334" key="com.intellij.ide.util.TipDialog/-900.-133.900.1410/1680.0.1440.870/0.0.1680.1020@0.0.1680.1020" timestamp="1587239930984" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
