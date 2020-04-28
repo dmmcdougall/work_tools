@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="f517df6b-abc2-45fb-8c1c-df503ff9fbb8" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/kris_fix.py" beforeDir="false" afterPath="$PROJECT_DIR$/kris_fix.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
