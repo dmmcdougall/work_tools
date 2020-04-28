@@ -21,6 +21,15 @@ def write_date(dateread_sheet, dater_row, datenew_sheet, datew_row):
     datenew_sheet.write(datew_row, 3, shift_date)
     print(shift_date)
 
+def date_loop(read_row, write_row, readsheet2, newsheet2):
+    i = 19
+    while i < 70:
+        if ((read_row >= i) and (read_row <= i + 6)):
+            write_date(readsheet2, i + 1, newsheet2, write_row)
+            i += 7
+        else:
+            i += 7
+
 def write_time(timeread_sheet, timer_row,timer_col, timenew_sheet, timew_row):
     data = timeread_sheet.cell_value(timer_row, timer_col)
     if data == '':
@@ -96,30 +105,8 @@ def main():
                     for head_num in my_dict.search_for_match(data):
                         new_sheet.write(w_row, 2, head_num)
 
-                    # write date
-                    if ((r_row >= 19) and (r_row <= 25)):  # SUNDAY
-                        write_date(read_sheet, 20, new_sheet, w_row)
-
-                    elif ((r_row >= 26) and (r_row <= 32)):  # MONDAY
-                        write_date(read_sheet, 27, new_sheet, w_row)
-
-                    elif ((r_row >= 33) and (r_row <= 39)):  # TUESDAY
-                        write_date(read_sheet, 34, new_sheet, w_row)
-
-                    elif ((r_row >= 40) and (r_row <= 46)):  # WEDNESDAY
-                        write_date(read_sheet, 41, new_sheet, w_row)
-
-                    elif ((r_row >= 47) and (r_row <= 53)):  # THURSDAY
-                        write_date(read_sheet, 48, new_sheet, w_row)
-
-                    elif ((r_row >= 54) and (r_row <= 60)):  # FRIDAY
-                        write_date(read_sheet, 55, new_sheet, w_row)
-
-                    elif ((r_row >= 61) and (r_row <= 67)):  # SATURDAY
-                        write_date(read_sheet, 62, new_sheet, w_row)
-
-                    # the kris_fix is done to deal with KL's custom formatting'
-                    # kf_format( write row, read row, write sheet, read sheet, read column)
+                    #write date
+                    date_loop(r_row, w_row, read_sheet, new_sheet)
 
                     # write time in
                     if head_num == 3:  # if it's kris, then...
