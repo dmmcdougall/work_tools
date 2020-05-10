@@ -4,7 +4,6 @@ import re
 # imported from third party repos
 
 # imported from local directories
-#import config as cfg
 
 class salariedHead:
 

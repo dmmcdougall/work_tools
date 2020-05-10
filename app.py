@@ -11,6 +11,17 @@ import kris_fix as kf
 from myClasses import searchDict
 import timesheet2011 as tf11
 
+def col_names(col_new_sheet):
+    column_names = ["Shift", "HeadIDLetter", "HeadIDNumber",
+                    "Date", "InTime", "OutTime",
+                    "ShowYrID", "ShowID", "Reg",
+                    "OT", "Double", "Acct",
+                    "Showcall", "MP"]
+    for i in range(len(column_names)):
+        col_new_sheet.write(0,i, column_names[i])
+        print(column_names[i])
+
+
 def write_date(dateread_sheet, dater_row, datenew_sheet, datew_row):
     data = dateread_sheet.cell_value(dater_row, 0)
     shift_date_tuple = xlrd.xldate_as_tuple(data, 1)
@@ -60,11 +71,13 @@ def main():
     new_book = copy(write_book)
     new_sheet = new_book.get_sheet(0)
 
+    col_names(new_sheet)
+
     # find first blank cel in write_book and make it the target row
-    w_row = write_sheet.nrows
-    print(f"{w_row + 1} appears to be the first available row in the write_book.") # write_row is now the write_book row
-    print("Does that sound correct? RETURN for yes, CTRL+C for no.")
-    input()
+    w_row = 1 # write_sheet.nrows
+    #print(f"{w_row + 1} appears to be the first available row in the write_book.") # write_row is now the write_book row
+    #print("Does that sound correct? RETURN for yes, CTRL+C for no.")
+    #input()
 
     # create a list of the read_books
     read_list = os.listdir(cfg.dir)
@@ -138,7 +151,7 @@ def main():
                         new_sheet.write(w_row, 11, acct_num)
 
                     # write show data
-                    data = 'J'  # this is year specific CHANGE THIS FOR YOUR NEEDS
+                    data = 'J'  # this is year specific CHANGE THIS FOR YOUR NEEDS - WRITE SOMETHING BETTER
                     new_sheet.write(w_row, 6, data)
 
                     data = '0-310820'  # this is year specific
