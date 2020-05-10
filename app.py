@@ -17,10 +17,9 @@ def col_names(col_new_sheet):
                     "ShowYrID", "ShowID", "Reg",
                     "OT", "Double", "Acct",
                     "Showcall", "MP"]
+
     for i in range(len(column_names)):
         col_new_sheet.write(0,i, column_names[i])
-        print(column_names[i])
-
 
 def write_date(dateread_sheet, dater_row, datenew_sheet, datew_row):
     data = dateread_sheet.cell_value(dater_row, 0)
@@ -73,11 +72,11 @@ def main():
 
     col_names(new_sheet)
 
-    # find first blank cel in write_book and make it the target row
-    w_row = 1 # write_sheet.nrows
-    #print(f"{w_row + 1} appears to be the first available row in the write_book.") # write_row is now the write_book row
-    #print("Does that sound correct? RETURN for yes, CTRL+C for no.")
-    #input()
+    #now that the headers are in, set the first write row to be row #2
+    w_row = 1
+    print(f"Row number {w_row + 1} appears to be the first available row in the write_book.") # write_row is now the write_book row
+    print("Does that sound correct? RETURN for yes, CTRL+C for no.")
+    input()
 
     # create a list of the read_books
     read_list = os.listdir(cfg.dir)
