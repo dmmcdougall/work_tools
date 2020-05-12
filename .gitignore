@@ -8,3 +8,4 @@ config.py
 #ignore dir
 .idea/
 __pycache__/
+venv/
