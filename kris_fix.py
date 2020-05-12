@@ -8,8 +8,6 @@
 
 # imported from local directories
 
-# write time in...
-
 def kf_format(klw_row, klr_row, klnew_sheet, klread_sheet, klr_col):
     data = klread_sheet.cell_value(klr_row, klr_col)
     kris_str = str(data)
