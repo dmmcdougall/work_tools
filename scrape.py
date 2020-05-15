@@ -197,8 +197,9 @@ def main():
     print("All done! Time to save to...")
     print(f"{cfg.home}\Desktop\scraped_by_python.xls")
     new_book.save(f"{cfg.home}\Desktop\scraped_by_python.xls")
-    print("Opening saved file")
-    os.system(f"start EXCEL.EXE {cfg.home}\Desktop\scraped_by_python.xls")
+    # putting a hold on these two lines while I work on the post2db.py
+    # print("Opening saved file")
+    # os.system(f"start EXCEL.EXE {cfg.home}\Desktop\scraped_by_python.xls")
     print()
 
 if __name__ == '__main__':
