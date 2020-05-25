@@ -145,9 +145,12 @@ def main():
                     # write accounting code
                     data = read_sheet.cell_value(r_row, 8)
                     print(data)
-                    my_dict = searchDict(cfg.acct_codes)
-                    for acct_num in my_dict.search_for_match(data):
-                        new_sheet.write(w_row, 11, acct_num)
+                    # my_dict = searchDict(cfg.acct_codes)
+                    # for acct_num in my_dict.search_for_match(data):
+                    #     new_sheet.write(w_row, 11, acct_num)
+                    acct_num = cfg.acct_codes[data]
+                    new_sheet.write(w_row, 11, acct_num)
+
 
                     # write show data
                     data = 'J'  # this is year specific CHANGE THIS FOR YOUR NEEDS - WRITE SOMETHING BETTER
