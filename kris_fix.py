@@ -1,6 +1,8 @@
-# Kris changed the formatting of his timesheet to make it more flexible and subsequently
-# killed the scrapper.  This is the work around
-# this function is for writing the begin and end times of calls
+'''
+Kris changed the formatting of his timesheet to make it more flexible and subsequently
+killed the scrapper.  This is the work around
+this function is for writing the begin and end times of calls
+'''
 
 # imported from standard library
 

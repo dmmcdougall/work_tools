@@ -1,16 +1,16 @@
 '''
-This package is for taking collected timesheets, scrapping them, and
+This file is for taking collected timesheets, scrapping them, and
 placing the scraped data into a .xls for further processing.
 '''
 
-#imported from standard library
+# imported from standard library
 import os
 
-#imported from third party repos
+# imported from third party repos
 import xlrd
 from xlutils.copy import copy
 
-#imported from local directories
+# imported from local directories
 import config as cfg
 import kris_fix as kf # added when kris broke the scrapper
 from myClasses import searchDict
@@ -157,9 +157,8 @@ def main():
                     # write accounting code
                     data = read_sheet.cell_value(r_row, 8)
                     print(data)
-                    my_dict = searchDict(cfg.acct_codes)
-                    for acct_num in my_dict.search_for_match(data):
-                        new_sheet.write(w_row, 11, acct_num)
+                    acct_num = cfg.acct_codes[data]
+                    new_sheet.write(w_row, 11, acct_num)
 
                     # write show data
                     data = 'J'  # this is year specific CHANGE THIS FOR YOUR NEEDS - WRITE SOMETHING BETTER

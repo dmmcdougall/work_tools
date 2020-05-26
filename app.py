@@ -1,8 +1,13 @@
-#imported from standard library
+'''
+This is the main file for several pieces of the timesheet scrapper
+Please see each file for more info
+'''
 
-#imported from third party repos
+# imported from standard library
 
-#imported from local directories
+# imported from third party repos
+
+# imported from local directories
 import post2db
 import scrape
 

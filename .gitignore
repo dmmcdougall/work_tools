@@ -1,11 +1,11 @@
 #
-#git config --global core.excludesfile ~/.gitignore_global
+# git config --global core.excludesfile ~/.gitignore_global
 #
 
-#ignore config files
+# ignore config files
 config.py
 
-#ignore dir
+# ignore dir
 .idea/
 __pycache__/
 venv/
