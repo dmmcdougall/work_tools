@@ -1,4 +1,5 @@
 # standard library
+import os
 import pandas as pd
 import pyodbc
 
@@ -6,21 +7,11 @@ import pyodbc
 
 # local repo
 import config as cfg
-import myFunctions as db
+import myFunctions as fnc
 
-conn = pyodbc.connect(
-    "Driver={ODBC Driver 13 for SQL Server};"
-    "Server=CGYSQL01\MISC;"
-    "Database=production;"
-    "Trusted_Connection=yes;"
-)
+# at this point, the new data has been scrapped from the timesheet and added
 
 def main():
-
-    # to print to screen
-    # db.read(conn, query)
-    # to read into df
-    # views = pd.read_sql(query, conn)
 
     # put the new data into a df
     cols_to_use = [1,2,3,4,5,6,7,8,9,10,11,12,13]
@@ -28,9 +19,9 @@ def main():
 
     # find the number we need to start the new data with
     query = "SELECT * FROM HeadShiftWorkedTable"
-    df_hShift = pd.read_sql(query, conn)
+    df_hShift = pd.read_sql(query, cfg.conn)
     last_shift = df_hShift['HeadShiftWorkedID'].max()
-    print(last_shift)
+    # print(last_shift) # for testing
     new_shift = last_shift +1
 
     # put the new shiftIDs into the df
@@ -40,18 +31,32 @@ def main():
         shift_list.append(new_shift+i)
 
     df_scraped.insert(0,'Shift', shift_list)
+    
+    df_scraped.to_excel(cfg.home+"\\Desktop\\scraped_with_shiftNum.xls")
+
+    os.system(f"start EXCEL.EXE {cfg.home}\Desktop\scraped_with_shiftNum.xls")
+
+    # !!!!! IS IT POSSIBLE ONE CANNOT CONNECT TO ACCESS WITH 64-BIT PYTHON!!!!
+    # connect to MS Access
+    # conn2 = pyodbc.connect(
+    #     "Driver={Microsoft Access Driver (*.mdb, *.accdb)};"
+    #     "DBQ=C:\\Users\\dmcdougall\\Desktop\\test.accdb;"
+    # )
+    #
+    # cursor = conn2.cursor()
+    # cursor.execute('select * from TMP-HeadsImport')
+    #
+    # for row in cursor.fetchall():
+    #     print(row)
 
     # clear the tmp table
-    query = 'DELETE FROM  TMP-HeadsImport;'
-    db.delete(conn, query)
-
-    # to print to screen
-    #db.read(conn, query)
+    # query = 'TRUNCATE TABLE  TMP-HeadsImport;'
+    # fnc.delete(conn, query)
 
     # to read into df
     #views = pd.read_sql(query, conn)
 
-    conn.close()
+    cfg.conn.close()
 
 if __name__ == '__main__':
     print()

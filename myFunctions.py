@@ -1,4 +1,5 @@
 # standard library
+import pyodbc
 
 # third part libraries
 
@@ -80,5 +81,13 @@ if __name__ == '__main__':
     print("METHOD CHECK")
     print('------------')
     print()
+    conn = pyodbc.connect(
+        "Driver={ODBC Driver 13 for SQL Server};"
+        "Server=CGYSQL01\MISC;"
+        "Database=production;"
+        "Trusted_Connection=yes;"
+    )
+    query = "SELECT * FROM sys.tables"
+    read(query, conn)
 
 
