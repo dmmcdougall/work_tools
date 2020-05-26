@@ -7,7 +7,7 @@ import pyodbc
 
 # local repo
 import config as cfg
-import myFunctions as fnc
+import databaseFunctions as dbfnc
 
 # at this point, the new data has been scrapped from the timesheet and added
 
