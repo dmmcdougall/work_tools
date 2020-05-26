@@ -28,10 +28,9 @@ def read2(query, conn):
 def delete(query, conn):
     print("Delete")
     cursor = conn.cursor()
-
     cursor.execute(query)
-    conn.commit()
-    read(conn)
+    # conn.commit()
+    # read(conn)
 
 # does your table exist?
 def tblexists(table_name, conn):

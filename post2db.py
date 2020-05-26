@@ -40,7 +40,11 @@ def main():
 
     os.system(f"start EXCEL.EXE {cfg.home}\Desktop\scraped_with_shiftNum.xls")
 
-    dbfnc.tblexists(HeadNames, cfg.conn)
+    # if dbfnc.tblexists('TMPtblWeeklyHeadsData', cfg.conn) == 'exists':
+    #     query = 'DROP TABLE  TMPtblWeeklyHeadsData;'
+    #     dbfnc.delete(query, cfg.conn)
+    #
+    # df_scraped.to_sql('TMPtblWeeklyHeadsData', con=cfg.conn, if_exists = 'append')
 
     # !!!!! IS IT POSSIBLE ONE CANNOT CONNECT TO ACCESS WITH 64-BIT PYTHON!!!!
     # connect to MS Access
