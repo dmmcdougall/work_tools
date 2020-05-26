@@ -40,6 +40,8 @@ def main():
 
     os.system(f"start EXCEL.EXE {cfg.home}\Desktop\scraped_with_shiftNum.xls")
 
+    dbfnc.tblexists(HeadNames, cfg.conn)
+
     # !!!!! IS IT POSSIBLE ONE CANNOT CONNECT TO ACCESS WITH 64-BIT PYTHON!!!!
     # connect to MS Access
     # conn2 = pyodbc.connect(

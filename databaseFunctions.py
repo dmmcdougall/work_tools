@@ -33,6 +33,14 @@ def delete(query, conn):
     conn.commit()
     read(conn)
 
+# does your table exist?
+def tblexists(table_name, conn):
+    cursor = conn.cursor()
+    if cursor.tables(table=table_name, tableType='TABLE').fetchone():
+        print("exists")
+    else:
+        print("doesn't exist")
+
 
 # not tested
 def read_db2df(query, conn):
