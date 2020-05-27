@@ -25,12 +25,10 @@ def read2(query, conn):
     cursor.execute(query)
 
 # delete data from anSQL table
-def delete(query, conn):
-    print("Delete")
+def general(query, conn):
     cursor = conn.cursor()
     cursor.execute(query)
-    # conn.commit()
-    # read(conn)
+
 
 # does your table exist?
 def tblexists(table_name, conn):
@@ -39,6 +37,20 @@ def tblexists(table_name, conn):
         print("exists")
     else:
         print("doesn't exist")
+
+def checkTableExists(dbcon, tablename):
+    dbcur = dbcon.cursor()
+    dbcur.execute("""
+        SELECT COUNT(*)
+        FROM information_schema.tables
+        WHERE table_name = '{0}'
+        """.format(tablename.replace('\'', '\'\'')))
+    if dbcur.fetchone()[0] == 1:
+        dbcur.close()
+        return True
+
+    dbcur.close()
+    return False
 
 
 # not tested
@@ -76,14 +88,14 @@ def update(conn):
 
 
 # not tested
-def delete(conn, query):
-    print("Delete")
-    cursor = conn.cursor()
-    cursor.execute(
-        'delete from <tblname dummy a > 5;',
-    )
-    conn.commit()
-    read(conn)
+# def delete2(conn, query):
+#     print("Delete")
+#     cursor = conn.cursor()
+#     cursor.execute(
+#         'delete from <tblname dummy a > 5;',
+#     )
+#     conn.commit()
+#     read(conn)
 
 
 if __name__ == '__main__':

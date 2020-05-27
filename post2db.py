@@ -5,7 +5,9 @@
 # standard library
 import os
 import pandas as pd
-import pyodbc
+#import pyodbc
+import sqlalchemy as sa
+import urllib
 
 # third party libraries
 
@@ -19,7 +21,7 @@ def main():
 
     # put the new data into a df
     cols_to_use = [1,2,3,4,5,6,7,8,9,10,11,12,13]
-    df_scraped = pd.read_excel(cfg.home+"\\Desktop\\scraped_by_python.xls", index='Shift', usecols=cols_to_use)
+    df_scraped = pd.read_excel(cfg.home+"\\Desktop\\scraped_by_python.xls", usecols=cols_to_use)
 
     # find the number we need to start the new data with
     query = "SELECT * FROM HeadShiftWorkedTable"
@@ -35,36 +37,29 @@ def main():
         shift_list.append(new_shift+i)
 
     df_scraped.insert(0,'Shift', shift_list)
-    
-    df_scraped.to_excel(cfg.home+"\\Desktop\\scraped_with_shiftNum.xls")
+    df_scraped.set_index('Shift')
 
-    os.system(f"start EXCEL.EXE {cfg.home}\Desktop\scraped_with_shiftNum.xls")
+    # print(df_scraped) # for testing
 
-    # if dbfnc.tblexists('TMPtblWeeklyHeadsData', cfg.conn) == 'exists':
-    #     query = 'DROP TABLE  TMPtblWeeklyHeadsData;'
-    #     dbfnc.delete(query, cfg.conn)
-    #
-    # df_scraped.to_sql('TMPtblWeeklyHeadsData', con=cfg.conn, if_exists = 'append')
+    # DON'T DELETE YET
+    # df_scraped.to_excel(cfg.home+"\\Desktop\\scraped_with_shiftNum.xls")
+    # os.system(f"start EXCEL.EXE {cfg.home}\Desktop\scraped_with_shiftNum.xls")
 
-    # !!!!! IS IT POSSIBLE ONE CANNOT CONNECT TO ACCESS WITH 64-BIT PYTHON!!!!
-    # connect to MS Access
-    # conn2 = pyodbc.connect(
-    #     "Driver={Microsoft Access Driver (*.mdb, *.accdb)};"
-    #     "DBQ=C:\\Users\\dmcdougall\\Desktop\\test.accdb;"
-    # )
-    #
-    # cursor = conn2.cursor()
-    # cursor.execute('select * from TMP-HeadsImport')
-    #
-    # for row in cursor.fetchall():
-    #     print(row)
+    tbl = 'TMPtblWeeklyHeadsData'
+    tbl_exist = dbfnc.checkTableExists(cfg.conn, tbl)
 
-    # clear the tmp table
-    # query = 'TRUNCATE TABLE  TMP-HeadsImport;'
-    # fnc.delete(conn, query)
+    if tbl_exist == True:
+        print("let's drop it")
+        query = f'DROP TABLE {tbl};'
+        dbfnc.general(query, cfg.conn)
+    else:
+        print("let's build it")
 
-    # to read into df
-    #views = pd.read_sql(query, conn)
+    print("table cleared, let's write to the db")
+    engine = sa.create_engine(cfg.alc_str)
+    df_scraped.to_sql(tbl, con=engine, if_exists = 'append', index = False)
+
+
 
     cfg.conn.close()
 

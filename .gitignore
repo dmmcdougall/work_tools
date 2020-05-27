@@ -4,6 +4,7 @@
 
 # ignore config files
 config.py
+myscratch.py
 
 # ignore dir
 .idea/
