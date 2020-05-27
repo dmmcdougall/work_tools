@@ -15,7 +15,8 @@ import urllib
 import config as cfg
 import databaseFunctions as dbfnc
 
-# at this point, the new data has been scrapped from the timesheet and added
+# at this point, the new data has been scrapped from the timesheet and added to
+# a .xls file
 
 def main():
 
@@ -45,6 +46,7 @@ def main():
     # df_scraped.to_excel(cfg.home+"\\Desktop\\scraped_with_shiftNum.xls")
     # os.system(f"start EXCEL.EXE {cfg.home}\Desktop\scraped_with_shiftNum.xls")
 
+    # send the df to the db
     tbl = 'TMPtblWeeklyHeadsData'
     tbl_exist = dbfnc.checkTableExists(cfg.conn, tbl)
 
@@ -55,18 +57,16 @@ def main():
     else:
         print("let's build it")
 
-    print("table cleared, let's write to the db")
+    print("Table path cleared, let's write to the db")
     engine = sa.create_engine(cfg.alc_str)
     df_scraped.to_sql(tbl, con=engine, if_exists = 'append', index = False)
-
-
 
     cfg.conn.close()
 
 if __name__ == '__main__':
     print()
     print("++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++")
-    print("              post_2db.py file launched")
+    print("                 post_2db.py file launched")
     print("++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++")
     print()
     main()
