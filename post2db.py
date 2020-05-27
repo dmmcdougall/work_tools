@@ -52,10 +52,15 @@ def main():
 
     if tbl_exist == True:
         print("let's drop it")
-        query = f'DROP TABLE {tbl};'
-        dbfnc.general(query, cfg.conn)
+        cur = cfg.conn.cursor()
+        cur.execute("DROP Table TMPtblWeeklyHeadsData")
+        cfg.conn.commit()
+
     else:
         print("let's build it")
+
+    # query = f'SELECT * FROM {tbl}'
+    # dbfnc.read2screen(query, cfg.conn)
 
     print("Table path cleared, let's write to the db")
     engine = sa.create_engine(cfg.alc_str)

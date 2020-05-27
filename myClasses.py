@@ -48,6 +48,8 @@ class searchDict(dict):
     def search_for_match(self, event):
         return (self[key] for key in self if re.match(key, event))
 
+
+
 #test salaried head class
 if __name__ == '__main__':
     print()

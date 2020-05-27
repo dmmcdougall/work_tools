@@ -17,7 +17,7 @@ def read2screen(query, conn):
     cursor.execute(query)
     for row in cursor:
         print(row)
-    print
+
 
 # read from SQL without printing
 def read2(query, conn):
@@ -44,6 +44,9 @@ def checkTableExists(dbcon, tablename):
 
     dbcur.close()
     return False
+
+def drop_table(self, table):
+    self._exec(schema.DropTable(table))
 
 if __name__ == '__main__':
     print()
