@@ -64,14 +64,14 @@ def main():
 
     print("Table path cleared, let's write to the db")
     engine = sa.create_engine(cfg.alc_str)
-    df_scraped.to_sql(
-        tbl, con=engine,
-             if_exists = 'append',
-             index = False,
-             dtype={'HeadIDLetter':sa.types.NVARCHAR(length=255),
-                    'HeadIDNumber':sa.types.INT,
-                    'Acct':sa.types.NVARCHAR(length=255)}
-    )
+    df_scraped.to_sql(tbl,
+                      con=engine,
+                      if_exists = 'append',
+                      index = False,
+                      dtype={'HeadIDLetter':sa.types.NVARCHAR(length=255),
+                             'HeadIDNumber':sa.types.INT,
+                             'Acct':sa.types.NVARCHAR(length=255)}
+                      )
 
     cfg.conn.close()
 
