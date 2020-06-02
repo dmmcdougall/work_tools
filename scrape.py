@@ -39,12 +39,22 @@ def write_date(dateread_sheet, dater_row, datenew_sheet, datew_row):
     datenew_sheet.write(datew_row, 3, shift_date)
     print(shift_date)
 
+def write_date2(dateread_sheet, dater_row, datenew_sheet, datew_row):
+    data = dateread_sheet.cell_value(dater_row, 0)
+    shift_date_tuple = xlrd.xldate_as_tuple(data, 1)
+    day = f"{shift_date_tuple[2]}"
+    month = f"{shift_date_tuple[1]}"
+    year = f"{shift_date_tuple[0]}"
+    shift_date = year + '-' + month + '-' + day
+    datenew_sheet.write(datew_row, 3, shift_date)
+    print(shift_date)
+
 # this is a loop, to iterate over the write_date method
 def date_loop(read_row, write_row, readsheet2, newsheet2):
     i = 19
     while i < 70:
         if ((read_row >= i) and (read_row <= i + 6)):
-            write_date(readsheet2, i + 1, newsheet2, write_row)
+            write_date2(readsheet2, i + 1, newsheet2, write_row)
             i += 7
         else:
             i += 7

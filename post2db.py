@@ -5,8 +5,9 @@
 # standard library
 import os
 import pandas as pd
-#import pyodbc
+import pyodbc
 import sqlalchemy as sa
+import sqlalchemy.dialects.mssql
 import urllib
 
 # third party libraries
@@ -53,7 +54,8 @@ def main():
     if tbl_exist == True:
         print("let's empty the table")
         cur = cfg.conn.cursor()
-        cur.execute("TRUNCATE Table TMPtblWeeklyHeadsData")
+        # cur.execute("TRUNCATE Table TMPtblWeeklyHeadsData")
+        cur.execute("DROP Table TMPtblWeeklyHeadsData")
         cfg.conn.commit()
 
     else:
@@ -70,8 +72,23 @@ def main():
                       dtype={'Shift':sa.types.INT,
                              'HeadIDLetter':sa.types.NVARCHAR(length=255),
                              'HeadIDNumber':sa.types.INT,
-                             'Acct':sa.types.NVARCHAR(length=255)}
+                             'Date': sa.dialects.mssql.DATETIME2,
+                             'InTime': sa.dialects.mssql.DATETIME2,
+                             'OutTime': sa.dialects.mssql.DATETIME2,
+                             'EventYrID':sa.types.NVARCHAR(length=255),
+                             'EventID': sa.types.NVARCHAR(length=255),
+                             'Reg': sa.types.FLOAT,
+                             'OT': sa.types.FLOAT,
+                             'Double': sa.types.FLOAT,
+                             'Acct':sa.types.NVARCHAR(length=255),
+                             'Blackscall': sa.dialects.mssql.BIT,
+                             'MP': sa.dialects.mssql.BIT
+                             }
                       )
+
+    # column_names = [  "Reg",
+    #                 "OT", "Double", "Acct",
+    #                 "Blackscall", "MP"]
 
     cfg.conn.close()
 
