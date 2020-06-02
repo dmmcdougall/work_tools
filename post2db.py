@@ -51,16 +51,15 @@ def main():
     tbl_exist = dbfnc.checkTableExists(cfg.conn, tbl)
 
     if tbl_exist == True:
-        print("let's drop it")
+        print("let's empty the table")
         cur = cfg.conn.cursor()
-        cur.execute("DROP Table TMPtblWeeklyHeadsData")
+        cur.execute("TRUNCATE Table TMPtblWeeklyHeadsData")
         cfg.conn.commit()
 
     else:
-        print("let's build it")
-
-    # query = f'SELECT * FROM {tbl}'
-    # dbfnc.read2screen(query, cfg.conn)
+        print("let's build the table")
+        # with engine.connect() as con:
+        #     con.execute('ALTER TABLE TMPtblWeeklyHeadsData ADD PRIMARY KEY (Shift);')
 
     print("Table path cleared, let's write to the db")
     engine = sa.create_engine(cfg.alc_str)
@@ -68,7 +67,8 @@ def main():
                       con=engine,
                       if_exists = 'append',
                       index = False,
-                      dtype={'HeadIDLetter':sa.types.NVARCHAR(length=255),
+                      dtype={'Shift':sa.types.INT,
+                             'HeadIDLetter':sa.types.NVARCHAR(length=255),
                              'HeadIDNumber':sa.types.INT,
                              'Acct':sa.types.NVARCHAR(length=255)}
                       )
