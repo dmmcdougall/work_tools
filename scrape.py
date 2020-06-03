@@ -28,6 +28,27 @@ def col_names(col_new_sheet):
     for i in range(len(column_names)):
         col_new_sheet.write(0,i, column_names[i])
 
+def write_HeadIDAlpha(headalpha_wsheet, headalpha_wrow, headalpha_wcol):
+    data = 'z'
+    headalpha_wsheet.write(headalpha_wrow, headalpha_wcol, data)
+
+def grabempNum(empNum_rsheet, empNum_rrow, empNum_rcol):
+    data = empNum_rsheet.cell_value(empNum_rrow, empNum_rcol)
+    my_dict = searchDict(cfg.dict_heads)
+    for head_num in my_dict.search_for_match(data):
+        return head_num
+
+def grabempNum2(empNum_rsheet, empNum_rrow, empNum_rcol):
+    data = empNum_rsheet.cell_value(empNum_rrow, empNum_rcol)
+    mylist = str.split(data)
+    head_num = (cfg.mylist[0].HeadID)
+
+
+
+def write_empNum(empNum_rsheet, empNum_rrow, empNum_rcol,emplNum_wsheet, empNum_wrow, emplNum_wcol):
+    emplNum_wsheet.write(empNum_wrow, emplNum_wcol, grabempNum(empNum_rsheet, empNum_rrow, empNum_rcol))
+
+
 # this method will write the date to the new .xls sheet
 def write_date(dateread_sheet, dater_row, datenew_sheet, datew_row):
     data = dateread_sheet.cell_value(dater_row, 0)
@@ -114,6 +135,10 @@ def main():
         read_book = xlrd.open_workbook(read_file)
         read_sheet = read_book.sheet_by_index(0)
 
+        #WHAT DO I NEED WITH THESE METHODS
+        # READ SHEET, READ ROW, READ COL
+        # WRITE SHEET, WRITE ROW, WRITE COL
+
         # is this actually a timesheet? And which one is it?
         if read_sheet.cell_value(7, 0) == 'SUNDAY':
             print("This timesheet was designed in 2011. Begin data scrape")
@@ -130,19 +155,34 @@ def main():
                     print("writing data")
 
                     # write the HeadAlphaID
-                    data = 'z'
-                    new_sheet.write(w_row, 1, data)
+                    w_col = 1
+                    write_HeadIDAlpha(new_sheet, w_row, w_col)
 
-                    # write persons employee number
+                    # write head employee number
                     data = read_sheet.cell_value(15, 2)
                     my_dict = searchDict(cfg.dict_heads)
                     for head_num in my_dict.search_for_match(data):
                         new_sheet.write(w_row, 2, head_num)
 
+                    # This wokrs, but above is needded for now
+                    # new_sheet.write(w_row,2,grabempNum(read_sheet,15,2))
+
                     #write date
                     date_loop(r_row, w_row, read_sheet, new_sheet)
 
                     # write time in
+                    # r_col = 2
+                    # if grabempNum(read_sheet,r_row,r_col) == 3:  # if it's kris, then...
+                    #     kf.kf_format(w_row,r_row,new_sheet,read_sheet,2)
+                    # else:  # it's not kris, so....
+                    #     write_time(read_sheet, r_row, 2, new_sheet, w_row)
+                    #
+                    # # write time out - kris_fix2
+                    # if grabempNum(read_sheet,r_row,r_col) == 3:
+                    #     kf.kf_format(w_row, r_row, new_sheet, read_sheet, 3)
+                    # else:
+                    #     write_time(read_sheet, r_row, 3, new_sheet, w_row)
+
                     if head_num == 3:  # if it's kris, then...
                         kf.kf_format(w_row,r_row,new_sheet,read_sheet,2)
                     else:  # it's not kris, so....
