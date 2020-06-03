@@ -7,8 +7,6 @@ import os
 import pandas as pd
 import pyodbc
 import sqlalchemy as sa
-import sqlalchemy.dialects.mssql
-import urllib
 
 # third party libraries
 
@@ -41,12 +39,6 @@ def main():
     df_scraped.insert(0,'Shift', shift_list)
     df_scraped.set_index('Shift')
 
-    # print(df_scraped) # for testing
-
-    # DON'T DELETE YET
-    # df_scraped.to_excel(cfg.home+"\\Desktop\\scraped_with_shiftNum.xls")
-    # os.system(f"start EXCEL.EXE {cfg.home}\Desktop\scraped_with_shiftNum.xls")
-
     # send the df to the db
     tbl = 'TMPtblWeeklyHeadsData'
     tbl_exist = dbfnc.checkTableExists(cfg.conn, tbl)
@@ -72,9 +64,9 @@ def main():
                       dtype={'Shift':sa.types.INT,
                              'HeadIDLetter':sa.types.NVARCHAR(length=255),
                              'HeadIDNumber':sa.types.INT,
-                             'Date': sa.dialects.mssql.DATETIME2,
-                             'InTime': sa.dialects.mssql.DATETIME2,
-                             'OutTime': sa.dialects.mssql.DATETIME2,
+                             'Date': sa.dialects.mssql.DATETIME2(0),
+                             'InTime': sa.dialects.mssql.DATETIME2(0),
+                             'OutTime': sa.dialects.mssql.DATETIME2(0),
                              'EventYrID':sa.types.NVARCHAR(length=255),
                              'EventID': sa.types.NVARCHAR(length=255),
                              'Reg': sa.types.FLOAT,
@@ -82,13 +74,8 @@ def main():
                              'Double': sa.types.FLOAT,
                              'Acct':sa.types.NVARCHAR(length=255),
                              'Blackscall': sa.dialects.mssql.BIT,
-                             'MP': sa.dialects.mssql.BIT
-                             }
+                             'MP': sa.dialects.mssql.BIT}
                       )
-
-    # column_names = [  "Reg",
-    #                 "OT", "Double", "Acct",
-    #                 "Blackscall", "MP"]
 
     cfg.conn.close()
 
