@@ -40,10 +40,10 @@ def grabempNum(empNum_rsheet, empNum_rrow, empNum_rcol):
 
 def grabempNum2(empNum_rsheet, empNum_rrow, empNum_rcol):
     data = empNum_rsheet.cell_value(empNum_rrow, empNum_rcol)
-    mylist = str.split(data)
-    head_num = (cfg.mylist[0].HeadID)
-
-
+    mylist = (str.split(data))
+    var = mylist[0]
+    head_num = cfg.dict_heads[var]
+    return head_num
 
 def write_empNum(empNum_rsheet, empNum_rrow, empNum_rcol,emplNum_wsheet, empNum_wrow, emplNum_wcol):
     emplNum_wsheet.write(empNum_wrow, emplNum_wcol, grabempNum(empNum_rsheet, empNum_rrow, empNum_rcol))
@@ -159,40 +159,40 @@ def main():
                     write_HeadIDAlpha(new_sheet, w_row, w_col)
 
                     # write head employee number
-                    data = read_sheet.cell_value(15, 2)
-                    my_dict = searchDict(cfg.dict_heads)
-                    for head_num in my_dict.search_for_match(data):
-                        new_sheet.write(w_row, 2, head_num)
+                    # data = read_sheet.cell_value(15, 2)
+                    # my_dict = searchDict(cfg.dict_heads)
+                    # for head_num in my_dict.search_for_match(data):
+                    #     new_sheet.write(w_row, 2, head_num)
 
-                    # This wokrs, but above is needded for now
-                    # new_sheet.write(w_row,2,grabempNum(read_sheet,15,2))
+                    # This works, but above is needded for now
+                    new_sheet.write(w_row,2,grabempNum2(read_sheet,15,2))
 
                     #write date
                     date_loop(r_row, w_row, read_sheet, new_sheet)
 
                     # write time in
-                    # r_col = 2
-                    # if grabempNum(read_sheet,r_row,r_col) == 3:  # if it's kris, then...
-                    #     kf.kf_format(w_row,r_row,new_sheet,read_sheet,2)
-                    # else:  # it's not kris, so....
-                    #     write_time(read_sheet, r_row, 2, new_sheet, w_row)
-                    #
-                    # # write time out - kris_fix2
-                    # if grabempNum(read_sheet,r_row,r_col) == 3:
-                    #     kf.kf_format(w_row, r_row, new_sheet, read_sheet, 3)
-                    # else:
-                    #     write_time(read_sheet, r_row, 3, new_sheet, w_row)
-
-                    if head_num == 3:  # if it's kris, then...
+                    r_col = 2
+                    if grabempNum2(read_sheet,15,2) == 3:  # if it's kris, then...
                         kf.kf_format(w_row,r_row,new_sheet,read_sheet,2)
                     else:  # it's not kris, so....
                         write_time(read_sheet, r_row, 2, new_sheet, w_row)
 
                     # write time out - kris_fix2
-                    if head_num == 3:
+                    if grabempNum2(read_sheet,15,2) == 3:
                         kf.kf_format(w_row, r_row, new_sheet, read_sheet, 3)
                     else:
                         write_time(read_sheet, r_row, 3, new_sheet, w_row)
+
+                    # if head_num == 3:  # if it's kris, then...
+                    #     kf.kf_format(w_row,r_row,new_sheet,read_sheet,2)
+                    # else:  # it's not kris, so....
+                    #     write_time(read_sheet, r_row, 2, new_sheet, w_row)
+                    #
+                    # # write time out - kris_fix2
+                    # if head_num == 3:
+                    #     kf.kf_format(w_row, r_row, new_sheet, read_sheet, 3)
+                    # else:
+                    #     write_time(read_sheet, r_row, 3, new_sheet, w_row)
 
                     # write reg time, ot, dt
                     w_col = 8
