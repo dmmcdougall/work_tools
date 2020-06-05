@@ -28,6 +28,10 @@ def col_names(col_new_sheet):
     for i in range(len(column_names)):
         col_new_sheet.write(0,i, column_names[i])
 
+# WHAT DO I NEED WITH THESE METHODS
+# READ SHEET, READ ROW, READ COL, START ROW, END ROW, START COL END COL
+# WRITE SHEET, WRITE ROW, WRITE COL
+
 def write_HeadIDAlpha(headalpha_wsheet, headalpha_wrow, headalpha_wcol):
     data = 'z'
     headalpha_wsheet.write(headalpha_wrow, headalpha_wcol, data)
@@ -60,22 +64,23 @@ def write_date(dateread_sheet, dater_row, datenew_sheet, datew_row):
     datenew_sheet.write(datew_row, 3, shift_date)
     print(shift_date)
 
-def write_date2(dateread_sheet, dater_row, datenew_sheet, datew_row):
-    data = dateread_sheet.cell_value(dater_row, 0)
+def write_date2(wdate_rsheet, wdate_rrow, wdate_rcol, wdate_wsheet, wdate_wrow, wdate_wcol):
+    data = wdate_rsheet.cell_value(wdate_rrow, wdate_rcol)
     shift_date_tuple = xlrd.xldate_as_tuple(data, 1)
     day = f"{shift_date_tuple[2]}"
     month = f"{shift_date_tuple[1]}"
     year = f"{shift_date_tuple[0]}"
     shift_date = year + '-' + month + '-' + day
-    datenew_sheet.write(datew_row, 3, shift_date)
     print(shift_date)
+    wdate_wsheet.write(wdate_wrow, wdate_wcol, shift_date)
+
 
 # this is a loop, to iterate over the write_date method
-def date_loop(read_row, write_row, readsheet2, newsheet2):
+def date_loop(loop_func, loop_rsheet, loop_rrow, loop_rcol, loop_wsheet, loop_wrow, loop_wcol):
     i = 19
     while i < 70:
-        if ((read_row >= i) and (read_row <= i + 6)):
-            write_date2(readsheet2, i + 1, newsheet2, write_row)
+        if ((loop_rrow >= i) and (loop_rrow <= i + 6)):
+            loop_func(loop_rsheet, i + 1, loop_rcol, loop_wsheet, loop_wrow, loop_wcol)
             i += 7
         else:
             i += 7
@@ -103,6 +108,84 @@ def write_time(timeread_sheet, timer_row,timer_col, timenew_sheet, timew_row):
 def write_hrs(hrsread_sheet, hrsr_row, hrsr_col, hrsnew_sheet, hrsw_row, hrsw_col):
     data = hrsread_sheet.cell_value(hrsr_row, hrsr_col)
     hrsnew_sheet.write(hrsw_row, hrsw_col, data)
+
+def grab_acct(grabacct_rsheet, grabacct_rrow, grabacct_rcol):
+    acct_num = grabacct_rsheet.cell_value(grabacct_rrow, grabacct_rcol)
+    return acct_num
+
+def write_acct(acct_rsheet, acct_rrow, acct_rcol,acct_wsheet, acct_wrow, acct_wcol):
+    data = acct_rsheet.cell_value(acct_rrow, acct_rcol)
+    print(data)
+    acct_wsheet.write(acct_wrow, acct_wcol, grab_acct(acct_rsheet, acct_rrow, acct_rcol))
+
+def grabeventYR2(datestr):
+    newdate = str.split(datestr, '/')
+    yr_int = int(newdate[2])
+    mos_int = int(newdate[1])
+    yr_strt = 2011
+    mos_strt = 9
+    yr_diff = yr_int - yr_strt
+    mos_diff = mos_int - mos_strt
+
+    if yr_int == 2019:
+        if mos_int < mos_strt:
+            if mos_diff < 0:
+                alphayr = ord('A') + yr_diff - 1
+            else:
+                alphayr = ord('A') + yr_diff
+        else:
+            if mos_diff < 0:
+                alphayr = ord('A') + yr_diff
+            else:
+                alphayr = ord('A') + yr_diff +1
+    elif yr_int > 2019:
+        if mos_diff < 0:
+            alphayr = ord('A') + yr_diff
+        else:
+            alphayr = ord('A') + yr_diff + 1
+    else:
+        if mos_diff < 0:
+            alphayr = ord('A')+yr_diff-1
+        else:
+            alphayr = ord('A')+yr_diff
+
+    return chr(alphayr)
+
+def writeevntYrID(wvntyr_rsheet, wvntyr_rrow, wvntyr_rcol, wvntyr_wsheet, wvntyr_wrow, wvntyr_wcol):
+    data = wvntyr_rsheet.cell_value(wvntyr_rrow, wvntyr_rcol)
+    wvntyr_wsheet.write(wvntyr_wrow, wvntyr_wcol, grabeventYR2(data))
+
+# def evnt_loop(loop_rsheet, loop_rrow, loop_rcol, loop_wsheet, loop_wrow, loop_wcol):
+#     i = 19
+#     while i < 70:
+#         if ((loop_rrow >= i) and (loop_rrow <= i + 6)):
+#             writeevntYrID(loop_rsheet, i + 1, loop_rcol, loop_wsheet, loop_wrow, loop_wcol)
+#             i += 7
+#         else:
+#             i += 7
+
+
+# Kris changed the formatting of his timesheet to make it more flexible and subsequently
+# killed the scrapper.  This is the work around
+# this function is for writing the begin and end times of calls
+
+def kf_format(klr_sheet, klr_row, klr_col, klw_sheet, klw_row):
+    data = klr_sheet.cell_value(klr_row, klr_col)
+    kris_str = str(data)
+    count_int = len(kris_str)
+
+    if count_int == 1:
+        kris_tuple = (0, data, 0, 0)
+    elif count_int == 2:
+        kris_tuple = (kris_str[0], kris_str[1], 0, 0)
+    elif count_int == 3:
+        kris_tuple = (0, kris_str[0], kris_str[1], kris_str[2])
+    else:
+        kris_tuple = (kris_str[0], kris_str[1], kris_str[2], kris_str[3])
+
+    time = str(kris_tuple[0]) + str(kris_tuple[1]) + ":" + str(kris_tuple[2]) + str(kris_tuple[3])
+    print(time)
+    klw_sheet.write(klw_row, klr_col + 2, time)
 
 def main():
 
@@ -136,7 +219,7 @@ def main():
         read_sheet = read_book.sheet_by_index(0)
 
         #WHAT DO I NEED WITH THESE METHODS
-        # READ SHEET, READ ROW, READ COL
+        # READ SHEET, READ ROW, READ COL, START ROW, END ROW, START COL END COL
         # WRITE SHEET, WRITE ROW, WRITE COL
 
         # is this actually a timesheet? And which one is it?
@@ -159,40 +242,25 @@ def main():
                     write_HeadIDAlpha(new_sheet, w_row, w_col)
 
                     # write head employee number
-                    # data = read_sheet.cell_value(15, 2)
-                    # my_dict = searchDict(cfg.dict_heads)
-                    # for head_num in my_dict.search_for_match(data):
-                    #     new_sheet.write(w_row, 2, head_num)
-
-                    # This works, but above is needded for now
                     new_sheet.write(w_row,2,grabempNum2(read_sheet,15,2))
 
                     #write date
-                    date_loop(r_row, w_row, read_sheet, new_sheet)
+                    r_col =0
+                    w_col = 3
+                    date_loop(write_date2, read_sheet, r_row, r_col, new_sheet, w_row, w_col)
 
                     # write time in
                     r_col = 2
                     if grabempNum2(read_sheet,15,2) == 3:  # if it's kris, then...
-                        kf.kf_format(w_row,r_row,new_sheet,read_sheet,2)
+                        kf_format(read_sheet, r_row, 2, new_sheet,w_row)
                     else:  # it's not kris, so....
                         write_time(read_sheet, r_row, 2, new_sheet, w_row)
 
                     # write time out - kris_fix2
                     if grabempNum2(read_sheet,15,2) == 3:
-                        kf.kf_format(w_row, r_row, new_sheet, read_sheet, 3)
+                        kf_format(read_sheet, r_row, 2, new_sheet,w_row)
                     else:
                         write_time(read_sheet, r_row, 3, new_sheet, w_row)
-
-                    # if head_num == 3:  # if it's kris, then...
-                    #     kf.kf_format(w_row,r_row,new_sheet,read_sheet,2)
-                    # else:  # it's not kris, so....
-                    #     write_time(read_sheet, r_row, 2, new_sheet, w_row)
-                    #
-                    # # write time out - kris_fix2
-                    # if head_num == 3:
-                    #     kf.kf_format(w_row, r_row, new_sheet, read_sheet, 3)
-                    # else:
-                    #     write_time(read_sheet, r_row, 3, new_sheet, w_row)
 
                     # write reg time, ot, dt
                     w_col = 8
@@ -205,15 +273,24 @@ def main():
                     write_hrs(read_sheet, r_row, 6, new_sheet, w_row, w_col)
 
                     # write accounting code
-                    data = read_sheet.cell_value(r_row, 8)
-                    print(data)
-                    acct_num = cfg.acct_codes[data]
-                    new_sheet.write(w_row, 11, acct_num)
+                    r_col = 8
+                    w_col = 11
+                    write_acct(read_sheet, r_row, r_col, new_sheet, w_row, w_col)
+
+                    # data = read_sheet.cell_value(r_row, 8)
+                    # print(data)
+                    # acct_num = cfg.acct_codes[data]
+                    # new_sheet.write(w_row, 11, acct_num)
 
                     # write show data
+                    w_col = 6
                     data = 'J'  # this is year specific CHANGE THIS FOR YOUR NEEDS - WRITE SOMETHING BETTER
-                    new_sheet.write(w_row, 6, data)
+                    new_sheet.write(w_row, w_col, data)
 
+                    # w_col = 6
+                    # date_loop(writeevntYrID, read_sheet, r_row, r_col, new_sheet,w_row, w_col)
+
+                    acct_num = grab_acct(read_sheet, r_row, r_col)
                     data = '0-310820'  # this is year specific
                     if acct_num != '6210-50-504' and acct_num != '6200-50-504':
                         new_sheet.write(w_row, 7, data)
