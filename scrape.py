@@ -29,7 +29,8 @@ def col_names(col_new_sheet):
         col_new_sheet.write(0,i, column_names[i])
 
 # WHAT DO I NEED WITH THESE METHODS
-# READ SHEET, READ ROW, READ COL, START ROW, END ROW, START COL END COL
+# READ SHEET, READ ROW, READ COL,
+# START ROW, END ROW, START COL END COL
 # WRITE SHEET, WRITE ROW, WRITE COL
 
 def write_HeadIDAlpha(headalpha_wsheet, headalpha_wrow, headalpha_wcol):
@@ -155,15 +156,31 @@ def writeevntYrID(wvntyr_rsheet, wvntyr_rrow, wvntyr_rcol, wvntyr_wsheet, wvntyr
     data = wvntyr_rsheet.cell_value(wvntyr_rrow, wvntyr_rcol)
     wvntyr_wsheet.write(wvntyr_wrow, wvntyr_wcol, grabeventYR2(data))
 
-# def evnt_loop(loop_rsheet, loop_rrow, loop_rcol, loop_wsheet, loop_wrow, loop_wcol):
-#     i = 19
-#     while i < 70:
-#         if ((loop_rrow >= i) and (loop_rrow <= i + 6)):
-#             writeevntYrID(loop_rsheet, i + 1, loop_rcol, loop_wsheet, loop_wrow, loop_wcol)
-#             i += 7
-#         else:
-#             i += 7
+def eventid(evnt_rsheet, evnt_rrow, evnt_rcol, evnt_wsheet, evnt_wrow, evnt_wcol):
+    data = '0-310820'  # this is year specific
+    evnt_num = grab_acct(evnt_rsheet, evnt_rrow, evnt_rcol)
+    if evnt_num != '6210-50-504' and evnt_num != '6200-50-504':
+        evnt_wsheet.write(evnt_wrow,evnt_wcol, data)
+    else:
+        evnt_wsheet.write(evnt_wrow, evnt_wcol, "")
 
+def blackscall(blk_rsheet, blk_rrow, blk_rcol, blk_wsheet, blk_wrow, blk_wcol):
+    data = blk_rsheet.cell_value(blk_rrow, blk_rcol)
+    if data != '':
+        blacks = 1
+    else:
+        blacks = 0
+
+    blk_wsheet.write(blk_wrow, blk_wcol, blacks)
+    
+def mpcall(mp_rsheet, mp_rrow, mp_rcol, mp_wsheet, mp_wrow, mp_wcol):
+    data = mp_rsheet.cell_value(mp_rrow, mp_rcol)
+    if data == 1:
+        meal = 1
+    else:
+        meal = 0
+
+    mp_wsheet.write(mp_wrow, mp_wcol, meal)
 
 # Kris changed the formatting of his timesheet to make it more flexible and subsequently
 # killed the scrapper.  This is the work around
@@ -290,28 +307,20 @@ def main():
                     # w_col = 6
                     # date_loop(writeevntYrID, read_sheet, r_row, r_col, new_sheet,w_row, w_col)
 
-                    acct_num = grab_acct(read_sheet, r_row, r_col)
-                    data = '0-310820'  # this is year specific
-                    if acct_num != '6210-50-504' and acct_num != '6200-50-504':
-                        new_sheet.write(w_row, 7, data)
-                    # elif acct_num != '6200-50-504':
-                    #   new_sheet.write(w_row, 7, data)
-                    else:
-                        new_sheet.write(w_row, 7, "")
+                    # show id
+                    w_col = 7
+                    eventid(read_sheet, r_row, r_col, new_sheet, w_row, w_col)
 
                     # showcall true/false
-                    data = read_sheet.cell_value(r_row, 9)
-                    if data != '':
-                        new_sheet.write(w_row, 12, 1)
-                    else:
-                        new_sheet.write(w_row, 12, 0)
+                    r_col=9
+                    w_col = 12
+
+                    blackscall(read_sheet, r_row, r_col, new_sheet, w_row, w_col)
 
                     # Meal Penalty true/false
-                    data = read_sheet.cell_value(r_row, 7)
-                    if data == 1:
-                        new_sheet.write(w_row, 13, 1)
-                    else:
-                        new_sheet.write(w_row, 13, 0)
+                    r_col = 7
+                    w_col = 13
+                    mpcall(read_sheet, r_row, r_col, new_sheet, w_row, w_col)
 
                     w_row = w_row + 1  # move along in the write_book
 
