@@ -13,12 +13,12 @@ from xlutils.copy import copy
 # imported from local directories
 import config as cfg
 import kris_fix as kf # added when kris broke the scrapper
+import myClasses as my_cls
 from myClasses import searchDict
-import timesheet2011 as tf11
-import casualtimesheet as cas
+from myClasses import timesheet
 
 # this method will create the columns in the new .xls sheet
-def col_names(col_new_sheet):
+def col_names(col_write_sheet):
     column_names = ["Shift", "HeadIDLetter", "HeadIDNumber",
                     "Date", "InTime", "OutTime",
                     "EventYrID", "EventID", "Reg",
@@ -26,7 +26,7 @@ def col_names(col_new_sheet):
                     "Blackscall", "MP"]
 
     for i in range(len(column_names)):
-        col_new_sheet.write(0,i, column_names[i])
+        col_write_sheet.write(0,i, column_names[i])
 
 # WHAT DO I NEED WITH THESE METHODS
 # READ SHEET, READ ROW, READ COL,
@@ -55,14 +55,14 @@ def write_empNum(empNum_rsheet, empNum_rrow, empNum_rcol,emplNum_wsheet, empNum_
 
 
 # this method will write the date to the new .xls sheet
-def write_date(dateread_sheet, dater_row, datenew_sheet, datew_row):
+def write_date(dateread_sheet, dater_row, datewrite_sheet, datew_row):
     data = dateread_sheet.cell_value(dater_row, 0)
     shift_date_tuple = xlrd.xldate_as_tuple(data, 1)
     day = f"{shift_date_tuple[2]}"
     month = f"{shift_date_tuple[1]}"
     year = f"{shift_date_tuple[0]}"
     shift_date = day + '/' + month + '/' + year
-    datenew_sheet.write(datew_row, 3, shift_date)
+    datewrite_sheet.write(datew_row, 3, shift_date)
     print(shift_date)
 
 def write_date2(wdate_rsheet, wdate_rrow, wdate_rcol, wdate_wsheet, wdate_wrow, wdate_wcol):
@@ -87,7 +87,7 @@ def date_loop(loop_func, loop_rsheet, loop_rrow, loop_rcol, loop_wsheet, loop_wr
             i += 7
 
 # this method will write the time to the new .xls sheet
-def write_time(timeread_sheet, timer_row,timer_col, timenew_sheet, timew_row):
+def write_time(timeread_sheet, timer_row,timer_col, timewrite_sheet, timew_row):
     data = timeread_sheet.cell_value(timer_row, timer_col)
     if data == '':
         shift_in_tuple = (0, 0, 0, 0, 0, 0)
@@ -103,12 +103,12 @@ def write_time(timeread_sheet, timer_row,timer_col, timenew_sheet, timew_row):
         half2_time = f"{shift_in_tuple[4]}"
     time = half1_time + ":" + half2_time
     print(time)
-    timenew_sheet.write(timew_row, timer_col + 2, time)
+    timewrite_sheet.write(timew_row, timer_col + 2, time)
 
 # this method will write the hours worked to the new .xls sheet
-def write_hrs(hrsread_sheet, hrsr_row, hrsr_col, hrsnew_sheet, hrsw_row, hrsw_col):
+def write_hrs(hrsread_sheet, hrsr_row, hrsr_col, hrswrite_sheet, hrsw_row, hrsw_col):
     data = hrsread_sheet.cell_value(hrsr_row, hrsr_col)
-    hrsnew_sheet.write(hrsw_row, hrsw_col, data)
+    hrswrite_sheet.write(hrsw_row, hrsw_col, data)
 
 def grab_acct(grabacct_rsheet, grabacct_rrow, grabacct_rcol):
     acct_num = grabacct_rsheet.cell_value(grabacct_rrow, grabacct_rcol)
@@ -186,7 +186,7 @@ def mpcall(mp_rsheet, mp_rrow, mp_rcol, mp_wsheet, mp_wrow, mp_wcol):
 # killed the scrapper.  This is the work around
 # this function is for writing the begin and end times of calls
 
-def kf_format(klr_sheet, klr_row, klr_col, klw_sheet, klw_row):
+def kf_format(klr_sheet, klr_row, klr_col, klwrite_sheet, klw_row):
     data = klr_sheet.cell_value(klr_row, klr_col)
     kris_str = str(data)
     count_int = len(kris_str)
@@ -202,18 +202,24 @@ def kf_format(klr_sheet, klr_row, klr_col, klw_sheet, klw_row):
 
     time = str(kris_tuple[0]) + str(kris_tuple[1]) + ":" + str(kris_tuple[2]) + str(kris_tuple[3])
     print(time)
-    klw_sheet.write(klw_row, klr_col + 2, time)
+    klwrite_sheet.write(klw_row, klr_col + 2, time)
 
 def main():
+
+    # define timesheets - version, name_row, name_column, start_data_row, start_data_col
+    ts15 = timesheet('ts15', 15, 2, 19, 2)
+    ts11 = timesheet('ts11', 3, 1, 7, 1)
+    ts_cas = timesheet('ts_cas', 9, 1, 14, 1)
+
 
     # load the write workbook
     write_book = xlrd.open_workbook(cfg.write_file)
     write_sheet = write_book.sheet_by_index(0)
     new_book = copy(write_book)
-    new_sheet = new_book.get_sheet(0)
+    write_sheet = new_book.get_sheet(0)
 
     # set up the column headers
-    col_names(new_sheet)
+    col_names(write_sheet)
 
     #now that the headers are in, set the first write row to be row #2
     w_row = 1
@@ -228,7 +234,7 @@ def main():
     input()
 
     # a loop to iterate through the read_list
-    i = 0  # file list position number
+    i = 0  # where in the list are we?
     for i in range(len(read_list)):
         read_file = (cfg.dir + '\\' + read_list[i])
         print(read_file)
@@ -256,71 +262,72 @@ def main():
 
                     # write the HeadAlphaID
                     w_col = 1
-                    write_HeadIDAlpha(new_sheet, w_row, w_col)
+                    write_sheet.write(w_row, w_col, my_cls.timesheet.ts_write_HeadIDAlpha(ts15, read_sheet))
 
                     # write head employee number
-                    new_sheet.write(w_row,2,grabempNum2(read_sheet,15,2))
+                    w_col = 2
+                    write_sheet.write(w_row,w_col,my_cls.timesheet.ts_grabempNum(ts15, read_sheet))
 
                     #write date
                     r_col =0
                     w_col = 3
-                    date_loop(write_date2, read_sheet, r_row, r_col, new_sheet, w_row, w_col)
+                    date_loop(write_date2, read_sheet, r_row, r_col, write_sheet, w_row, w_col)
 
                     # write time in
                     r_col = 2
                     if grabempNum2(read_sheet,15,2) == 3:  # if it's kris, then...
-                        kf_format(read_sheet, r_row, 2, new_sheet,w_row)
+                        kf_format(read_sheet, r_row, 2, write_sheet,w_row)
                     else:  # it's not kris, so....
-                        write_time(read_sheet, r_row, 2, new_sheet, w_row)
+                        write_time(read_sheet, r_row, 2, write_sheet, w_row)
 
                     # write time out - kris_fix2
                     if grabempNum2(read_sheet,15,2) == 3:
-                        kf_format(read_sheet, r_row, 2, new_sheet,w_row)
+                        kf_format(read_sheet, r_row, 2, write_sheet,w_row)
                     else:
-                        write_time(read_sheet, r_row, 3, new_sheet, w_row)
+                        write_time(read_sheet, r_row, 3, write_sheet, w_row)
 
                     # write reg time, ot, dt
                     w_col = 8
-                    write_hrs(read_sheet, r_row, 4, new_sheet, w_row, w_col)
+                    write_hrs(read_sheet, r_row, 4, write_sheet, w_row, w_col)
                     w_col = w_col + 1
 
-                    write_hrs(read_sheet, r_row, 5, new_sheet, w_row, w_col)
+                    write_hrs(read_sheet, r_row, 5, write_sheet, w_row, w_col)
                     w_col = w_col + 1
 
-                    write_hrs(read_sheet, r_row, 6, new_sheet, w_row, w_col)
+                    write_hrs(read_sheet, r_row, 6, write_sheet, w_row, w_col)
 
                     # write accounting code
                     r_col = 8
                     w_col = 11
-                    write_acct(read_sheet, r_row, r_col, new_sheet, w_row, w_col)
+                    write_acct(read_sheet, r_row, r_col, write_sheet, w_row, w_col)
 
                     # data = read_sheet.cell_value(r_row, 8)
                     # print(data)
                     # acct_num = cfg.acct_codes[data]
-                    # new_sheet.write(w_row, 11, acct_num)
+                    # write_sheet.write(w_row, 11, acct_num)
 
                     # write show data
                     w_col = 6
                     data = 'J'  # this is year specific CHANGE THIS FOR YOUR NEEDS - WRITE SOMETHING BETTER
-                    new_sheet.write(w_row, w_col, data)
+                    write_sheet.write(w_row, w_col, data)
 
                     # w_col = 6
-                    # date_loop(writeevntYrID, read_sheet, r_row, r_col, new_sheet,w_row, w_col)
+                    # date_loop(writeevntYrID, read_sheet, r_row, r_col, write_sheet,w_row, w_col)
 
                     # show id
                     w_col = 7
-                    eventid(read_sheet, r_row, r_col, new_sheet, w_row, w_col)
+                    eventid(read_sheet, r_row, r_col, write_sheet, w_row, w_col)
 
                     # showcall true/false
                     r_col=9
                     w_col = 12
 
-                    blackscall(read_sheet, r_row, r_col, new_sheet, w_row, w_col)
+                    blackscall(read_sheet, r_row, r_col, write_sheet, w_row, w_col)
 
                     # Meal Penalty true/false
                     r_col = 7
                     w_col = 13
-                    mpcall(read_sheet, r_row, r_col, new_sheet, w_row, w_col)
+                    mpcall(read_sheet, r_row, r_col, write_sheet, w_row, w_col)
 
                     w_row = w_row + 1  # move along in the write_book
 
