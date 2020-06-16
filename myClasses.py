@@ -8,51 +8,6 @@ import re
 # imported from third party repos
 
 # imported from local directories
-import config as cfg
-
-class timesheet:
-
-    def __init__(self, version, name_row, name_column, start_data_row, start_data_col):
-        self.version = version
-        self.name_row = name_row
-        self.name_column = name_column
-        self.start_data_row = start_data_row
-        self.start_data_col = start_data_col
-
-    # grab the HeadIDAlpha
-    def ts_write_HeadIDAlpha(self, HeadID_rsheet):
-        data = 'z'
-        # print(data)
-        return data
-
-    # grab the HeadIDAlpha
-    def ts_grabempNum(self, empNum_rsheet):
-        data = empNum_rsheet.cell_value(self.name_row, self.name_column)
-        mylist = (str.split(data))
-        var = mylist[0]
-        head_num = cfg.dict_heads[var]
-        # print(head_num)
-        return head_num
-
-    def write_date2(self):
-        data = wdate_rsheet.cell_value(self.start_data_row, self.start_data_col-2)
-        shift_date_tuple = xlrd.xldate_as_tuple(data, 1)
-        day = f"{shift_date_tuple[2]}"
-        month = f"{shift_date_tuple[1]}"
-        year = f"{shift_date_tuple[0]}"
-        shift_date = year + '-' + month + '-' + day
-        # print(shift_date)
-        return shift_date
-
-
-
-
-
-
-
-
-
-
 
 class salariedHead:
 

@@ -15,7 +15,10 @@ import config as cfg
 import kris_fix as kf # added when kris broke the scrapper
 import myClasses as my_cls
 from myClasses import searchDict
-from myClasses import timesheet
+import timesheet as ts
+from timesheet import ts_2015
+from timesheet import ts_2011
+from timesheet import ts_casual
 
 # this method will create the columns in the new .xls sheet
 def col_names(col_write_sheet):
@@ -74,7 +77,6 @@ def write_date2(wdate_rsheet, wdate_rrow, wdate_rcol, wdate_wsheet, wdate_wrow, 
     shift_date = year + '-' + month + '-' + day
     print(shift_date)
     wdate_wsheet.write(wdate_wrow, wdate_wcol, shift_date)
-
 
 # this is a loop, to iterate over the write_date method
 def date_loop(loop_func, loop_rsheet, loop_rrow, loop_rcol, loop_wsheet, loop_wrow, loop_wcol):
@@ -206,10 +208,11 @@ def kf_format(klr_sheet, klr_row, klr_col, klwrite_sheet, klw_row):
 
 def main():
 
-    # define timesheets - version, name_row, name_column, start_data_row, start_data_col
-    ts15 = timesheet('ts15', 15, 2, 19, 2)
-    ts11 = timesheet('ts11', 3, 1, 7, 1)
-    ts_cas = timesheet('ts_cas', 9, 1, 14, 1)
+    # define timesheets - version, name_row, name_column, start_data_row, start_data_col,
+    # end_data_row, space_per_day
+    ts15 = ts_2015('ts15', 15, 2, 19, 2, 69, 7)
+    ts11 = ts_2011('ts11', 3, 1, 7, 1, 55, 7)
+    ts_cas = ts_casual('ts_cas', 9, 1, 14, 1, 55, 6)
 
 
     # load the write workbook
@@ -252,7 +255,8 @@ def main():
         elif read_sheet.cell_value(19, 0) == 'SUNDAY':
             print("This timesheet was designed in 2015. Begin data scrape")
 
-            r_row = 19  # r_row is now the read_book row
+            #r_row = 19  # r_row is now the read_book row
+            r_row = ts15.start_data_row
 
             # A loop to iterate through the time slots one at a time
             for r_row in range(19, 68):
@@ -262,16 +266,26 @@ def main():
 
                     # write the HeadAlphaID
                     w_col = 1
-                    write_sheet.write(w_row, w_col, my_cls.timesheet.ts_write_HeadIDAlpha(ts15, read_sheet))
+                    write_sheet.write(w_row, w_col,ts.timesheet.ts_grabHeadIDAlpha(ts15, read_sheet))
 
                     # write head employee number
                     w_col = 2
-                    write_sheet.write(w_row,w_col,my_cls.timesheet.ts_grabempNum(ts15, read_sheet))
+                    write_sheet.write(w_row,w_col,ts.timesheet.ts_grabempNum(ts15, read_sheet))
 
                     #write date
                     r_col =0
                     w_col = 3
-                    date_loop(write_date2, read_sheet, r_row, r_col, write_sheet, w_row, w_col)
+                    i = 19
+                    while i < 70:
+                        if ((r_row >= i) and (r_row <= i + 6)):
+                            ts.ts_2015(ts15, read_sheet, i + 1, r_col, write_sheet, w_row, w_col)
+                            i += 7
+                        else:
+                            i += 7
+
+                    # ts.timesheet.ts_date_loop(date_loop(
+                    #     ts15, read_sheet, r_row, r_col, write_sheet, w_row, w_col),
+                    #     read_sheet, r_row, r_col, write_sheet, w_row, w_col)
 
                     # write time in
                     r_col = 2
