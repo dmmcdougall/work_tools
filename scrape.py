@@ -170,15 +170,27 @@ def main():
                     acct_num = cfg.acct_codes[data]
                     new_sheet.write(w_row, 11, acct_num)
 
+                    # CAPTURING THIS FOR NOW
+                    # # write show data
+                    # data = 'J'  # this is year specific CHANGE THIS FOR YOUR NEEDS - WRITE SOMETHING BETTER
+                    # new_sheet.write(w_row, 6, data)
+
                     # write show data
-                    data = 'J'  # this is year specific CHANGE THIS FOR YOUR NEEDS - WRITE SOMETHING BETTER
+                    data = 'K'  # this is year specific CHANGE THIS FOR YOUR NEEDS - WRITE SOMETHING BETTER
                     new_sheet.write(w_row, 6, data)
 
-                    data = '0-310820'  # this is year specific
+                    # CAPTURING THIS FOR NOW
+                    # data = '0-310820'  # this is year specific
+                    # if acct_num != '6210-50-504' and acct_num != '6200-50-504':
+                    #     new_sheet.write(w_row, 7, data)
+                    # # elif acct_num != '6200-50-504':
+                    # #   new_sheet.write(w_row, 7, data)
+                    # else:
+                    #     new_sheet.write(w_row, 7, "")
+
+                    data = '0-310821'  # this is year specific
                     if acct_num != '6210-50-504' and acct_num != '6200-50-504':
                         new_sheet.write(w_row, 7, data)
-                    # elif acct_num != '6200-50-504':
-                    #   new_sheet.write(w_row, 7, data)
                     else:
                         new_sheet.write(w_row, 7, "")
 
