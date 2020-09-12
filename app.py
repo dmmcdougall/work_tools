@@ -1,6 +1,9 @@
 '''
 This is the main file for several pieces of the timesheet scrapper
 Please see each file for more info
+
+This rebuild in Sept 2020 hopefully intgrates full functioning
+timesheet selection and removes writing to a .xls
 '''
 
 # imported from standard library

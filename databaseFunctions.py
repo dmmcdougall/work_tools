@@ -10,6 +10,16 @@ import config as cfg
 
 # local repo
 
+# find the number we need to start the new data with
+def find_next_row_from_db(my_table):
+    query = "SELECT * FROM " + table
+    df_hShift = pd.read_sql(query, cfg.conn)
+    last_shift = df_hShift[my_table].max()
+    # print(last_shift) # for testing
+    new_shift = last_shift + 1
+    return new_shift
+
+
 # read from SQL and print to screen
 def read2screen(query, conn):
     print("Read Method")
