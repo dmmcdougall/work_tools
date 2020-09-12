@@ -54,6 +54,8 @@ def main():
         print("let's build the table")
         # with engine.connect() as con:
         #     con.execute('ALTER TABLE TMPtblWeeklyHeadsData ADD PRIMARY KEY (Shift);')
+        print("OOPS! IF YOU ARE READING THIS WE HAVE A PROBLEM!")
+        print("NEXT COMES THE ERROR MESSAGE!")
 
     print("Table path cleared, let's write to the db")
     engine = sa.create_engine(cfg.alc_str)
