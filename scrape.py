@@ -221,7 +221,7 @@ def main():
     # # end_data_row, space_per_day
     # ts15 = ts_2015('ts15', 15, 2, 19, 2, 69, 7)
     # ts11 = ts_2011('ts11', 3, 1, 7, 1, 55, 7)
-    # ts_cas = ts_casual('ts_cas', 9, 1, 14, 1, 55, 6)
+
 
     # GARBAGE
     # # load the write workbook
@@ -262,9 +262,19 @@ def main():
         # WRITE SHEET, WRITE ROW, WRITE COL
 
         # is this actually a timesheet? And which one is it?
+        # define timesheets - version, name_row, name_column, start_data_row,
+        # start_data_col, spaces_per_day
         if read_sheet.cell_value(7, 0) == 'SUNDAY':
             print("This timesheet was designed in 2011. Begin data scrape")
             tf11.timesheet2011()
+        elif read_sheet.cell_value(14, 0) == 'SUNDAY':
+            print("This timesheet belongs to a casual. Begin data scrape")
+            ts_cas = ts_casual('ts_cas', 9, 1, 14, 1, 55, 6)
+
+            # Grab a casual number from the db
+            data = read_sheet.cell_value(1,9)
+            dbfnc.find_crew_number(data)
+
         elif read_sheet.cell_value(19, 0) == 'SUNDAY':
             print("This timesheet was designed in 2015. Begin data scrape")
 

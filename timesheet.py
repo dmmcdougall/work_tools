@@ -12,14 +12,14 @@ import config as cfg
 
 class timesheet:
 
-    def __init__(self, version, name_row, name_column, start_data_row, start_data_col, end_data_row, space_per_day):
+    def __init__(self, version, name_row, name_column, start_data_row, start_data_col, end_data_row, spaces_per_day):
         self.version = version
         self.name_row = name_row
         self.name_column = name_column
         self.start_data_row = start_data_row
         self.start_data_col = start_data_col
         self.end_data_row = end_data_row
-        self.space_per_day = space_per_day
+        self.spaces_per_day = spaces_per_day
 
     # grab the HeadIDAlpha
     def ts_grabHeadIDAlpha(self, HeadID_rsheet):

@@ -10,9 +10,20 @@ import config as cfg
 
 # local repo
 
+def find_crew_number(crew_name):
+    mylist = (str.split(crew_name))
+    query = ("""
+        SELECT * FROM CrewNamesTable
+        WHERE First Name = ?
+        AND LastName = ?
+    """, mylist[0],mylist[1])
+    df_crewNum = pd.read_sql(query, cfg.conn)
+    crew_num = df_crewNum[0]
+    return crew_num
+
 # find the number we need to start the new data with
 def find_next_row_from_db(my_table):
-    query = "SELECT * FROM " + table
+    query = ("SELECT * FROM ?", my_table)
     df_hShift = pd.read_sql(query, cfg.conn)
     last_shift = df_hShift[my_table].max()
     # print(last_shift) # for testing
