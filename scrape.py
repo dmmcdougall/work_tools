@@ -270,10 +270,36 @@ def main():
         elif read_sheet.cell_value(14, 0) == 'SUNDAY':
             print("This timesheet belongs to a casual. Begin data scrape")
             ts_cas = ts_casual('ts_cas', 9, 1, 14, 1, 55, 6)
+            r_row = ts_cas.start_data_row
 
-            # Grab a casual number from the db
-            data = read_sheet.cell_value(1,9)
-            dbfnc.find_crew_number(data)
+            # A loop to iterate through the time slots one at a time
+            for r_row in range(ts_cas.start_data_row, ts_cas.end_data_row):
+                if read_sheet.cell_type(r_row, 2) != 0:
+                    print("writing data")
+
+                    # create an empty list to store the data
+                    crew_data_list = []
+
+                    # Next Crew Shift Number
+                    data = dbfnc.find_next_row_from_db("CrewShiftWorkedTbl")
+                    crew_data_list.append(data)
+
+                    # CrewID Alpha
+                    data = "STA" # build something to pull it from the db?
+                    crew_data_list.append(data)
+
+                    # Grab a casual number from the db
+                    data = read_sheet.cell_value(1,9)
+                    crew_data_list.append(dbfnc.find_crew_number(data))
+
+                    """          "Date", "InTime", "OutTime",
+                                 "EventYrID", "EventID", "Reg",
+                                 "OT", "Double", "Acct",
+                                 "Blackscall", "MP", "ShiftType"]
+                    """
+
+                else:
+                    print("no data in cel B" + str((r_row) + 1))  # move on to the next time slot
 
         elif read_sheet.cell_value(19, 0) == 'SUNDAY':
             print("This timesheet was designed in 2015. Begin data scrape")
