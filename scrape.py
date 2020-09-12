@@ -1,6 +1,6 @@
-'''
+"""
 This file is for taking collected timesheets, scrapping them, and....
-'''
+"""
 
 # imported from standard library
 import os
@@ -217,25 +217,14 @@ def col_names(timesheet):
 
 def main():
     # this need to move down to after the if statement
-    # # define timesheets - version, name_row, name_column, start_data_row, start_data_col,
-    # # end_data_row, space_per_day
     # ts15 = ts_2015('ts15', 15, 2, 19, 2, 69, 7)
     # ts11 = ts_2011('ts11', 3, 1, 7, 1, 55, 7)
-
-
-    # GARBAGE
-    # # load the write workbook
-    # write_book = xlrd.open_workbook(cfg.write_file)
-    # write_sheet = write_book.sheet_by_index(0)
-    # new_book = copy(write_book)
-    # write_sheet = new_book.get_sheet(0)
 
     # set up the column headers
     col_names(ts_cas)
     col_names(ts15)
 
-    # # Creating an empty Dataframe with column names only
-    # dfObj = pd.DataFrame(columns=['User_ID', 'UserName', 'Action'])
+    # # Creating an empty dataframes with column names only
     df_head = pd.DataFrame(columns=head_keys)
     df_crew = pd.DataFrame(columns=crew_keys)
 
@@ -256,10 +245,6 @@ def main():
         print(read_file)
         read_book = xlrd.open_workbook(read_file)
         read_sheet = read_book.sheet_by_index(0)
-
-        #WHAT DO I NEED WITH THESE METHODS
-        # READ SHEET, READ ROW, READ COL, START ROW, END ROW, START COL END COL
-        # WRITE SHEET, WRITE ROW, WRITE COL
 
         # is this actually a timesheet? And which one is it?
         # define timesheets - version, name_row, name_column, start_data_row,
