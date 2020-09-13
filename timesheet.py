@@ -36,6 +36,24 @@ class timesheet:
         # print(head_num)
         return head_num
 
+    # this is a loop, to iterate over the write_date method
+    def ts_grabdate(self, read_sheet, read_row):
+        i=self.start_data_row
+        while i < self.end_data_row:
+            if ((read_row >= i) and (read_row <= i + 6)):
+                data = read_sheet.cell_value(read_row, 0)
+                shift_date_tuple = xlrd.xldate_as_tuple(data, 1)
+                day = f"{shift_date_tuple[2]}"
+                month = f"{shift_date_tuple[1]}"
+                year = f"{shift_date_tuple[0]}"
+                shift_date = year + '-' + month + '-' + day
+                i += self.spaces_per_day
+                return shift_date
+            else:
+                i += self.spaces_per_day
+
+
+
 class ts_2015(timesheet):
 
     #grab the date

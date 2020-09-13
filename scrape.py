@@ -223,6 +223,7 @@ def main():
     # set up the column headers
     col_names(ts_cas)
     col_names(ts15)
+    #col_names(ts11)
 
     # # Creating an empty dataframes with column names only
     df_head = pd.DataFrame(columns=head_keys)
@@ -257,17 +258,21 @@ def main():
             ts_cas = ts_casual('ts_cas', 9, 1, 14, 1, 55, 6)
             r_row = ts_cas.start_data_row
 
+            # Grab next Crew Shift Number
+            shift_num = dbfnc.find_next_row_from_db("CrewShiftWorkedTbl")
+
             # A loop to iterate through the time slots one at a time
             for r_row in range(ts_cas.start_data_row, ts_cas.end_data_row):
                 if read_sheet.cell_type(r_row, 2) != 0:
                     print("writing data")
 
-                    # create an empty list to store the data
+                    # House keeping...
+                    # create an empty list to store the data and increment the shift number
                     crew_data_list = []
+                    shift_num +=1
 
-                    # Next Crew Shift Number
-                    data = dbfnc.find_next_row_from_db("CrewShiftWorkedTbl")
-                    crew_data_list.append(data)
+                    # write shift number
+                    crew_data_list.append(shift_num)
 
                     # CrewID Alpha
                     data = "STA" # build something to pull it from the db?
@@ -277,7 +282,12 @@ def main():
                     data = read_sheet.cell_value(1,9)
                     crew_data_list.append(dbfnc.find_crew_number(data))
 
-                    """          "Date", "InTime", "OutTime",
+                    # Grab ts date
+                    data = ts_cas.ts_grabdate(read_sheet,r_row)
+                    print(data)
+                    crew_data_list.append(data)
+
+                    """          "InTime", "OutTime",
                                  "EventYrID", "EventID", "Reg",
                                  "OT", "Double", "Acct",
                                  "Blackscall", "MP", "ShiftType"]
