@@ -4,6 +4,7 @@
 
 # standard library
 import pyodbc
+import pandas as pd
 
 # third part libraries
 import config as cfg

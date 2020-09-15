@@ -23,22 +23,6 @@ from timesheet import ts_casual
 
 # these functions will create the keys for the
 # dictionarires we will use to create the df columns
-def col_names(timesheet):
-    if timesheet = ts_cas:
-        crew_keys = ["Shift", "CrewIDLetter", "CrewIDNumber",
-                    "Date", "InTime", "OutTime",
-                    "EventYrID", "EventID", "Reg",
-                    "OT", "Double", "Acct",
-                    "Blackscall", "MP", "ShiftType"]
-    else:
-        head_keys = ["Shift", "HeadIDLetter", "HeadIDNumber",
-                    "Date", "InTime", "OutTime",
-                    "EventYrID", "EventID", "Reg",
-                    "OT", "Double", "Acct",
-                    "Blackscall", "MP"]
-
-    for i in range(len(column_names)):
-        col_write_sheet.write(0,i, column_names[i])
 
 # WHAT DO I NEED WITH THESE METHODS
 # READ SHEET, READ ROW, READ COL,
@@ -221,9 +205,16 @@ def main():
     # ts11 = ts_2011('ts11', 3, 1, 7, 1, 55, 7)
 
     # set up the column headers
-    col_names(ts_cas)
-    col_names(ts15)
-    #col_names(ts11)
+    crew_keys = ["Shift", "CrewIDLetter", "CrewIDNumber",
+                 "Date", "InTime", "OutTime",
+                 "EventYrID", "EventID", "Reg",
+                 "OT", "Double", "Acct",
+                 "Blackscall", "MP", "ShiftType"]
+    head_keys = ["Shift", "HeadIDLetter", "HeadIDNumber",
+                 "Date", "InTime", "OutTime",
+                 "EventYrID", "EventID", "Reg",
+                 "OT", "Double", "Acct",
+                 "Blackscall", "MP"]
 
     # # Creating an empty dataframes with column names only
     df_head = pd.DataFrame(columns=head_keys)
