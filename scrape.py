@@ -21,89 +21,6 @@ from timesheet import ts_2015
 from timesheet import ts_2011
 from timesheet import ts_casual
 
-# these functions will create the keys for the
-# dictionarires we will use to create the df columns
-
-# WHAT DO I NEED WITH THESE METHODS
-# READ SHEET, READ ROW, READ COL,
-# START ROW, END ROW, START COL END COL
-# WRITE SHEET, WRITE ROW, WRITE COL
-
-# def write_HeadIDAlpha(headalpha_wsheet, headalpha_wrow, headalpha_wcol):
-#     data = 'z'
-#     headalpha_wsheet.write(headalpha_wrow, headalpha_wcol, data)
-#
-# def grabempNum(empNum_rsheet, empNum_rrow, empNum_rcol):
-#     data = empNum_rsheet.cell_value(empNum_rrow, empNum_rcol)
-#     my_dict = searchDict(cfg.dict_heads)
-#     for head_num in my_dict.search_for_match(data):
-#         return head_num
-#
-# def grabempNum2(empNum_rsheet, empNum_rrow, empNum_rcol):
-#     data = empNum_rsheet.cell_value(empNum_rrow, empNum_rcol)
-#     mylist = (str.split(data))
-#     var = mylist[0]
-#     head_num = cfg.dict_heads[var]
-#     return head_num
-#
-# def write_empNum(empNum_rsheet, empNum_rrow, empNum_rcol,emplNum_wsheet, empNum_wrow, emplNum_wcol):
-#     emplNum_wsheet.write(empNum_wrow, emplNum_wcol, grabempNum(empNum_rsheet, empNum_rrow, empNum_rcol))
-#
-#
-# # this method will write the date to the new .xls sheet
-# def write_date(dateread_sheet, dater_row, datewrite_sheet, datew_row):
-#     data = dateread_sheet.cell_value(dater_row, 0)
-#     shift_date_tuple = xlrd.xldate_as_tuple(data, 1)
-#     day = f"{shift_date_tuple[2]}"
-#     month = f"{shift_date_tuple[1]}"
-#     year = f"{shift_date_tuple[0]}"
-#     shift_date = day + '/' + month + '/' + year
-#     datewrite_sheet.write(datew_row, 3, shift_date)
-#     print(shift_date)
-#
-# def write_date2(wdate_rsheet, wdate_rrow, wdate_rcol, wdate_wsheet, wdate_wrow, wdate_wcol):
-#     data = wdate_rsheet.cell_value(wdate_rrow, wdate_rcol)
-#     shift_date_tuple = xlrd.xldate_as_tuple(data, 1)
-#     day = f"{shift_date_tuple[2]}"
-#     month = f"{shift_date_tuple[1]}"
-#     year = f"{shift_date_tuple[0]}"
-#     shift_date = year + '-' + month + '-' + day
-#     print(shift_date)
-#     wdate_wsheet.write(wdate_wrow, wdate_wcol, shift_date)
-#
-# # this is a loop, to iterate over the write_date method
-# def date_loop(loop_func, loop_rsheet, loop_rrow, loop_rcol, loop_wsheet, loop_wrow, loop_wcol):
-#     i = 19
-#     while i < 70:
-#         if ((loop_rrow >= i) and (loop_rrow <= i + 6)):
-#             loop_func(loop_rsheet, i + 1, loop_rcol, loop_wsheet, loop_wrow, loop_wcol)
-#             i += 7
-#         else:
-#             i += 7
-#
-# # this method will write the time to the new .xls sheet
-# def write_time(timeread_sheet, timer_row,timer_col, timewrite_sheet, timew_row):
-#     data = timeread_sheet.cell_value(timer_row, timer_col)
-#     if data == '':
-#         shift_in_tuple = (0, 0, 0, 0, 0, 0)
-#     else:
-#         shift_in_tuple = xlrd.xldate_as_tuple(data, 1)
-#     if shift_in_tuple[3] < 10:
-#         half1_time = f"{shift_in_tuple[3]}"
-#     else:
-#         half1_time = f"{shift_in_tuple[3]}"
-#     if shift_in_tuple[4] == 0:
-#         half2_time = f"{shift_in_tuple[4]}0"
-#     else:
-#         half2_time = f"{shift_in_tuple[4]}"
-#     time = half1_time + ":" + half2_time
-#     print(time)
-#     timewrite_sheet.write(timew_row, timer_col + 2, time)
-#
-# # this method will write the hours worked to the new .xls sheet
-# def write_hrs(hrsread_sheet, hrsr_row, hrsr_col, hrswrite_sheet, hrsw_row, hrsw_col):
-#     data = hrsread_sheet.cell_value(hrsr_row, hrsr_col)
-#     hrswrite_sheet.write(hrsw_row, hrsw_col, data)
 #
 # def grab_acct(grabacct_rsheet, grabacct_rrow, grabacct_rcol):
 #     acct_num = grabacct_rsheet.cell_value(grabacct_rrow, grabacct_rcol)
@@ -113,44 +30,7 @@ from timesheet import ts_casual
 #     data = acct_rsheet.cell_value(acct_rrow, acct_rcol)
 #     print(data)
 #     acct_wsheet.write(acct_wrow, acct_wcol, grab_acct(acct_rsheet, acct_rrow, acct_rcol))
-#
-# def grabeventYR2(datestr):
-#     newdate = str.split(datestr, '/')
-#     yr_int = int(newdate[2])
-#     mos_int = int(newdate[1])
-#     yr_strt = 2011
-#     mos_strt = 9
-#     yr_diff = yr_int - yr_strt
-#     mos_diff = mos_int - mos_strt
-#
-#     if yr_int == 2019:
-#         if mos_int < mos_strt:
-#             if mos_diff < 0:
-#                 alphayr = ord('A') + yr_diff - 1
-#             else:
-#                 alphayr = ord('A') + yr_diff
-#         else:
-#             if mos_diff < 0:
-#                 alphayr = ord('A') + yr_diff
-#             else:
-#                 alphayr = ord('A') + yr_diff +1
-#     elif yr_int > 2019:
-#         if mos_diff < 0:
-#             alphayr = ord('A') + yr_diff
-#         else:
-#             alphayr = ord('A') + yr_diff + 1
-#     else:
-#         if mos_diff < 0:
-#             alphayr = ord('A')+yr_diff-1
-#         else:
-#             alphayr = ord('A')+yr_diff
-#
-#     return chr(alphayr)
-#
-# def writeevntYrID(wvntyr_rsheet, wvntyr_rrow, wvntyr_rcol, wvntyr_wsheet, wvntyr_wrow, wvntyr_wcol):
-#     data = wvntyr_rsheet.cell_value(wvntyr_rrow, wvntyr_rcol)
-#     wvntyr_wsheet.write(wvntyr_wrow, wvntyr_wcol, grabeventYR2(data))
-#
+
 # def eventid(evnt_rsheet, evnt_rrow, evnt_rcol, evnt_wsheet, evnt_wrow, evnt_wcol):
 #     data = '0-310820'  # this is year specific
 #     evnt_num = grab_acct(evnt_rsheet, evnt_rrow, evnt_rcol)
@@ -200,10 +80,6 @@ from timesheet import ts_casual
 #     klwrite_sheet.write(klw_row, klr_col + 2, time)
 
 def main():
-    # this need to move down to after the if statement
-    # ts15 = ts_2015('ts15', 15, 2, 19, 2, 69, 7)
-    # ts11 = ts_2011('ts11', 3, 1, 7, 1, 55, 7)
-
     # set up the column headers
     crew_keys = ["Shift", "CrewIDLetter", "CrewIDNumber",
                  "Date", "InTime", "OutTime",
@@ -220,9 +96,16 @@ def main():
     df_head = pd.DataFrame(columns=head_keys)
     df_crew = pd.DataFrame(columns=crew_keys)
 
-    # find the number we need to start the new data with
-    head_record = dbfnc.find_next_row_from_db("HeadShiftWorkedTable")
-    crew_record = dbfnc.find_next_row_from_db("CrewShiftWorkedTable")
+    # find the max number in the Shift number lists
+    query = "SELECT * FROM HeadShiftWorkedTable"
+    df_hShift = pd.read_sql(query, cfg.conn)
+    head_record = df_hShift['HeadShiftWorkedID'].max()
+    next_head_num = head_record +1
+
+    query = "SELECT * FROM CrewShiftWorkedTable"
+    df_hShift = pd.read_sql(query, cfg.conn)
+    crew_record = df_hShift['ShiftWorkedID'].max()
+    next_crew_num = crew_record + 1
 
     # create a list of the read_books
     read_list = os.listdir(cfg.dir)
@@ -243,14 +126,13 @@ def main():
         # start_data_col, spaces_per_day
         if read_sheet.cell_value(7, 0) == 'SUNDAY':
             print("This timesheet was designed in 2011. Begin data scrape")
-            tf11.timesheet2011()
+            ts11 = ts_2011('ts11', 3, 1, 7, 1, 55, 7)
+            r_row = ts11.start_data_row
+
         elif read_sheet.cell_value(14, 0) == 'SUNDAY':
             print("This timesheet belongs to a casual. Begin data scrape")
             ts_cas = ts_casual('ts_cas', 9, 1, 14, 1, 55, 6)
             r_row = ts_cas.start_data_row
-
-            # Grab next Crew Shift Number
-            shift_num = dbfnc.find_next_row_from_db("CrewShiftWorkedTbl")
 
             # A loop to iterate through the time slots one at a time
             for r_row in range(ts_cas.start_data_row, ts_cas.end_data_row):
@@ -260,10 +142,10 @@ def main():
                     # House keeping...
                     # create an empty list to store the data and increment the shift number
                     crew_data_list = []
-                    shift_num +=1
 
                     # write shift number
-                    crew_data_list.append(shift_num)
+                    crew_data_list.append(next_crew_num)
+                    next_crew_num +=1
 
                     # CrewID Alpha
                     data = "STA" # build something to pull it from the db?
@@ -271,117 +153,150 @@ def main():
 
                     # Grab a casual number from the db
                     data = read_sheet.cell_value(1,9)
-                    crew_data_list.append(dbfnc.find_crew_number(data))
+                    cas_id = dbfnc.find_crew_number(data)
+                    print(cas_id)
+                    crew_data_list.append(cas_id)
 
                     # Grab ts date
                     data = ts_cas.ts_grabdate(read_sheet,r_row)
                     print(data)
                     crew_data_list.append(data)
 
-                    """          "InTime", "OutTime",
-                                 "EventYrID", "EventID", "Reg",
-                                 "OT", "Double", "Acct",
+                    # Grab in time
+                    r_col = ts_cas.start_data_col+1
+                    data = ts_cas.ts_write_time(read_sheet,r_row, r_col)
+                    print(data)
+                    crew_data_list.append(data)
+
+                    # Grab out time
+                    r_col = ts_cas.start_data_col+2
+                    data = ts_cas.ts_write_time(read_sheet,r_row, r_col)
+                    print(data)
+                    crew_data_list.append(data)
+
+                    # Grab event year
+                    data = ts_cas.ts_grabdate(read_sheet,r_row)
+                    evntYr = dbfnc.grabeventYR2(data)
+                    crew_data_list.append(evntYr)
+
+                    # Grab Event ID
+                    # Nothing to do here for casuals.  Sorry...
+
+                    # write reg time, ot, dt
+                    r_col = ts_cas.start_data_col+3
+                    data = ts_cas.ts_grabhrs(read_sheet,r_row,r_col)
+                    crew_data_list.append(data)
+                    r_col = r_col + 1
+
+                    data = ts_cas.ts_grabhrs(read_sheet, r_row, r_col)
+                    crew_data_list.append(data)
+                    r_col = r_col + 1
+
+                    data = ts_cas.ts_grabhrs(read_sheet, r_row, r_col)
+                    crew_data_list.append(data)
+
+                    """          "Acct",
                                  "Blackscall", "MP", "ShiftType"]
                     """
 
                 else:
                     print("no data in cel B" + str((r_row) + 1))  # move on to the next time slot
 
-        elif read_sheet.cell_value(19, 0) == 'SUNDAY':
-            print("This timesheet was designed in 2015. Begin data scrape")
-
-            #r_row = 19  # r_row is now the read_book row
-            r_row = ts15.start_data_row
-
-            # A loop to iterate through the time slots one at a time
-            for r_row in range(19, 68):
-                # Find the first slot with data
-                if read_sheet.cell_type(r_row, 2) != 0:
-                    print("writing data")
-
-                    # write the HeadAlphaID
-                    w_col = 1
-                    write_sheet.write(w_row, w_col,ts.timesheet.ts_grabHeadIDAlpha(ts15, read_sheet))
-
-                    # write head employee number
-                    w_col = 2
-                    write_sheet.write(w_row,w_col,ts.timesheet.ts_grabempNum(ts15, read_sheet))
-
-                    #write date
-                    r_col =0
-                    w_col = 3
-                    i = 19
-                    while i < 70:
-                        if ((r_row >= i) and (r_row <= i + 6)):
-                            ts.ts_2015(ts15, read_sheet, i + 1, r_col, write_sheet, w_row, w_col)
-                            i += 7
-                        else:
-                            i += 7
-
-                    # ts.timesheet.ts_date_loop(date_loop(
-                    #     ts15, read_sheet, r_row, r_col, write_sheet, w_row, w_col),
-                    #     read_sheet, r_row, r_col, write_sheet, w_row, w_col)
-
-                    # write time in
-                    r_col = 2
-                    if grabempNum2(read_sheet,15,2) == 3:  # if it's kris, then...
-                        kf_format(read_sheet, r_row, 2, write_sheet,w_row)
-                    else:  # it's not kris, so....
-                        write_time(read_sheet, r_row, 2, write_sheet, w_row)
-
-                    # write time out - kris_fix2
-                    if grabempNum2(read_sheet,15,2) == 3:
-                        kf_format(read_sheet, r_row, 2, write_sheet,w_row)
-                    else:
-                        write_time(read_sheet, r_row, 3, write_sheet, w_row)
-
-                    # write reg time, ot, dt
-                    w_col = 8
-                    write_hrs(read_sheet, r_row, 4, write_sheet, w_row, w_col)
-                    w_col = w_col + 1
-
-                    write_hrs(read_sheet, r_row, 5, write_sheet, w_row, w_col)
-                    w_col = w_col + 1
-
-                    write_hrs(read_sheet, r_row, 6, write_sheet, w_row, w_col)
-
-                    # write accounting code
-                    r_col = 8
-                    w_col = 11
-                    write_acct(read_sheet, r_row, r_col, write_sheet, w_row, w_col)
-
-                    # data = read_sheet.cell_value(r_row, 8)
-                    # print(data)
-                    # acct_num = cfg.acct_codes[data]
-                    # write_sheet.write(w_row, 11, acct_num)
-
-                    # write show data
-                    w_col = 6
-                    data = 'J'  # this is year specific CHANGE THIS FOR YOUR NEEDS - WRITE SOMETHING BETTER
-                    write_sheet.write(w_row, w_col, data)
-
-                    # w_col = 6
-                    # date_loop(writeevntYrID, read_sheet, r_row, r_col, write_sheet,w_row, w_col)
-
-                    # show id
-                    w_col = 7
-                    eventid(read_sheet, r_row, r_col, write_sheet, w_row, w_col)
-
-                    # showcall true/false
-                    r_col=9
-                    w_col = 12
-
-                    blackscall(read_sheet, r_row, r_col, write_sheet, w_row, w_col)
-
-                    # Meal Penalty true/false
-                    r_col = 7
-                    w_col = 13
-                    mpcall(read_sheet, r_row, r_col, write_sheet, w_row, w_col)
-
-                    w_row = w_row + 1  # move along in the write_book
-
-                else:
-                    print("no data in cel E" + str((r_row) + 1))  # move on to the next time slot
+        # elif read_sheet.cell_value(19, 0) == 'SUNDAY':
+        #     print("This timesheet was designed in 2015. Begin data scrape")
+        #     ts15 = ts_2015('ts15', 15, 2, 19, 2, 69, 7)
+        #     r_row = 19  # r_row is now the read_book row
+        #     r_row = ts15.start_data_row
+        #
+        #     # A loop to iterate through the time slots one at a time
+        #     for r_row in range(19, 68):
+        #         # Find the first slot with data
+        #         if read_sheet.cell_type(r_row, 2) != 0:
+        #             print("writing data")
+        #
+        #             # write the HeadAlphaID
+        #             w_col = 1
+        #             write_sheet.write(w_row, w_col,ts.timesheet.ts_grabHeadIDAlpha(ts15, read_sheet))
+        #
+        #             # write head employee number
+        #             w_col = 2
+        #             write_sheet.write(w_row,w_col,ts.timesheet.ts_grabempNum(ts15, read_sheet))
+        #
+        #             #write date
+        #             r_col =0
+        #             w_col = 3
+        #             i = 19
+        #             while i < 70:
+        #                 if ((r_row >= i) and (r_row <= i + 6)):
+        #                     ts.ts_2015(ts15, read_sheet, i + 1, r_col, write_sheet, w_row, w_col)
+        #                     i += 7
+        #                 else:
+        #                     i += 7
+        #
+        #             # ts.timesheet.ts_date_loop(date_loop(
+        #             #     ts15, read_sheet, r_row, r_col, write_sheet, w_row, w_col),
+        #             #     read_sheet, r_row, r_col, write_sheet, w_row, w_col)
+        #
+        #             # write time in
+        #             r_col = 2
+        #             if grabempNum2(read_sheet,15,2) == 3:  # if it's kris, then...
+        #                 kf_format(read_sheet, r_row, 2, write_sheet,w_row)
+        #             else:  # it's not kris, so....
+        #                 write_time(read_sheet, r_row, 2, write_sheet, w_row)
+        #
+        #             # write time out - kris_fix2
+        #             if grabempNum2(read_sheet,15,2) == 3:
+        #                 kf_format(read_sheet, r_row, 2, write_sheet,w_row)
+        #             else:
+        #                 write_time(read_sheet, r_row, 3, write_sheet, w_row)
+        #
+        #             # write reg time, ot, dt
+        #             w_col = 8
+        #             write_hrs(read_sheet, r_row, 4, write_sheet, w_row, w_col)
+        #             w_col = w_col + 1
+        #
+        #             write_hrs(read_sheet, r_row, 5, write_sheet, w_row, w_col)
+        #             w_col = w_col + 1
+        #
+        #             write_hrs(read_sheet, r_row, 6, write_sheet, w_row, w_col)
+        #
+        #             # write accounting code
+        #             r_col = 8
+        #             w_col = 11
+        #             write_acct(read_sheet, r_row, r_col, write_sheet, w_row, w_col)
+        #
+        #             # data = read_sheet.cell_value(r_row, 8)
+        #             # print(data)
+        #             # acct_num = cfg.acct_codes[data]
+        #             # write_sheet.write(w_row, 11, acct_num)
+        #
+        #             # write show data
+        #             w_col = 6
+        #             data = 'J'  # this is year specific CHANGE THIS FOR YOUR NEEDS - WRITE SOMETHING BETTER
+        #             write_sheet.write(w_row, w_col, data)
+        #
+        #             # w_col = 6
+        #             # date_loop(writeevntYrID, read_sheet, r_row, r_col, write_sheet,w_row, w_col)
+        #
+        #             # show id
+        #             w_col = 7
+        #             eventid(read_sheet, r_row, r_col, write_sheet, w_row, w_col)
+        #
+        #             # showcall true/false
+        #             r_col=9
+        #             w_col = 12
+        #
+        #             blackscall(read_sheet, r_row, r_col, write_sheet, w_row, w_col)
+        #
+        #             # Meal Penalty true/false
+        #             r_col = 7
+        #             w_col = 13
+        #             mpcall(read_sheet, r_row, r_col, write_sheet, w_row, w_col)
+        #
+        #             w_row = w_row + 1  # move along in the write_book
+        #
+        #         else:
+        #             print("no data in cel E" + str((r_row) + 1))  # move on to the next time slot
 
     else: print("this is NOT a timesheet")
     print()
