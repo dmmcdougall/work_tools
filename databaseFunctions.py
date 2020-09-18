@@ -13,14 +13,14 @@ import config as cfg
 
 def find_crew_number(crew_name):
     mylist = (str.split(crew_name))
-    query = ("""
-        SELECT * FROM CrewNamesTable
-        WHERE First Name = ?
+    query = cfg.conn.execute("""
+        SELECT CrewID FROM CrewNamesTable
+        WHERE FirstName = ?
         AND LastName = ?
-    """, mylist[0],mylist[1])
-    df_crewNum = pd.read_sql(query, cfg.conn)
-    crew_num = df_crewNum[0]
-    return crew_num
+    """, (mylist[0],mylist[1]))
+    my_record = (query.fetchone())
+
+    return my_record[0]
 
 # find the number we need to start the new data with
 def find_next_row_from_db(my_table, my_column):
@@ -32,8 +32,14 @@ def find_next_row_from_db(my_table, my_column):
     return new_shift
 
 def grabeventYR2(datestr):
-    newdate = str.split(datestr, '/')
-    yr_int = int(newdate[2])
+    if datestr[4] == '/':
+        newdate = str.split(datestr, '/')
+    elif datestr[4] == '-':
+        newdate = str.split(datestr, '-')
+    else:
+        print("Your 'Grab Event Year' method is broken")
+    #print(newdate)
+    yr_int = int(newdate[0])
     mos_int = int(newdate[1])
     yr_strt = 2011
     mos_strt = 9

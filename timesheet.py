@@ -45,7 +45,8 @@ class timesheet:
         i=self.start_data_row
         while i < self.end_data_row:
             if ((read_row >= i) and (read_row <= i + 6)):
-                data = read_sheet.cell_value(read_row, 0)
+                data = read_sheet.cell_value(i+1, 0)
+                #print(data)
                 shift_date_tuple = xlrd.xldate_as_tuple(data, 1)
                 day = f"{shift_date_tuple[2]}"
                 month = f"{shift_date_tuple[1]}"

@@ -152,7 +152,7 @@ def main():
                     crew_data_list.append(data)
 
                     # Grab a casual number from the db
-                    data = read_sheet.cell_value(1,9)
+                    data = read_sheet.cell_value(9,1)
                     cas_id = dbfnc.find_crew_number(data)
                     print(cas_id)
                     crew_data_list.append(cas_id)
@@ -163,19 +163,20 @@ def main():
                     crew_data_list.append(data)
 
                     # Grab in time
-                    r_col = ts_cas.start_data_col+1
+                    r_col = ts_cas.start_data_col
                     data = ts_cas.ts_write_time(read_sheet,r_row, r_col)
                     print(data)
                     crew_data_list.append(data)
 
                     # Grab out time
-                    r_col = ts_cas.start_data_col+2
+                    r_col = ts_cas.start_data_col+1
                     data = ts_cas.ts_write_time(read_sheet,r_row, r_col)
                     print(data)
                     crew_data_list.append(data)
 
                     # Grab event year
                     data = ts_cas.ts_grabdate(read_sheet,r_row)
+                    print(data + " prepped date")
                     evntYr = dbfnc.grabeventYR2(data)
                     crew_data_list.append(evntYr)
 
@@ -198,6 +199,8 @@ def main():
                     """          "Acct",
                                  "Blackscall", "MP", "ShiftType"]
                     """
+
+                    print(crew_data_list)
 
                 else:
                     print("no data in cel B" + str((r_row) + 1))  # move on to the next time slot

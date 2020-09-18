@@ -23,6 +23,7 @@ if __name__ == '__main__':
     scrape.main()
     print()
     post2db.main()
+    cfg.conn.close()
     print()
     print("++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++")
     print("                        VICTORY!")
