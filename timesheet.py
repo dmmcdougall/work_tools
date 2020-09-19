@@ -22,7 +22,8 @@ class TimeSheet:
         self.end_data_row = end_data_row
         self.spaces_per_day = spaces_per_day
 
-    def ts_grab_acct(self, read_sheet, read_row, read_col):
+    @staticmethod
+    def ts_grab_acct(read_sheet, read_row, read_col):
         acct_num = read_sheet.cell_value(read_row, read_col)
         return acct_num
 
@@ -43,13 +44,15 @@ class TimeSheet:
             else:
                 i += self.spaces_per_day
 
-    def ts_grab_hrs(self, read_sheet, read_row, read_col):
+    @staticmethod
+    def ts_grab_hrs(read_sheet, read_row, read_col):
         data = read_sheet.cell_value(read_row, read_col)
         if data == '':
             data = 0
         return data
 
-    def ts_write_time(self, read_sheet, read_row, read_col):
+    @staticmethod
+    def ts_write_time(read_sheet, read_row, read_col):
         data = read_sheet.cell_value(read_row, read_col)
         if data == '':
             shift_in_tuple = (0, 0, 0, 0, 0, 0)
@@ -66,7 +69,8 @@ class TimeSheet:
         time = half1_time + ":" + half2_time
         return time
 
-    def ts_blacks_call(self, read_sheet, read_row, read_col):
+    @staticmethod
+    def ts_blacks_call(read_sheet, read_row, read_col):
         data = read_sheet.cell_value(read_row, read_col)
         if data != '':
             blacks = 1
@@ -74,7 +78,8 @@ class TimeSheet:
             blacks = 0
         return blacks
 
-    def ts_mp(self, read_sheet, read_row, read_col):
+    @staticmethod
+    def ts_mp(read_sheet, read_row, read_col):
         data = read_sheet.cell_value(read_row, read_col)
         if data == 1:
             mp = 1
@@ -94,15 +99,18 @@ class TS2015(TimeSheet):
 
 class TSCasual(TimeSheet):
 
-    def ts_cas_write_acct(self):
+    @staticmethod
+    def ts_cas_write_acct():
         return '6230-50-504'
 
-    def ts_cas_write_shift_type(self):
+    @staticmethod
+    def ts_cas_write_shift_type():
         data = 1
         return data
         # TODO :check this num
 
-    def ts_cas_write_show_num(self, date_str):
+    @staticmethod
+    def ts_cas_write_show_num(date_str):
         def split(word):
             return [char for char in word]
 
