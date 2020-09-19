@@ -105,14 +105,16 @@ class TSCasual(TimeSheet):
 
     @staticmethod
     def ts_cas_write_shift_type():
-        data = 1
+        data = 9
         return data
-        # TODO :check this num
+
+    @staticmethod
+    def ts_cas_shift_types_list():
+        return cfg.list_crew_shift_types()
 
     @staticmethod
     def ts_cas_write_show_num(date_str):
-        def split(word):
-            return [char for char in word]
+
 
         if date_str[4] == '/':
             new_date = str.split(date_str, '/')
@@ -126,6 +128,10 @@ class TSCasual(TimeSheet):
         else:
             addon = 0
         test = new_date[0]
+
+        def split(word):
+            return [char for char in word]
+
         new_list = split(test)
 
         dig_4 = int(new_list[3]) + addon

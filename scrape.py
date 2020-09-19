@@ -222,14 +222,14 @@ def main():
 
                     print("adding to crew df")
 
-                    dictionary = dictionary = dict(zip(crew_keys, crew_data_list))
-                    print(dictionary)
+                    my_dict = dict(zip(crew_keys, crew_data_list))
+                    # print(dictionary)
 
-                    df_crew = df_crew.append(dictionary, ignore_index=True)
+                    df_crew = df_crew.append(my_dict, ignore_index=True)
 
                 else:
                     # TODO: what is this pycharm error?
-                    print("no data in cel B" + str((r_row) + 1)) # move on to the next time slot
+                    print("no data in cel B" + str((r_row) + 1))  # move on to the next time slot
 
         # elif read_sheet.cell_value(19, 0) == 'SUNDAY':
         #     print("This timesheet was designed in 2015. Begin data scrape")
@@ -335,7 +335,7 @@ def main():
     tbl = 'TMPtblWeeklyHeadsData'
     tbl_exist = dbfnc.checkTableExists(cfg.conn, tbl)
 
-    if tbl_exist == True:
+    if tbl_exist:
         print("let's empty Heads the table")
         cur = cfg.conn.cursor()
         # cur.execute("TRUNCATE Table TMPtblWeeklyHeadsData")
@@ -352,29 +352,29 @@ def main():
     print("Table path cleared, let's write to the db")
     engine = sa.create_engine(cfg.alc_str)
     df_head.to_sql(tbl,
-                      con=engine,
-                      if_exists='append',
-                      index=False,
-                      dtype={'Shift': sa.types.INT,
-                             'HeadIDLetter': sa.types.NVARCHAR(length=255),
-                             'HeadIDNumber': sa.types.INT,
-                             'Date': sa.dialects.mssql.DATETIME2(0),
-                             'InTime': sa.dialects.mssql.DATETIME2(0),
-                             'OutTime': sa.dialects.mssql.DATETIME2(0),
-                             'EventYrID': sa.types.NVARCHAR(length=255),
-                             'EventID': sa.types.NVARCHAR(length=255),
-                             'Reg': sa.types.FLOAT,
-                             'OT': sa.types.FLOAT,
-                             'Double': sa.types.FLOAT,
-                             'Acct': sa.types.NVARCHAR(length=255),
-                             'Blackscall': sa.dialects.mssql.BIT,
-                             'MP': sa.dialects.mssql.BIT}
-                      )
+                  con=engine,
+                  if_exists='append',
+                  index=False,
+                  dtype={'Shift': sa.types.INT,
+                         'HeadIDLetter': sa.types.NVARCHAR(length=255),
+                         'HeadIDNumber': sa.types.INT,
+                         'Date': sa.dialects.mssql.DATETIME2(0),
+                         'InTime': sa.dialects.mssql.DATETIME2(0),
+                         'OutTime': sa.dialects.mssql.DATETIME2(0),
+                         'EventYrID': sa.types.NVARCHAR(length=255),
+                         'EventID': sa.types.NVARCHAR(length=255),
+                         'Reg': sa.types.FLOAT,
+                         'OT': sa.types.FLOAT,
+                         'Double': sa.types.FLOAT,
+                         'Acct': sa.types.NVARCHAR(length=255),
+                         'Blackscall': sa.dialects.mssql.BIT,
+                         'MP': sa.dialects.mssql.BIT}
+                  )
     # send the df to the db
     tbl = 'TMPtblWeeklyCrewData'
     tbl_exist = dbfnc.checkTableExists(cfg.conn, tbl)
 
-    if tbl_exist == True:
+    if tbl_exist:
         print("let's empty the Crew table")
         cur = cfg.conn.cursor()
         # cur.execute("TRUNCATE Table TMPtblWeeklyCrewData")
@@ -389,37 +389,29 @@ def main():
     print("Table path cleared, let's write to the db")
     engine = sa.create_engine(cfg.alc_str)
     df_crew.to_sql(tbl,
-                      con=engine,
-                      if_exists='append',
-                      index=False,
-                      dtype={'Shift': sa.types.INT,
-                             'CrewIDLetter': sa.types.NVARCHAR(length=255),
-                             'CrewIDNumber': sa.types.INT,
-                             'Date': sa.dialects.mssql.DATETIME2(0),
-                             'InTime': sa.dialects.mssql.DATETIME2(0),
-                             'OutTime': sa.dialects.mssql.DATETIME2(0),
-                             'EventYrID': sa.types.NVARCHAR(length=255),
-                             'EventID': sa.types.NVARCHAR(length=255),
-                             'Reg': sa.types.FLOAT,
-                             'OT': sa.types.FLOAT,
-                             'Double': sa.types.FLOAT,
-                             'Acct': sa.types.NVARCHAR(length=255),
-                             'Blackscall': sa.dialects.mssql.BIT,
-                             'MP': sa.dialects.mssql.BIT,
-                             'ShiftType': sa.types.INT}
-                      )
+                  con=engine,
+                  if_exists='append',
+                  index=False,
+                  dtype={'Shift': sa.types.INT,
+                         'CrewIDLetter': sa.types.NVARCHAR(length=255),
+                         'CrewIDNumber': sa.types.NVARCHAR(length=255),
+                         'Date': sa.dialects.mssql.DATETIME2(0),
+                         'InTime': sa.dialects.mssql.DATETIME2(0),
+                         'OutTime': sa.dialects.mssql.DATETIME2(0),
+                         'EventYrID': sa.types.NVARCHAR(length=255),
+                         'EventID': sa.types.NVARCHAR(length=255),
+                         'Reg': sa.types.FLOAT,
+                         'OT': sa.types.FLOAT,
+                         'Double': sa.types.FLOAT,
+                         'Acct': sa.types.NVARCHAR(length=255),
+                         'Blackscall': sa.dialects.mssql.BIT,
+                         'MP': sa.dialects.mssql.BIT,
+                         'ShiftType': sa.types.INT}
+                  )
 
     cfg.conn.close()
 
-
-
-
-    #print("All done! Time to save to...")
-    #print(f"{cfg.home}\\Desktop\\scraped_by_python.xls")
-    # new_book.save(f"{cfg.home}\Desktop\scraped_by_python.xls")
-    # putting a hold on these two lines while I work on the post2db.py
-    # print("Opening saved file")
-    # os.system(f"start EXCEL.EXE {cfg.home}\Desktop\scraped_by_python.xls")
+    print("All done! Time to save to bailout")
     print()
 
 
