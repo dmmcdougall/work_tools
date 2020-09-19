@@ -12,12 +12,12 @@ import xlrd
 # imported from local directories
 import config as cfg
 import databaseFunctions as dbfnc
-import kris_fix as kf # added when kris broke the scrapper
-import myClasses as my_cls
+import kris_fix as kf  # added when kris broke the scrapper
+import myClasses as myCls
 from myClasses import searchDict
-from timesheet import ts_2015
-from timesheet import ts_2011
-from timesheet import ts_casual
+from timesheet import TS2015
+from timesheet import TS2011
+from timesheet import TSCasual
 
 #
 # def grab_acct(grabacct_rsheet, grabacct_rrow, grabacct_rcol):
@@ -77,6 +77,7 @@ from timesheet import ts_casual
 #     print(time)
 #     klwrite_sheet.write(klw_row, klr_col + 2, time)
 
+
 def main():
     # set up the column headers
     crew_keys = ["Shift", "CrewIDLetter", "CrewIDNumber",
@@ -96,13 +97,13 @@ def main():
 
     # find the max number in the Shift number lists
     query = "SELECT * FROM HeadShiftWorkedTable"
-    df_hShift = pd.read_sql(query, cfg.conn)
-    head_record = df_hShift['HeadShiftWorkedID'].max()
-    next_head_num = head_record +1
+    df_h_shift = pd.read_sql(query, cfg.conn)
+    head_record = df_h_shift['HeadShiftWorkedID'].max()
+    next_head_num = head_record + 1
 
     query = "SELECT * FROM CrewShiftWorkedTable"
-    df_hShift = pd.read_sql(query, cfg.conn)
-    crew_record = df_hShift['ShiftWorkedID'].max()
+    df_c_shift = pd.read_sql(query, cfg.conn)
+    crew_record = df_c_shift['ShiftWorkedID'].max()
     next_crew_num = crew_record + 1
 
     # create a list of the read_books
@@ -124,12 +125,12 @@ def main():
         # start_data_col, spaces_per_day
         if read_sheet.cell_value(7, 0) == 'SUNDAY':
             print("This timesheet was designed in 2011. Begin data scrape")
-            ts11 = ts_2011('ts11', 3, 1, 7, 1, 55, 7)
+            ts11 = TS2011('ts11', 3, 1, 7, 1, 55, 7)
             r_row = ts11.start_data_row
 
         elif read_sheet.cell_value(14, 0) == 'SUNDAY':
             print("This timesheet belongs to a casual. Begin data scrape")
-            ts_cas = ts_casual('ts_cas', 9, 1, 14, 1, 55, 6)
+            ts_cas = TSCasual('ts_cas', 9, 1, 14, 1, 55, 6)
             r_row = ts_cas.start_data_row
 
             # A loop to iterate through the time slots one at a time
@@ -143,87 +144,88 @@ def main():
 
                     # write shift number
                     crew_data_list.append(next_crew_num)
-                    next_crew_num +=1
+                    next_crew_num += 1
 
                     # Grab a casual Alpha number from the db
-                    data = read_sheet.cell_value(9,1)
-                    casAlpha_id = dbfnc.find_crew_Alpha_number(data)
-                    print(casAlpha_id)
-                    crew_data_list.append(casAlpha_id)
+                    data = read_sheet.cell_value(9, 1)
+                    cas_alpha_id = dbfnc.find_crew_Alpha_number(data)
+                    print(cas_alpha_id)
+                    crew_data_list.append(cas_alpha_id)
 
                     # Grab a casual number from the db
-                    data = read_sheet.cell_value(9,1)
+                    data = read_sheet.cell_value(9, 1)
                     cas_id = dbfnc.find_crew_number(data)
                     print(cas_id)
                     crew_data_list.append(cas_id)
 
                     # Grab ts date
-                    data = ts_cas.ts_grabdate(read_sheet,r_row)
+                    data = ts_cas.ts_grab_date(read_sheet, r_row)
                     print(data)
                     crew_data_list.append(data)
 
                     # Grab in time
                     r_col = ts_cas.start_data_col
-                    data = ts_cas.ts_write_time(read_sheet,r_row, r_col)
+                    data = ts_cas.ts_write_time(read_sheet, r_row, r_col)
                     print(data)
                     crew_data_list.append(data)
 
                     # Grab out time
                     r_col = ts_cas.start_data_col+1
-                    data = ts_cas.ts_write_time(read_sheet,r_row, r_col)
+                    data = ts_cas.ts_write_time(read_sheet, r_row, r_col)
                     print(data)
                     crew_data_list.append(data)
 
                     # Grab event year
-                    data = ts_cas.ts_grabdate(read_sheet,r_row)
+                    data = ts_cas.ts_grab_date(read_sheet, r_row)
                     print(data + " prepped date")
-                    evntYr = dbfnc.grabeventYR2(data)
-                    crew_data_list.append(evntYr)
+                    evnt_yr = dbfnc.grabeventYR2(data)
+                    crew_data_list.append(evnt_yr)
 
                     # Grab Event ID
-                    data = ts_cas.ts_grabdate(read_sheet, r_row)
-                    show = ts_cas.tscas_write_show_num(data)
+                    data = ts_cas.ts_grab_date(read_sheet, r_row)
+                    show = ts_cas.ts_cas_write_show_num(data)
                     crew_data_list.append(show)
 
                     # write reg time, ot, dt
                     r_col = ts_cas.start_data_col+2
-                    data = ts_cas.ts_grabhrs(read_sheet,r_row,r_col)
+                    data = ts_cas.ts_grab_hrs(read_sheet, r_row, r_col)
                     crew_data_list.append(data)
                     r_col = r_col + 1
 
-                    data = ts_cas.ts_grabhrs(read_sheet, r_row, r_col)
+                    data = ts_cas.ts_grab_hrs(read_sheet, r_row, r_col)
                     crew_data_list.append(data)
                     r_col = r_col + 1
 
-                    data = ts_cas.ts_grabhrs(read_sheet, r_row, r_col)
+                    data = ts_cas.ts_grab_hrs(read_sheet, r_row, r_col)
                     crew_data_list.append(data)
 
                     # write accounting code
-                    data = ts_cas.tscas_write_acct()
+                    data = ts_cas.ts_cas_write_acct()
                     crew_data_list.append(data)
 
                     # showcall true/false
                     r_col = ts_cas.start_data_col+5
-                    data = ts_cas.ts_blacks_call(r_row,r_col)
+                    data = ts_cas.ts_blacks_call(read_sheet, r_row, r_col)
                     crew_data_list.append(data)
 
                     print(crew_data_list)
 
                     # Grab MP
                     r_col = ts_cas.start_data_col+6
-                    data = ts_cas.ts_mp(r_row,r_col)
+                    data = ts_cas.ts_mp(read_sheet, r_row, r_col)
                     crew_data_list.append(data)
 
                     # Grab Shiftype
-                    data = ts_cas.tscas_write_shifttype()
+                    data = ts_cas.ts_cas_write_shift_type()
                     crew_data_list.append(data)
 
                     print("adding to crew df")
 
-                    df_crew = pd.DataFrame(crew_data_list, columns=crew_keys)
+                    df_crew = pd.DataFrame([crew_data_list], columns=crew_keys)
 
                 else:
-                    print("no data in cel B" + str((r_row) + 1))  # move on to the next time slot
+                    # TODO: what is this pycharm error?
+                    print("no data in cel B" + str((r_row) + 1)) # move on to the next time slot
 
         # elif read_sheet.cell_value(19, 0) == 'SUNDAY':
         #     print("This timesheet was designed in 2015. Begin data scrape")
@@ -321,15 +323,17 @@ def main():
         #         else:
         #             print("no data in cel E" + str((r_row) + 1))  # move on to the next time slot
 
-    else: print("this is NOT a timesheet")
+    else:
+        print("this is NOT a timesheet")
     print()
     print("All done! Time to save to...")
-    print(f"{cfg.home}\Desktop\scraped_by_python.xls")
-    new_book.save(f"{cfg.home}\Desktop\scraped_by_python.xls")
+    print(f"{cfg.home}\\Desktop\\scraped_by_python.xls")
+    # new_book.save(f"{cfg.home}\Desktop\scraped_by_python.xls")
     # putting a hold on these two lines while I work on the post2db.py
     # print("Opening saved file")
     # os.system(f"start EXCEL.EXE {cfg.home}\Desktop\scraped_by_python.xls")
     print()
+
 
 if __name__ == '__main__':
     print()
