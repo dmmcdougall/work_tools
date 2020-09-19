@@ -80,6 +80,22 @@ class timesheet:
         time = half1_time + ":" + half2_time
         return time
 
+    def ts_blacks_call(self, read_row, read_col):
+        data = read_sheet.cell_value(read_row, read_col)
+        if data != '':
+            blacks = 1
+        else:
+            blacks =0
+        return blacks
+
+    def ts_MP(self,read_row,read_col):
+        data = read_sheet.cell_value(read_row, read_col)
+        if data == 1:
+            mp = 1
+        else:
+            mp = 0
+        return mp
+
 
 
 class ts_2015(timesheet):
@@ -92,7 +108,15 @@ class ts_casual(timesheet):
     def tscas_write_acct(self):
         return '6230-50-504'
 
+    def tscas_write_shifttype(self):
+        data = 1
+        return data
+        #TODO :check thi num
+
     def tscas_write_show_num(self, datestr):
+        def split(word):
+            return [char for char in word]
+
         if datestr[4] == '/':
             newdate = str.split(datestr, '/')
         elif datestr[4] == '-':
@@ -103,10 +127,6 @@ class ts_casual(timesheet):
             addon = 1
         else:
             addon = 0
-
-        def split(word):
-            return [char for char in word]
-
         test = newdate[0]
         new_list = split(test)
 

@@ -204,11 +204,25 @@ def main():
                     data = ts_cas.tscas_write_acct()
                     crew_data_list.append(data)
 
-                    """          
-                                 "Blackscall", "MP", "ShiftType"]
-                    """
+                    # showcall true/false
+                    r_col = ts_cas.start_data_col+5
+                    data = ts_cas.ts_blacks_call(r_row,r_col)
+                    crew_data_list.append(data)
 
                     print(crew_data_list)
+
+                    # Grab MP
+                    r_col = ts_cas.start_data_col+6
+                    data = ts_cas.ts_mp(r_row,r_col)
+                    crew_data_list.append(data)
+
+                    # tODO: shifttype
+
+
+                    print(crew_data_list)
+
+
+
 
                 else:
                     print("no data in cel B" + str((r_row) + 1))  # move on to the next time slot
