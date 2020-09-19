@@ -8,7 +8,6 @@ import pandas as pd
 
 # imported from third party repos
 import xlrd
-from xlutils.copy import copy
 
 # imported from local directories
 import config as cfg
@@ -16,7 +15,6 @@ import databaseFunctions as dbfnc
 import kris_fix as kf # added when kris broke the scrapper
 import myClasses as my_cls
 from myClasses import searchDict
-import timesheet as ts
 from timesheet import ts_2015
 from timesheet import ts_2011
 from timesheet import ts_casual
@@ -92,7 +90,7 @@ def main():
                  "OT", "Double", "Acct",
                  "Blackscall", "MP"]
 
-    # # Creating an empty dataframes with column names only
+    # # Creating empty dataframes with column names only
     df_head = pd.DataFrame(columns=head_keys)
     df_crew = pd.DataFrame(columns=crew_keys)
 
@@ -216,13 +214,13 @@ def main():
                     data = ts_cas.ts_mp(r_row,r_col)
                     crew_data_list.append(data)
 
-                    # tODO: shifttype
+                    # Grab Shiftype
+                    data = ts_cas.tscas_write_shifttype()
+                    crew_data_list.append(data)
 
+                    print("adding to crew df")
 
-                    print(crew_data_list)
-
-
-
+                    df_crew = pd.DataFrame(crew_data_list, columns=crew_keys)
 
                 else:
                     print("no data in cel B" + str((r_row) + 1))  # move on to the next time slot

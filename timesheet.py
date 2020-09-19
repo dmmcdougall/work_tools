@@ -1,6 +1,6 @@
-'''
+"""
 
-'''
+"""
 
 # imported from the standard library
 import xlrd
@@ -10,7 +10,8 @@ import xlrd
 # imported from local directories
 import config as cfg
 
-class timesheet:
+
+class TimeSheet:
 
     def __init__(self, version, name_row, name_column, start_data_row, start_data_col, end_data_row, spaces_per_day):
         self.version = version
@@ -25,28 +26,13 @@ class timesheet:
         acct_num = read_sheet.cell_value(read_row, read_col)
         return acct_num
 
-    # grab the HeadIDAlpha
-    def ts_grabHeadIDAlpha(self, HeadID_rsheet):
-        data = 'z'
-        # print(data)
-        return data
-
-    # grab the HeadIDAlpha
-    def ts_grabempNum(self, empNum_rsheet):
-        data = empNum_rsheet.cell_value(self.name_row, self.name_column)
-        mylist = (str.split(data))
-        var = mylist[0]
-        head_num = cfg.dict_heads[var]
-        # print(head_num)
-        return head_num
-
     # this is a loop, to iterate over the write_date method
-    def ts_grabdate(self, read_sheet, read_row):
-        i=self.start_data_row
+    def ts_grab_date(self, read_sheet, read_row):
+        i = self.start_data_row
         while i < self.end_data_row:
-            if ((read_row >= i) and (read_row <= i + 6)):
+            if (read_row >= i) and (read_row <= i + 6):
                 data = read_sheet.cell_value(i+1, 0)
-                #print(data)
+                # print(data)
                 shift_date_tuple = xlrd.xldate_as_tuple(data, 1)
                 day = f"{shift_date_tuple[2]}"
                 month = f"{shift_date_tuple[1]}"
@@ -57,13 +43,13 @@ class timesheet:
             else:
                 i += self.spaces_per_day
 
-    def ts_grabhrs(self, read_sheet, read_row, read_col):
+    def ts_grab_hrs(self, read_sheet, read_row, read_col):
         data = read_sheet.cell_value(read_row, read_col)
         if data == '':
             data = 0
         return data
 
-    def ts_write_time(self, read_sheet, read_row,read_col):
+    def ts_write_time(self, read_sheet, read_row, read_col):
         data = read_sheet.cell_value(read_row, read_col)
         if data == '':
             shift_in_tuple = (0, 0, 0, 0, 0, 0)
@@ -80,15 +66,15 @@ class timesheet:
         time = half1_time + ":" + half2_time
         return time
 
-    def ts_blacks_call(self, read_row, read_col):
+    def ts_blacks_call(self, read_sheet, read_row, read_col):
         data = read_sheet.cell_value(read_row, read_col)
         if data != '':
             blacks = 1
         else:
-            blacks =0
+            blacks = 0
         return blacks
 
-    def ts_MP(self,read_row,read_col):
+    def ts_mp(self, read_sheet, read_row, read_col):
         data = read_sheet.cell_value(read_row, read_col)
         if data == 1:
             mp = 1
@@ -97,44 +83,49 @@ class timesheet:
         return mp
 
 
+class TS2015(TimeSheet):
 
-class ts_2015(timesheet):
+    # grab the HeadIDAlpha
+    def ts_grab_head_id_alpha(self, head_id_read_sheet):
+        data = 'z'
+        # print(data)
+        return data
 
-    def test(self):
-        pass
 
-class ts_casual(timesheet):
+class TSCasual(TimeSheet):
 
-    def tscas_write_acct(self):
+    def ts_cas_write_acct(self):
         return '6230-50-504'
 
-    def tscas_write_shifttype(self):
+    def ts_cas_write_shift_type(self):
         data = 1
         return data
-        #TODO :check thi num
+        # TODO :check this num
 
-    def tscas_write_show_num(self, datestr):
+    def ts_cas_write_show_num(self, date_str):
         def split(word):
             return [char for char in word]
 
-        if datestr[4] == '/':
-            newdate = str.split(datestr, '/')
-        elif datestr[4] == '-':
-            newdate = str.split(datestr, '-')
+        if date_str[4] == '/':
+            new_date = str.split(date_str, '/')
+        elif date_str[4] == '-':
+            new_date = str.split(date_str, '-')
         else:
+            new_date = ""
             print("Your 'Crew Write Code' method is broken")
-        if int(newdate[1]) >= 9:
+        if int(new_date[1]) >= 9:
             addon = 1
         else:
             addon = 0
-        test = newdate[0]
+        test = new_date[0]
         new_list = split(test)
 
         dig_4 = int(new_list[3]) + addon
 
         return '0-3108' + new_list[2] + str(dig_4)
 
-class ts_2011(timesheet):
+
+class TS2011(TimeSheet):
 
     def test2(self):
         pass
