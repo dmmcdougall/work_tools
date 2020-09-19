@@ -1,14 +1,16 @@
 """
-This file is for taking collected timesheets, scrapping them, and....
+This file contains the main function for the timesheet scrapper
+is for taking collected timesheets, scrapping them, and placing that data
+into the production database
 """
 
 # imported from standard library
 import os
 import pandas as pd
 import sqlalchemy as sa
+import xlrd
 
 # imported from third party repos
-import xlrd
 
 # imported from local directories
 import config as cfg
@@ -97,6 +99,7 @@ def main():
     df_crew = pd.DataFrame(columns=crew_keys)
 
     # find the max number in the Shift number lists
+    # this info is pulled directly from the db
     query = "SELECT * FROM HeadShiftWorkedTable"
     df_h_shift = pd.read_sql(query, cfg.conn)
     head_record = df_h_shift['HeadShiftWorkedID'].max()
@@ -129,6 +132,10 @@ def main():
             ts11 = TS2011('ts11', 3, 1, 7, 1, 55, 7)
             r_row = ts11.start_data_row
 
+            print("This 2011 loop was deleted during the python2 to python3 upgrade")
+            print("You'll probably want to re-write this 2011 loop someday")
+            # TODO :write the 2011 loop
+
         elif read_sheet.cell_value(14, 0) == 'SUNDAY':
             print("This timesheet belongs to a casual. Begin data scrape")
             ts_cas = TSCasual('ts_cas', 9, 1, 14, 1, 55, 6)
@@ -136,11 +143,12 @@ def main():
 
             # A loop to iterate through the time slots one at a time
             for r_row in range(ts_cas.start_data_row, ts_cas.end_data_row):
-                if read_sheet.cell_type(r_row, 2) != 0:
+                r_col = ts_cas.start_data_col + 1
+                if read_sheet.cell_type(r_row, r_col) != 0:
                     print("writing data")
 
                     # House keeping...
-                    # create an empty list to store the data and increment the shift number
+                    # create an empty list to store the data
                     crew_data_list = []
 
                     # write shift number
@@ -148,13 +156,13 @@ def main():
                     next_crew_num += 1
 
                     # Grab a casual Alpha number from the db
-                    data = read_sheet.cell_value(9, 1)
+                    data = read_sheet.cell_value(ts_cas.name_row, ts_cas.name_column)
                     cas_alpha_id = dbfnc.find_crew_Alpha_number(data)
                     print(cas_alpha_id)
                     crew_data_list.append(cas_alpha_id)
 
-                    # Grab a casual number from the db
-                    data = read_sheet.cell_value(9, 1)
+                    # Grab a casual id number from the db
+                    data = read_sheet.cell_value(ts_cas.name_row, ts_cas.name_column)
                     cas_id = dbfnc.find_crew_number(data)
                     print(cas_id)
                     crew_data_list.append(cas_id)
@@ -187,7 +195,7 @@ def main():
                     show = ts_cas.ts_cas_write_show_num(data)
                     crew_data_list.append(show)
 
-                    # write reg time, ot, dt
+                    # grab reg time, ot, dt
                     r_col = ts_cas.start_data_col+2
                     data = ts_cas.ts_grab_hrs(read_sheet, r_row, r_col)
                     crew_data_list.append(data)
@@ -209,8 +217,6 @@ def main():
                     data = ts_cas.ts_blacks_call(read_sheet, r_row, r_col)
                     crew_data_list.append(data)
 
-                    print(crew_data_list)
-
                     # Grab MP
                     r_col = ts_cas.start_data_col+6
                     data = ts_cas.ts_mp(read_sheet, r_row, r_col)
@@ -220,32 +226,41 @@ def main():
                     data = ts_cas.ts_cas_write_shift_type()
                     crew_data_list.append(data)
 
+                    print(crew_data_list)
+
+                    # add this row to the df
                     print("adding to crew df")
-
                     my_dict = dict(zip(crew_keys, crew_data_list))
-                    # print(dictionary)
-
                     df_crew = df_crew.append(my_dict, ignore_index=True)
 
                 else:
-                    # TODO: what is this pycharm error?
                     print("no data in cel B" + str((r_row) + 1))  # move on to the next time slot
+                    # TODO: what is this pycharm error above?
 
-        # elif read_sheet.cell_value(19, 0) == 'SUNDAY':
-        #     print("This timesheet was designed in 2015. Begin data scrape")
-        #     ts15 = ts_2015('ts15', 15, 2, 19, 2, 69, 7)
-        #     r_row = 19  # r_row is now the read_book row
-        #     r_row = ts15.start_data_row
-        #
-        #     # A loop to iterate through the time slots one at a time
-        #     for r_row in range(19, 68):
-        #         # Find the first slot with data
-        #         if read_sheet.cell_type(r_row, 2) != 0:
-        #             print("writing data")
-        #
-        #             # write the HeadAlphaID
-        #             w_col = 1
-        #             write_sheet.write(w_row, w_col,ts.timesheet.ts_grabHeadIDAlpha(ts15, read_sheet))
+        elif read_sheet.cell_value(19, 0) == 'SUNDAY':
+            print("This timesheet was designed in 2015. Begin data scrape")
+            ts15 = TS2015('ts15', 15, 2, 19, 2, 69, 7)
+            r_row = ts15.start_data_row
+
+            # A loop to iterate through the time slots one at a time
+            for r_row in range(ts15.start_data_row, ts15.end_data_row):
+                # Find the first slot with data
+                r_col = ts15.start_data_col
+                if read_sheet.cell_type(r_row, r_col) != 0:
+                    print("writing data")
+
+                    # House keeping...
+                    # create an empty list to store the data and increment the shift number
+                    head_data_list = []
+
+                    # write shift number
+                    head_data_list.append(next_crew_num)
+                    next_head_num += 1
+
+                    # Grab a casual Alpha number from the db
+                    # data = read_sheet.cell_value(ts15.name_row, ts15.name_column)
+                    head_alpha_id = ts15.ts_15_grab_head_id_alpha()
+                    head_data_list.append(head_alpha_id)
         #
         #             # write head employee number
         #             w_col = 2
@@ -357,7 +372,7 @@ def main():
                   index=False,
                   dtype={'Shift': sa.types.INT,
                          'HeadIDLetter': sa.types.NVARCHAR(length=255),
-                         'HeadIDNumber': sa.types.INT,
+                         'HeadIDNumber': sa.types.INT,  # notice this is an INT
                          'Date': sa.dialects.mssql.DATETIME2(0),
                          'InTime': sa.dialects.mssql.DATETIME2(0),
                          'OutTime': sa.dialects.mssql.DATETIME2(0),
@@ -394,7 +409,7 @@ def main():
                   index=False,
                   dtype={'Shift': sa.types.INT,
                          'CrewIDLetter': sa.types.NVARCHAR(length=255),
-                         'CrewIDNumber': sa.types.NVARCHAR(length=255),
+                         'CrewIDNumber': sa.types.NVARCHAR(length=255),  # notice this is a CHAR
                          'Date': sa.dialects.mssql.DATETIME2(0),
                          'InTime': sa.dialects.mssql.DATETIME2(0),
                          'OutTime': sa.dialects.mssql.DATETIME2(0),

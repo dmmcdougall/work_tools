@@ -91,10 +91,12 @@ class TimeSheet:
 class TS2015(TimeSheet):
 
     # grab the HeadIDAlpha
-    def ts_grab_head_id_alpha(self, head_id_read_sheet):
+    @staticmethod
+    def ts_15_grab_head_id_alpha():
         data = 'z'
         # print(data)
         return data
+    # TODO: re-write this to ping the db, likely move to dbfnc as well
 
 
 class TSCasual(TimeSheet):
