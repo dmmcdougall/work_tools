@@ -59,6 +59,8 @@ class timesheet:
 
     def ts_grabhrs(self, read_sheet, read_row, read_col):
         data = read_sheet.cell_value(read_row, read_col)
+        if data == '':
+            data = 0
         return data
 
     def ts_write_time(self, read_sheet, read_row,read_col):
@@ -87,8 +89,30 @@ class ts_2015(timesheet):
 
 class ts_casual(timesheet):
 
-    def test(self):
-        pass
+    def tscas_write_acct(self):
+        return '6230-50-504'
+
+    def tscas_write_show_num(self, datestr):
+        if datestr[4] == '/':
+            newdate = str.split(datestr, '/')
+        elif datestr[4] == '-':
+            newdate = str.split(datestr, '-')
+        else:
+            print("Your 'Crew Write Code' method is broken")
+        if int(newdate[1]) >= 9:
+            addon = 1
+        else:
+            addon = 0
+
+        def split(word):
+            return [char for char in word]
+
+        test = newdate[0]
+        new_list = split(test)
+
+        dig_4 = int(new_list[3]) + addon
+
+        return '0-3108' + new_list[2] + str(dig_4)
 
 class ts_2011(timesheet):
 

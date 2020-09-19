@@ -147,9 +147,11 @@ def main():
                     crew_data_list.append(next_crew_num)
                     next_crew_num +=1
 
-                    # CrewID Alpha
-                    data = "STA" # build something to pull it from the db?
-                    crew_data_list.append(data)
+                    # Grab a casual Alpha number from the db
+                    data = read_sheet.cell_value(9,1)
+                    casAlpha_id = dbfnc.find_crew_Alpha_number(data)
+                    print(casAlpha_id)
+                    crew_data_list.append(casAlpha_id)
 
                     # Grab a casual number from the db
                     data = read_sheet.cell_value(9,1)
@@ -181,10 +183,12 @@ def main():
                     crew_data_list.append(evntYr)
 
                     # Grab Event ID
-                    # Nothing to do here for casuals.  Sorry...
+                    data = ts_cas.ts_grabdate(read_sheet, r_row)
+                    show = ts_cas.tscas_write_show_num(data)
+                    crew_data_list.append(show)
 
                     # write reg time, ot, dt
-                    r_col = ts_cas.start_data_col+3
+                    r_col = ts_cas.start_data_col+2
                     data = ts_cas.ts_grabhrs(read_sheet,r_row,r_col)
                     crew_data_list.append(data)
                     r_col = r_col + 1
@@ -196,7 +200,11 @@ def main():
                     data = ts_cas.ts_grabhrs(read_sheet, r_row, r_col)
                     crew_data_list.append(data)
 
-                    """          "Acct",
+                    # write accounting code
+                    data = ts_cas.tscas_write_acct()
+                    crew_data_list.append(data)
+
+                    """          
                                  "Blackscall", "MP", "ShiftType"]
                     """
 

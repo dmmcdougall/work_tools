@@ -22,6 +22,17 @@ def find_crew_number(crew_name):
 
     return my_record[0]
 
+def find_crew_Alpha_number(crew_name):
+    mylist = (str.split(crew_name))
+    query = cfg.conn.execute("""
+        SELECT CrewIDAlpha FROM CrewNamesTable
+        WHERE FirstName = ?
+        AND LastName = ?
+    """, (mylist[0],mylist[1]))
+    my_record = (query.fetchone())
+
+    return my_record[0]
+
 # find the number we need to start the new data with
 def find_next_row_from_db(my_table, my_column):
     query = ("SELECT * FROM ?", my_table)
