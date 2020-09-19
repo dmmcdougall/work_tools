@@ -23,7 +23,7 @@ if __name__ == '__main__':
     print()
     scrape.main()
     print()
-    post2db.main()
+    #post2db.main()
     #cfg.conn.close()
     print()
     print("++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++")
