@@ -261,26 +261,30 @@ def main():
                     # data = read_sheet.cell_value(ts15.name_row, ts15.name_column)
                     head_alpha_id = ts15.ts_15_grab_head_id_alpha()
                     head_data_list.append(head_alpha_id)
-        #
-        #             # write head employee number
-        #             w_col = 2
-        #             write_sheet.write(w_row,w_col,ts.timesheet.ts_grabempNum(ts15, read_sheet))
-        #
-        #             #write date
-        #             r_col =0
-        #             w_col = 3
-        #             i = 19
-        #             while i < 70:
-        #                 if ((r_row >= i) and (r_row <= i + 6)):
-        #                     ts.ts_2015(ts15, read_sheet, i + 1, r_col, write_sheet, w_row, w_col)
-        #                     i += 7
-        #                 else:
-        #                     i += 7
-        #
-        #             # ts.timesheet.ts_date_loop(date_loop(
-        #             #     ts15, read_sheet, r_row, r_col, write_sheet, w_row, w_col),
-        #             #     read_sheet, r_row, r_col, write_sheet, w_row, w_col)
-        #
+
+                    # Grab a head id number from the db
+                    data = read_sheet.cell_value(ts15.name_row, ts15.name_column)
+                    head_id = dbfnc.find_head_number(data)
+                    #print(head_id)
+                    head_data_list.append(head_id)
+
+                    # Grab ts date
+                    data = ts15.ts_grab_date(read_sheet, r_row)
+                    print(data)
+                    head_data_list.append(data)
+
+                    # Grab in time w the kris fix
+                    if head_id == 3:
+                        r_col = ts15.start_data_col
+                        data = ts15.kf_format(read_sheet,r_row,r_col)
+                        print(data)
+                        head_data_list.append(data)
+                    else:
+                        r_col = ts15.start_data_col
+                        data = ts15.ts_write_time(read_sheet, r_row, r_col)
+                        print(data)
+                        head_data_list.append(data)
+
         #             # write time in
         #             r_col = 2
         #             if grabempNum2(read_sheet,15,2) == 3:  # if it's kris, then...

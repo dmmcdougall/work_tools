@@ -52,7 +52,7 @@ class TimeSheet:
         return data
 
     @staticmethod
-    def ts_write_time(read_sheet, read_row, read_col):
+    def ts_write_time(read_sheet, read_row):
         data = read_sheet.cell_value(read_row, read_col)
         if data == '':
             shift_in_tuple = (0, 0, 0, 0, 0, 0)
@@ -97,6 +97,28 @@ class TS2015(TimeSheet):
         # print(data)
         return data
     # TODO: re-write this to ping the db, likely move to dbfnc as well
+
+    # Kris changed the formatting of his timesheet to make it more flexible and subsequently
+    # killed the scrapper.  This is the work around
+    # this function is for writing the begin and end times of calls
+    @staticmethod
+    def kf_format(read_sheet, read_row, read_col):
+        data = read_sheet.cell_value(read_row, read_col)
+        kris_str = str(data)
+        count_int = len(kris_str)
+
+        if count_int == 1:
+            kris_tuple = (0, data, 0, 0)
+        elif count_int == 2:
+            kris_tuple = (kris_str[0], kris_str[1], 0, 0)
+        elif count_int == 3:
+            kris_tuple = (0, kris_str[0], kris_str[1], kris_str[2])
+        else:
+            kris_tuple = (kris_str[0], kris_str[1], kris_str[2], kris_str[3])
+
+        time = str(kris_tuple[0]) + str(kris_tuple[1]) + ":" + str(kris_tuple[2]) + str(kris_tuple[3])
+        return time
+
 
 
 class TSCasual(TimeSheet):
