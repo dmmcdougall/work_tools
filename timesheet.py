@@ -102,7 +102,7 @@ class TS2015(TimeSheet):
     # killed the scrapper.  This is the work around
     # this function is for writing the begin and end times of calls
     @staticmethod
-    def kf_format(read_sheet, read_row, read_col):
+    def ts_15_kf_format(read_sheet, read_row, read_col):
         data = read_sheet.cell_value(read_row, read_col)
         kris_str = str(data)
         count_int = len(kris_str)
@@ -119,6 +119,17 @@ class TS2015(TimeSheet):
         time = str(kris_tuple[0]) + str(kris_tuple[1]) + ":" + str(kris_tuple[2]) + str(kris_tuple[3])
         return time
 
+    @staticmethod
+    def ts_15_write_acct(read_sheet, read_row, read_col):
+        data = read_sheet.cell_value(read_row, read_col)
+        return data
+
+    @staticmethod
+    def ts_15_eventid(read_sheet, read_row, read_col, acct_num):
+        data = '0-310820'  # this is year specific
+        if acct_num != '6210-50-504' and evnt_num != '6200-50-504':
+            data = ''
+        return data
 
 
 class TSCasual(TimeSheet):

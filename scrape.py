@@ -186,7 +186,7 @@ def main():
 
                     # Grab event year
                     data = ts_cas.ts_grab_date(read_sheet, r_row)
-                    print(data + " prepped date")
+                    #print(data + " prepped date")
                     evnt_yr = dbfnc.grabeventYR2(data)
                     crew_data_list.append(evnt_yr)
 
@@ -199,12 +199,12 @@ def main():
                     r_col = ts_cas.start_data_col+2
                     data = ts_cas.ts_grab_hrs(read_sheet, r_row, r_col)
                     crew_data_list.append(data)
-                    r_col = r_col + 1
 
+                    r_col = r_col + 1
                     data = ts_cas.ts_grab_hrs(read_sheet, r_row, r_col)
                     crew_data_list.append(data)
-                    r_col = r_col + 1
 
+                    r_col = r_col + 1
                     data = ts_cas.ts_grab_hrs(read_sheet, r_row, r_col)
                     crew_data_list.append(data)
 
@@ -285,66 +285,67 @@ def main():
                         print(data)
                         head_data_list.append(data)
 
-        #             # write time in
-        #             r_col = 2
-        #             if grabempNum2(read_sheet,15,2) == 3:  # if it's kris, then...
-        #                 kf_format(read_sheet, r_row, 2, write_sheet,w_row)
-        #             else:  # it's not kris, so....
-        #                 write_time(read_sheet, r_row, 2, write_sheet, w_row)
-        #
-        #             # write time out - kris_fix2
-        #             if grabempNum2(read_sheet,15,2) == 3:
-        #                 kf_format(read_sheet, r_row, 2, write_sheet,w_row)
-        #             else:
-        #                 write_time(read_sheet, r_row, 3, write_sheet, w_row)
-        #
-        #             # write reg time, ot, dt
-        #             w_col = 8
-        #             write_hrs(read_sheet, r_row, 4, write_sheet, w_row, w_col)
-        #             w_col = w_col + 1
-        #
-        #             write_hrs(read_sheet, r_row, 5, write_sheet, w_row, w_col)
-        #             w_col = w_col + 1
-        #
-        #             write_hrs(read_sheet, r_row, 6, write_sheet, w_row, w_col)
-        #
-        #             # write accounting code
-        #             r_col = 8
-        #             w_col = 11
-        #             write_acct(read_sheet, r_row, r_col, write_sheet, w_row, w_col)
-        #
-        #             # data = read_sheet.cell_value(r_row, 8)
-        #             # print(data)
-        #             # acct_num = cfg.acct_codes[data]
-        #             # write_sheet.write(w_row, 11, acct_num)
-        #
-        #             # write show data
-        #             w_col = 6
-        #             data = 'J'  # this is year specific CHANGE THIS FOR YOUR NEEDS - WRITE SOMETHING BETTER
-        #             write_sheet.write(w_row, w_col, data)
-        #
-        #             # w_col = 6
-        #             # date_loop(writeevntYrID, read_sheet, r_row, r_col, write_sheet,w_row, w_col)
-        #
-        #             # show id
-        #             w_col = 7
-        #             eventid(read_sheet, r_row, r_col, write_sheet, w_row, w_col)
-        #
-        #             # showcall true/false
-        #             r_col=9
-        #             w_col = 12
-        #
-        #             blackscall(read_sheet, r_row, r_col, write_sheet, w_row, w_col)
-        #
-        #             # Meal Penalty true/false
-        #             r_col = 7
-        #             w_col = 13
-        #             mpcall(read_sheet, r_row, r_col, write_sheet, w_row, w_col)
-        #
-        #             w_row = w_row + 1  # move along in the write_book
-        #
-        #         else:
-        #             print("no data in cel E" + str((r_row) + 1))  # move on to the next time slot
+                    # Grab out time w the kris fix
+                    if head_id == 3:
+                        r_col = ts15.start_data_col + 1
+                        data = ts15.kf_format(read_sheet,r_row,r_col)
+                        print(data)
+                        head_data_list.append(data)
+                    else:
+                        r_col = ts15.start_data_col + 1
+                        data = ts15.ts_write_time(read_sheet, r_row, r_col)
+                        print(data)
+                        head_data_list.append(data)
+
+                    # Grab event year
+                    data = ts15.ts_grab_date(read_sheet, r_row)
+                    evnt_yr = dbfnc.grabeventYR2(data)
+                    head_data_list.append(evnt_yr)
+
+                    # Grab Event ID
+                    # this needs to pick up the acct num,
+                    # but don't post to list yet
+                    r_col = ts15.start_data_col + 6
+                    head_acct = ts15.ts_15_write_acct(read_sheet, r_row, r_col)
+                    r_col = ts15.start_data_col +5
+                    data = ts15.ts_15_eventid(read_sheet, r_row, r_col, head_acct)
+                    head_data_list.append(data)
+
+                    # grab reg time, ot, dt
+                    r_col = ts15.start_data_col + 2
+                    data = ts15.ts_grab_hrs(read_sheet, r_row, r_col)
+                    head_data_list.append(data)
+
+                    r_col = r_col + 1
+                    data = ts15.ts_grab_hrs(read_sheet, r_row, r_col)
+                    head_data_list.append(data)
+
+                    r_col = r_col + 1
+                    data = ts15.ts_grab_hrs(read_sheet, r_row, r_col)
+                    head_data_list.append(data)
+
+                    # write accounting code
+                    head_data_list.append(head_acct)
+
+                    # showcall true/false
+                    r_col = ts_cas.start_data_col+5
+                    data = ts_cas.ts_blacks_call(read_sheet, r_row, r_col)
+                    head_data_list.append(data)
+
+                    # Grab MP
+                    r_col = ts_cas.start_data_col+6
+                    data = ts_cas.ts_mp(read_sheet, r_row, r_col)
+                    head_data_list.append(data)
+
+                    print(head_data_list)
+
+                    # add this row to the df
+                    print("adding to head df")
+                    my_dict = dict(zip(head_keys, head_data_list))
+                    df_head= df_head.append(my_dict, ignore_index=True)
+
+                else:
+                    print("no data in cel E" + str((r_row) + 1))  # move on to the next time slot
 
     else:
         print("this is NOT a timesheet")
