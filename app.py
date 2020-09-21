@@ -11,8 +11,6 @@ timesheet selection and removes writing to a .xls
 # imported from third party repos
 
 # imported from local directories
-import config as cfg
-import post2db
 import scrape
 
 if __name__ == '__main__':
@@ -22,9 +20,6 @@ if __name__ == '__main__':
     print("++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++")
     print()
     scrape.main()
-    print()
-    #post2db.main()
-    #cfg.conn.close()
     print()
     print("++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++")
     print("                        VICTORY!")

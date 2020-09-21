@@ -111,14 +111,17 @@ class TS2015(TimeSheet):
 
     def ts_15_write_acct(self, read_sheet, read_row, col_modifier):
         data = read_sheet.cell_value(read_row, self.start_data_col + col_modifier)
-        return data
+        print(data)
+        acct_num = cfg.acct_codes[data]
+        return acct_num
 
     @staticmethod
     def ts_15_event_id(acct_num):
-        data = '0-310820'  # this is year specific
-        if acct_num != '6210-50-504' and acct_num != '6200-50-504':
-            data = ''
-        return data
+         if acct_num != '6210-50-504' and acct_num != '6200-50-504':
+             data = '0-310820'
+         else:
+             data = ''
+         return data
 
 
 class TSCasual(TimeSheet):

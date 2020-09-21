@@ -35,8 +35,9 @@ def find_crew_Alpha_number(crew_name):
 
 def find_head_number(head_name):
     mylist = (str.split(head_name))
+    #print(mylist)
     query = cfg.conn.execute("""
-        SELECT CrewID FROM HeadNamesTable
+        SELECT HeadID FROM HeadNamesTable
         WHERE FirstName = ?
         AND LastName = ?
     """, (mylist[0],mylist[1]))

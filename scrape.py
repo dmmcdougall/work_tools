@@ -15,9 +15,6 @@ import xlrd
 # imported from local directories
 import config as cfg
 import databaseFunctions as dbfnc
-import kris_fix as kf  # added when kris broke the scrapper
-import myClasses as myCls
-from myClasses import searchDict
 from timesheet import TS2015
 from timesheet import TS2011
 from timesheet import TSCasual
@@ -209,25 +206,21 @@ def main():
 
                     # Grab in time w the kris fix
                     if head_id == 3:
-                        r_col = ts15.start_data_col
-                        data = ts15.kf_format(read_sheet,r_row,r_col)
+                        data = ts15.ts_15_kf_format(read_sheet,r_row, 0)
                         print(data)
                         head_data_list.append(data)
                     else:
-                        r_col = ts15.start_data_col
-                        data = ts15.ts_write_time(read_sheet, r_row, r_col)
+                        data = ts15.ts_write_time(read_sheet, r_row, 0)
                         print(data)
                         head_data_list.append(data)
 
                     # Grab out time w the kris fix
                     if head_id == 3:
-                        r_col = ts15.start_data_col + 1
-                        data = ts15.kf_format(read_sheet,r_row,r_col)
+                        data = ts15.ts_15_kf_format(read_sheet,r_row,1)
                         print(data)
                         head_data_list.append(data)
                     else:
-                        r_col = ts15.start_data_col + 1
-                        data = ts15.ts_write_time(read_sheet, r_row, r_col)
+                        data = ts15.ts_write_time(read_sheet, r_row, 1)
                         print(data)
                         head_data_list.append(data)
 
@@ -239,36 +232,30 @@ def main():
                     # Grab Event ID
                     # this needs to pick up the acct num,
                     # but don't post to list yet
-                    r_col = ts15.start_data_col + 6
-                    head_acct = ts15.ts_15_write_acct(read_sheet, r_row, r_col)
+                    head_acct = ts15.ts_15_write_acct(read_sheet, r_row, 6)
 
-                    data = ts15.ts_15_eventid(head_acct)
+                    data = ts15.ts_15_event_id(head_acct)
                     head_data_list.append(data)
 
                     # grab reg time, ot, dt
-                    r_col = ts15.start_data_col + 2
-                    data = ts15.ts_grab_hrs(read_sheet, r_row, r_col)
+                    data = ts15.ts_grab_hrs(read_sheet, r_row, 2)
                     head_data_list.append(data)
 
-                    r_col = r_col + 1
-                    data = ts15.ts_grab_hrs(read_sheet, r_row, r_col)
+                    data = ts15.ts_grab_hrs(read_sheet, r_row, 3)
                     head_data_list.append(data)
 
-                    r_col = r_col + 1
-                    data = ts15.ts_grab_hrs(read_sheet, r_row, r_col)
+                    data = ts15.ts_grab_hrs(read_sheet, r_row, 4)
                     head_data_list.append(data)
 
                     # write accounting code
                     head_data_list.append(head_acct)
 
                     # showcall true/false
-                    r_col = ts_cas.start_data_col+5
-                    data = ts_cas.ts_blacks_call(read_sheet, r_row, r_col)
+                    data = ts15.ts_blacks_call(read_sheet, r_row, 7)
                     head_data_list.append(data)
 
                     # Grab MP
-                    r_col = ts_cas.start_data_col+6
-                    data = ts_cas.ts_mp(read_sheet, r_row, r_col)
+                    data = ts15.ts_mp(read_sheet, r_row, 5)
                     head_data_list.append(data)
 
                     print(head_data_list)
@@ -368,7 +355,7 @@ def main():
 
     cfg.conn.close()
 
-    print("All done! Time to save to bailout")
+    print("All done! Time to bailout")
     print()
 
 
