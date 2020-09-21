@@ -1,6 +1,7 @@
-'''
-
-'''
+"""
+These are generic group of simple classes built to deal with
+timesheets.
+"""
 
 # imported from the standard library
 import re
@@ -9,48 +10,54 @@ import re
 
 # imported from local directories
 
-class salariedHead:
+
+class SalariedHead:
 
     headCount = 0
 
     # the instance, 'self' in this case, is always teh first argument
     # in it, you define the class variables, then assign thjose variables to the instance variables
-    def __init__(self, headAlphaID, headID, lastName, firstName, dir_path, has_left):
-        self.headAlphaID = headAlphaID
-        self.HeadID = headID
-        self.lastName = lastName
-        self. firstName = firstName
+    def __init__(self, head_alpha_id, head_id, last_name, first_name, dir_path, has_left):
+        self.head_alpha_id = head_alpha_id
+        self.head_id = head_id
+        self.last_name = last_name
+        self. first_name = first_name
         self.dir_path = dir_path
         self.has_left = has_left
-        salariedHead.headCount += 1 #this increments every time an employee is created
+        SalariedHead.headCount += 1  # this increments every time an employee is created
 
-    #repr allows us to print the list with 'salariedHeads(my_var)'
+    # repr allows us to print the list with 'salariedHeads(my_var)'
     def __repr__(self):
-        return f"salariedHead({self.HeadID}, '{self.lastName}', '{self.firstName}', '{self.dir_path}', {self.has_left})"
+        return f"salariedHead({self.head_id}, " \
+               f"'{self.last_name}', " \
+               f"'{self.first_name}', " \
+               f"'{self.dir_path}', " \
+               f"{self.has_left})"
 
-    #concat name
-    def fullName(self):
-        return f"{self.firstName} {self.lastName}"
+    # concat name
+    def full_name(self):
+        return f"{self.first_name} {self.last_name}"
 
     def email(self, domain):
-        return self.firstName[0].lower() + self.lastName.lower() + domain
+        return self.first_name[0].lower() + self.last_name.lower() + domain
 
-#test data
+
+# test data
 def testheads():
-    Wi = salariedHead('z', 99, 'Wonka', 'Willy', 'N/A', False)
-    print(Wi)
-    print(Wi.fullName())
-    print(Wi.email("@chocolatefactory.com"))
-    print(salariedHead.headCount)
+    wi = SalariedHead('z', 99, 'Wonka', 'Willy', 'N/A', False)
+    print(wi)
+    print(wi.full_name())
+    print(wi.email("@chocolatefactory.com"))
+    print(SalariedHead.headCount)
 
-class searchDict(dict):
+
+class SearchDict(dict):
 
     def search_for_match(self, event):
         return (self[key] for key in self if re.match(key, event))
 
 
-
-#test salaried head class
+# test salaried head class
 if __name__ == '__main__':
     print()
     print('------------')

@@ -82,13 +82,6 @@ class TimeSheet:
 
 class TS2015(TimeSheet):
 
-    # grab the HeadIDAlpha
-    @staticmethod
-    def ts_15_grab_head_id_alpha():
-        data = 'z'
-        return data
-    # TODO: re-write this to ping the db, likely move to dbfnc as well
-
     # Kris changed the formatting of his timesheet to make it more flexible and subsequently
     # killed the scrapper.  This is the work around
     # this function is for writing the begin and end times of calls
@@ -116,12 +109,40 @@ class TS2015(TimeSheet):
         return acct_num
 
     @staticmethod
-    def ts_15_event_id(acct_num):
-         if acct_num != '6210-50-504' and acct_num != '6200-50-504':
-             data = '0-310820'
-         else:
-             data = ''
-         return data
+    def ts_15_event_id(acct_num, date_str):
+        if acct_num != '6210-50-504' and acct_num != '6200-50-504':
+            if date_str[4] == '/':
+                new_date = str.split(date_str, '/')
+            elif date_str[4] == '-':
+                new_date = str.split(date_str, '-')
+            else:
+                new_date = ""
+                print("*****************ERROR************************")
+                print("Your 'Head Write Show Number' method is broken")
+                print("*****************ERROR************************")
+            if int(new_date[1]) >= 9:
+                addon = 1
+            else:
+                addon = 0
+            test = new_date[0]
+
+            def split1(word):
+                return [char for char in word]
+
+            new_list = split1(test)
+            dig_4 = int(new_list[3]) + addon
+            return '0-3108' + new_list[2] + str(dig_4)
+        else:
+            data = ''
+        return data
+        # TODO: combine the head and casual event num methods
+
+    # grab the HeadIDAlpha
+    @staticmethod
+    def ts_15_grab_head_id_alpha():
+        data = 'z'
+        return data
+    # TODO: re-write this to ping the db, likely move to dbfnc as well
 
 
 class TSCasual(TimeSheet):

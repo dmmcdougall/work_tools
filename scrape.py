@@ -19,6 +19,7 @@ from timesheet import TS2015
 from timesheet import TS2011
 from timesheet import TSCasual
 
+
 def main():
     # set up the column headers
     crew_keys = ["Shift", "CrewIDLetter", "CrewIDNumber",
@@ -49,7 +50,7 @@ def main():
     next_crew_num = crew_record + 1
 
     # create a list of the read_books
-    read_list = os.listdir(cfg.dir)
+    read_list = os.listdir(cfg.my_dir)
     print(f"We need to read approximately {len(read_list)} files")
     print("Are you ready to read? RETURN for yes, CTRL+C for no.")
     input()
@@ -57,7 +58,7 @@ def main():
     # a loop to iterate through the read_list
     i = 0  # where in the list are we?
     for i in range(len(read_list)):
-        read_file = (cfg.dir + '\\' + read_list[i])
+        read_file = (cfg.my_dir + '\\' + read_list[i])
         print(read_file)
         read_book = xlrd.open_workbook(read_file)
         read_sheet = read_book.sheet_by_index(0)
@@ -85,12 +86,8 @@ def main():
                 if read_sheet.cell_type(r_row, r_col) != 0:
                     print("writing data")
 
-                    # House keeping...
-                    # create an empty list to store the data
-                    crew_data_list = []
-
                     # write shift number
-                    crew_data_list.append(next_crew_num)
+                    crew_data_list = [next_crew_num]
                     next_crew_num += 1
 
                     # Grab a casual Alpha number from the db
@@ -112,19 +109,17 @@ def main():
 
                     # Grab in time
                     data = ts_cas.ts_write_time(read_sheet, r_row, 0)
-                    print(data)
                     crew_data_list.append(data)
 
                     # Grab out time
                     data = ts_cas.ts_write_time(read_sheet, r_row, 1)
-                    print(data)
                     crew_data_list.append(data)
 
                     # Grab event year
                     data = ts_cas.ts_grab_date(read_sheet, r_row)
-                    #print(data + " prepped date")
                     evnt_yr = dbfnc.grabeventYR2(data)
                     crew_data_list.append(evnt_yr)
+                    # TODO: build a read, function, write to list method
 
                     # Grab Event ID
                     data = ts_cas.ts_grab_date(read_sheet, r_row)
@@ -180,12 +175,8 @@ def main():
                 if read_sheet.cell_type(r_row, r_col) != 0:
                     print("writing data")
 
-                    # House keeping...
-                    # create an empty list to store the data and increment the shift number
-                    head_data_list = []
-
                     # write shift number
-                    head_data_list.append(next_crew_num)
+                    head_data_list = [next_head_num]
                     next_head_num += 1
 
                     # Grab a casual Alpha number from the db
@@ -196,17 +187,16 @@ def main():
                     # Grab a head id number from the db
                     data = read_sheet.cell_value(ts15.name_row, ts15.name_column)
                     head_id = dbfnc.find_head_number(data)
-                    #print(head_id)
                     head_data_list.append(head_id)
 
                     # Grab ts date
-                    data = ts15.ts_grab_date(read_sheet, r_row)
-                    print(data)
-                    head_data_list.append(data)
+                    my_date = ts15.ts_grab_date(read_sheet, r_row)
+                    print(my_date)
+                    head_data_list.append(my_date)
 
                     # Grab in time w the kris fix
                     if head_id == 3:
-                        data = ts15.ts_15_kf_format(read_sheet,r_row, 0)
+                        data = ts15.ts_15_kf_format(read_sheet, r_row, 0)
                         print(data)
                         head_data_list.append(data)
                     else:
@@ -216,7 +206,7 @@ def main():
 
                     # Grab out time w the kris fix
                     if head_id == 3:
-                        data = ts15.ts_15_kf_format(read_sheet,r_row,1)
+                        data = ts15.ts_15_kf_format(read_sheet, r_row, 1)
                         print(data)
                         head_data_list.append(data)
                     else:
@@ -234,7 +224,7 @@ def main():
                     # but don't post to list yet
                     head_acct = ts15.ts_15_write_acct(read_sheet, r_row, 6)
 
-                    data = ts15.ts_15_event_id(head_acct)
+                    data = ts15.ts_15_event_id(head_acct, my_date)
                     head_data_list.append(data)
 
                     # grab reg time, ot, dt
@@ -263,7 +253,7 @@ def main():
                     # add this row to the df
                     print("adding to head df")
                     my_dict = dict(zip(head_keys, head_data_list))
-                    df_head= df_head.append(my_dict, ignore_index=True)
+                    df_head = df_head.append(my_dict, ignore_index=True)
 
                 else:
                     print("no data in cel E" + str((r_row) + 1))  # move on to the next time slot
@@ -293,24 +283,24 @@ def main():
     print("Table path cleared, let's write to the db")
     engine = sa.create_engine(cfg.alc_str)
     df_head.to_sql(tbl,
-                  con=engine,
-                  if_exists='append',
-                  index=False,
-                  dtype={'Shift': sa.types.INT,
-                         'HeadIDLetter': sa.types.NVARCHAR(length=255),
-                         'HeadIDNumber': sa.types.INT,  # notice this is an INT
-                         'Date': sa.dialects.mssql.DATETIME2(0),
-                         'InTime': sa.dialects.mssql.DATETIME2(0),
-                         'OutTime': sa.dialects.mssql.DATETIME2(0),
-                         'EventYrID': sa.types.NVARCHAR(length=255),
-                         'EventID': sa.types.NVARCHAR(length=255),
-                         'Reg': sa.types.FLOAT,
-                         'OT': sa.types.FLOAT,
-                         'Double': sa.types.FLOAT,
-                         'Acct': sa.types.NVARCHAR(length=255),
-                         'Blackscall': sa.dialects.mssql.BIT,
-                         'MP': sa.dialects.mssql.BIT}
-                  )
+                   con=engine,
+                   if_exists='append',
+                   index=False,
+                   dtype={'Shift': sa.types.INT,
+                          'HeadIDLetter': sa.types.NVARCHAR(length=255),
+                          'HeadIDNumber': sa.types.INT,  # notice this is an INT
+                          'Date': sa.dialects.mssql.DATETIME2(0),
+                          'InTime': sa.dialects.mssql.DATETIME2(0),
+                          'OutTime': sa.dialects.mssql.DATETIME2(0),
+                          'EventYrID': sa.types.NVARCHAR(length=255),
+                          'EventID': sa.types.NVARCHAR(length=255),
+                          'Reg': sa.types.FLOAT,
+                          'OT': sa.types.FLOAT,
+                          'Double': sa.types.FLOAT,
+                          'Acct': sa.types.NVARCHAR(length=255),
+                          'Blackscall': sa.dialects.mssql.BIT,
+                          'MP': sa.dialects.mssql.BIT}
+                   )
     print()
 
     # send the df to the db
@@ -332,25 +322,25 @@ def main():
     print("Table path cleared, let's write to the db")
     engine = sa.create_engine(cfg.alc_str)
     df_crew.to_sql(tbl,
-                  con=engine,
-                  if_exists='append',
-                  index=False,
-                  dtype={'Shift': sa.types.INT,
-                         'CrewIDLetter': sa.types.NVARCHAR(length=255),
-                         'CrewIDNumber': sa.types.NVARCHAR(length=255),  # notice this is a CHAR
-                         'Date': sa.dialects.mssql.DATETIME2(0),
-                         'InTime': sa.dialects.mssql.DATETIME2(0),
-                         'OutTime': sa.dialects.mssql.DATETIME2(0),
-                         'EventYrID': sa.types.NVARCHAR(length=255),
-                         'EventID': sa.types.NVARCHAR(length=255),
-                         'Reg': sa.types.FLOAT,
-                         'OT': sa.types.FLOAT,
-                         'Double': sa.types.FLOAT,
-                         'Acct': sa.types.NVARCHAR(length=255),
-                         'Blackscall': sa.dialects.mssql.BIT,
-                         'MP': sa.dialects.mssql.BIT,
-                         'ShiftType': sa.types.INT}
-                  )
+                   con=engine,
+                   if_exists='append',
+                   index=False,
+                   dtype={'Shift': sa.types.INT,
+                          'CrewIDLetter': sa.types.NVARCHAR(length=255),
+                          'CrewIDNumber': sa.types.NVARCHAR(length=255),  # notice this is a CHAR
+                          'Date': sa.dialects.mssql.DATETIME2(0),
+                          'InTime': sa.dialects.mssql.DATETIME2(0),
+                          'OutTime': sa.dialects.mssql.DATETIME2(0),
+                          'EventYrID': sa.types.NVARCHAR(length=255),
+                          'EventID': sa.types.NVARCHAR(length=255),
+                          'Reg': sa.types.FLOAT,
+                          'OT': sa.types.FLOAT,
+                          'Double': sa.types.FLOAT,
+                          'Acct': sa.types.NVARCHAR(length=255),
+                          'Blackscall': sa.dialects.mssql.BIT,
+                          'MP': sa.dialects.mssql.BIT,
+                          'ShiftType': sa.types.INT}
+                   )
     print()
 
     cfg.conn.close()
