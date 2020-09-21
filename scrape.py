@@ -22,65 +22,6 @@ from timesheet import TS2015
 from timesheet import TS2011
 from timesheet import TSCasual
 
-#
-# def grab_acct(grabacct_rsheet, grabacct_rrow, grabacct_rcol):
-#     acct_num = grabacct_rsheet.cell_value(grabacct_rrow, grabacct_rcol)
-#     return acct_num
-#
-# def write_acct(acct_rsheet, acct_rrow, acct_rcol,acct_wsheet, acct_wrow, acct_wcol):
-#     data = acct_rsheet.cell_value(acct_rrow, acct_rcol)
-#     print(data)
-#     acct_wsheet.write(acct_wrow, acct_wcol, grab_acct(acct_rsheet, acct_rrow, acct_rcol))
-
-# def eventid(evnt_rsheet, evnt_rrow, evnt_rcol, evnt_wsheet, evnt_wrow, evnt_wcol):
-#     data = '0-310820'  # this is year specific
-#     evnt_num = grab_acct(evnt_rsheet, evnt_rrow, evnt_rcol)
-#     if evnt_num != '6210-50-504' and evnt_num != '6200-50-504':
-#         evnt_wsheet.write(evnt_wrow,evnt_wcol, data)
-#     else:
-#         evnt_wsheet.write(evnt_wrow, evnt_wcol, "")
-#
-# def blackscall(blk_rsheet, blk_rrow, blk_rcol, blk_wsheet, blk_wrow, blk_wcol):
-#     data = blk_rsheet.cell_value(blk_rrow, blk_rcol)
-#     if data != '':
-#         blacks = 1
-#     else:
-#         blacks = 0
-#
-#     blk_wsheet.write(blk_wrow, blk_wcol, blacks)
-#
-# def mpcall(mp_rsheet, mp_rrow, mp_rcol, mp_wsheet, mp_wrow, mp_wcol):
-#     data = mp_rsheet.cell_value(mp_rrow, mp_rcol)
-#     if data == 1:
-#         meal = 1
-#     else:
-#         meal = 0
-#
-#     mp_wsheet.write(mp_wrow, mp_wcol, meal)
-#
-# # Kris changed the formatting of his timesheet to make it more flexible and subsequently
-# # killed the scrapper.  This is the work around
-# # this function is for writing the begin and end times of calls
-#
-# def kf_format(klr_sheet, klr_row, klr_col, klwrite_sheet, klw_row):
-#     data = klr_sheet.cell_value(klr_row, klr_col)
-#     kris_str = str(data)
-#     count_int = len(kris_str)
-#
-#     if count_int == 1:
-#         kris_tuple = (0, data, 0, 0)
-#     elif count_int == 2:
-#         kris_tuple = (kris_str[0], kris_str[1], 0, 0)
-#     elif count_int == 3:
-#         kris_tuple = (0, kris_str[0], kris_str[1], kris_str[2])
-#     else:
-#         kris_tuple = (kris_str[0], kris_str[1], kris_str[2], kris_str[3])
-#
-#     time = str(kris_tuple[0]) + str(kris_tuple[1]) + ":" + str(kris_tuple[2]) + str(kris_tuple[3])
-#     print(time)
-#     klwrite_sheet.write(klw_row, klr_col + 2, time)
-
-
 def main():
     # set up the column headers
     crew_keys = ["Shift", "CrewIDLetter", "CrewIDNumber",
@@ -173,14 +114,12 @@ def main():
                     crew_data_list.append(data)
 
                     # Grab in time
-                    r_col = ts_cas.start_data_col
-                    data = ts_cas.ts_write_time(read_sheet, r_row, r_col)
+                    data = ts_cas.ts_write_time(read_sheet, r_row, 0)
                     print(data)
                     crew_data_list.append(data)
 
                     # Grab out time
-                    r_col = ts_cas.start_data_col+1
-                    data = ts_cas.ts_write_time(read_sheet, r_row, r_col)
+                    data = ts_cas.ts_write_time(read_sheet, r_row, 1)
                     print(data)
                     crew_data_list.append(data)
 
@@ -196,30 +135,25 @@ def main():
                     crew_data_list.append(show)
 
                     # grab reg time, ot, dt
-                    r_col = ts_cas.start_data_col+2
-                    data = ts_cas.ts_grab_hrs(read_sheet, r_row, r_col)
+                    data = ts_cas.ts_grab_hrs(read_sheet, r_row, 2)
                     crew_data_list.append(data)
 
-                    r_col = r_col + 1
-                    data = ts_cas.ts_grab_hrs(read_sheet, r_row, r_col)
+                    data = ts_cas.ts_grab_hrs(read_sheet, r_row, 3)
                     crew_data_list.append(data)
 
-                    r_col = r_col + 1
-                    data = ts_cas.ts_grab_hrs(read_sheet, r_row, r_col)
+                    data = ts_cas.ts_grab_hrs(read_sheet, r_row, 4)
                     crew_data_list.append(data)
 
                     # write accounting code
                     data = ts_cas.ts_cas_write_acct()
                     crew_data_list.append(data)
 
-                    # showcall true/false
-                    r_col = ts_cas.start_data_col+5
-                    data = ts_cas.ts_blacks_call(read_sheet, r_row, r_col)
+                    # blackscall true/false
+                    data = ts_cas.ts_blacks_call(read_sheet, r_row, 5)
                     crew_data_list.append(data)
 
                     # Grab MP
-                    r_col = ts_cas.start_data_col+6
-                    data = ts_cas.ts_mp(read_sheet, r_row, r_col)
+                    data = ts_cas.ts_mp(read_sheet, r_row, 6)
                     crew_data_list.append(data)
 
                     # Grab Shiftype
@@ -307,8 +241,8 @@ def main():
                     # but don't post to list yet
                     r_col = ts15.start_data_col + 6
                     head_acct = ts15.ts_15_write_acct(read_sheet, r_row, r_col)
-                    r_col = ts15.start_data_col +5
-                    data = ts15.ts_15_eventid(read_sheet, r_row, r_col, head_acct)
+
+                    data = ts15.ts_15_eventid(head_acct)
                     head_data_list.append(data)
 
                     # grab reg time, ot, dt
@@ -390,6 +324,8 @@ def main():
                          'Blackscall': sa.dialects.mssql.BIT,
                          'MP': sa.dialects.mssql.BIT}
                   )
+    print()
+
     # send the df to the db
     tbl = 'TMPtblWeeklyCrewData'
     tbl_exist = dbfnc.checkTableExists(cfg.conn, tbl)
@@ -428,6 +364,7 @@ def main():
                          'MP': sa.dialects.mssql.BIT,
                          'ShiftType': sa.types.INT}
                   )
+    print()
 
     cfg.conn.close()
 
