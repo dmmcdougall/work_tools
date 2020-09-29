@@ -56,7 +56,7 @@ def main():
     input()
 
     # a loop to iterate through the read_list
-    i = 0  # where in the list are we?
+    # i = 0  # where in the list are we?
     for i in range(len(read_list)):
         read_file = (cfg.my_dir + '\\' + read_list[i])
         print(read_file)
@@ -69,7 +69,7 @@ def main():
         if read_sheet.cell_value(7, 0) == 'SUNDAY':
             print("This timesheet was designed in 2011. Begin data scrape")
             ts11 = TS2011('ts11', 3, 1, 7, 1, 55, 7)
-            r_row = ts11.start_data_row
+            # r_row = ts11.start_data_row
 
             print("This 2011 loop was deleted during the python2 to python3 upgrade")
             print("You'll probably want to re-write this 2011 loop someday")
@@ -78,12 +78,13 @@ def main():
         elif read_sheet.cell_value(14, 0) == 'SUNDAY':
             print("This timesheet belongs to a casual. Begin data scrape")
             ts_cas = TSCasual('ts_cas', 9, 1, 14, 1, 55, 6)
-            r_row = ts_cas.start_data_row
+            # r_row = ts_cas.start_data_row
 
             # A loop to iterate through the time slots one at a time
             for r_row in range(ts_cas.start_data_row, ts_cas.end_data_row):
                 r_col = ts_cas.start_data_col + 1
                 if read_sheet.cell_type(r_row, r_col) != 0:
+                    # TODO: something that chatches the 8 hr reg flag
                     print("writing data")
 
                     # write shift number
@@ -166,7 +167,7 @@ def main():
         elif read_sheet.cell_value(19, 0) == 'SUNDAY':
             print("This timesheet was designed in 2015. Begin data scrape")
             ts15 = TS2015('ts15', 15, 2, 19, 2, 69, 7)
-            r_row = ts15.start_data_row
+            # r_row = ts15.start_data_row
 
             # A loop to iterate through the time slots one at a time
             for r_row in range(ts15.start_data_row, ts15.end_data_row):

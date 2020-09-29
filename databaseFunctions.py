@@ -44,6 +44,7 @@ def find_head_number(head_name):
     my_record = (query.fetchone())
 
     return my_record[0]
+    # TODO: write using preferred names
 
 # find the number we need to start the new data with
 def find_next_row_from_db(my_table, my_column):
@@ -130,7 +131,8 @@ def checkTableExists(dbcon, tablename):
     return False
 
 def drop_table(self, table):
-    self._exec(schema.DropTable(table))
+    pass
+    #self._exec(schema.DropTable(table))
 
 if __name__ == '__main__':
     print()
@@ -139,6 +141,6 @@ if __name__ == '__main__':
     print('------------')
     print()
     query = "SELECT * FROM sys.tables"
-    read(query, cfg.conn)
+    read2(query, cfg.conn)
 
 
