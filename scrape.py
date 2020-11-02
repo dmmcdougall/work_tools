@@ -117,9 +117,7 @@ def main():
         # is this actually a timesheet? And which one is it?
         if read_sheet.cell_value(7, 0) == 'SUNDAY':
             print("This timesheet was designed in 2011. Begin data scrape")
-<<<<<<< HEAD
             tf11.timesheet2011()
-=======
             ts11 = TS2011('ts11', 3, 1, 7, 1, 55, 7)
             # r_row = ts11.start_data_row
 
@@ -216,7 +214,6 @@ def main():
                     print("no data in cel B" + str((r_row) + 1))  # move on to the next time slot
                     # TODO: what is this pycharm error above?
 
->>>>>>> methods_w_ifs
         elif read_sheet.cell_value(19, 0) == 'SUNDAY':
             print("This timesheet was designed in 2015. Begin data scrape")
 
@@ -228,7 +225,6 @@ def main():
                 if read_sheet.cell_type(r_row, 2) != 0:
                     print("writing data")
 
-<<<<<<< HEAD
                     # write the HeadAlphaID
                     data = 'z'
                     new_sheet.write(w_row, 1, data)
