@@ -117,7 +117,106 @@ def main():
         # is this actually a timesheet? And which one is it?
         if read_sheet.cell_value(7, 0) == 'SUNDAY':
             print("This timesheet was designed in 2011. Begin data scrape")
+<<<<<<< HEAD
             tf11.timesheet2011()
+=======
+            ts11 = TS2011('ts11', 3, 1, 7, 1, 55, 7)
+            # r_row = ts11.start_data_row
+
+            print("This 2011 loop was deleted during the python2 to python3 upgrade")
+            print("You'll probably want to re-write this 2011 loop someday")
+            # TODO :write the 2011 loop
+
+        elif read_sheet.cell_value(14, 0) == 'SUNDAY':
+            print("This timesheet belongs to a casual. Begin data scrape")
+            ts_cas = TSCasual('ts_cas', 4, 1, 14, 1, 55, 6)
+            # r_row = ts_cas.start_data_row
+
+            # A loop to iterate through the time slots one at a time
+            for r_row in range(ts_cas.start_data_row, ts_cas.end_data_row):
+                r_col = ts_cas.start_data_col + 1
+                if read_sheet.cell_type(r_row, r_col) != 0:
+                    # TODO: something that chatches the 8 hr reg flag
+                    print("writing data")
+
+                    # write shift number
+                    crew_data_list = [next_crew_num]
+                    next_crew_num += 1
+
+                    # Grab a casual Alpha number from the db
+                    data = read_sheet.cell_value(ts_cas.name_row, ts_cas.name_column)
+                    cas_alpha_id = dbfnc.find_crew_Alpha_number(data)
+                    print(cas_alpha_id)
+                    crew_data_list.append(cas_alpha_id)
+
+                    # Grab a casual id number from the db
+                    data = read_sheet.cell_value(ts_cas.name_row, ts_cas.name_column)
+                    cas_id = dbfnc.find_crew_number(data)
+                    print(cas_id)
+                    crew_data_list.append(cas_id)
+
+                    # Grab ts date
+                    data = ts_cas.ts_grab_date(read_sheet, r_row, 3)
+                    print(data)
+                    crew_data_list.append(data)
+
+                    # Grab in time
+                    data = ts_cas.ts_write_time(read_sheet, r_row, 0)
+                    crew_data_list.append(data)
+
+                    # Grab out time
+                    data = ts_cas.ts_write_time(read_sheet, r_row, 1)
+                    crew_data_list.append(data)
+
+                    # Grab event year
+                    data = ts_cas.ts_grab_date(read_sheet, r_row, 3)
+                    evnt_yr = dbfnc.grabeventYR2(data)
+                    crew_data_list.append(evnt_yr)
+                    # TODO: build a read, function, write to list method
+
+                    # Grab Event ID
+                    data = ts_cas.ts_grab_date(read_sheet, r_row, 3)
+                    show = ts_cas.ts_cas_write_show_num(data)
+                    crew_data_list.append(show)
+
+                    # grab reg time, ot, dt
+                    data = ts_cas.ts_grab_hrs(read_sheet, r_row, 2)
+                    crew_data_list.append(data)
+
+                    data = ts_cas.ts_grab_hrs(read_sheet, r_row, 3)
+                    crew_data_list.append(data)
+
+                    data = ts_cas.ts_grab_hrs(read_sheet, r_row, 4)
+                    crew_data_list.append(data)
+
+                    # write accounting code
+                    data = ts_cas.ts_cas_write_acct()
+                    crew_data_list.append(data)
+
+                    # blackscall true/false
+                    data = ts_cas.ts_blacks_call(read_sheet, r_row, 5)
+                    crew_data_list.append(data)
+
+                    # Grab MP
+                    data = ts_cas.ts_mp(read_sheet, r_row, 6)
+                    crew_data_list.append(data)
+
+                    # Grab Shiftype
+                    data = ts_cas.ts_cas_write_shift_type()
+                    crew_data_list.append(data)
+
+                    print(crew_data_list)
+
+                    # add this row to the df
+                    print("adding to crew df")
+                    my_dict = dict(zip(crew_keys, crew_data_list))
+                    df_crew = df_crew.append(my_dict, ignore_index=True)
+
+                else:
+                    print("no data in cel B" + str((r_row) + 1))  # move on to the next time slot
+                    # TODO: what is this pycharm error above?
+
+>>>>>>> methods_w_ifs
         elif read_sheet.cell_value(19, 0) == 'SUNDAY':
             print("This timesheet was designed in 2015. Begin data scrape")
 
@@ -129,6 +228,7 @@ def main():
                 if read_sheet.cell_type(r_row, 2) != 0:
                     print("writing data")
 
+<<<<<<< HEAD
                     # write the HeadAlphaID
                     data = 'z'
                     new_sheet.write(w_row, 1, data)
@@ -138,6 +238,51 @@ def main():
                     my_dict = searchDict(cfg.dict_heads)
                     for head_num in my_dict.search_for_match(data):
                         new_sheet.write(w_row, 2, head_num)
+=======
+                    # write shift number
+                    head_data_list = [next_head_num]
+                    next_head_num += 1
+
+                    # Grab a casual Alpha number from the db
+                    # data = read_sheet.cell_value(ts15.name_row, ts15.name_column)
+                    head_alpha_id = ts15.ts_15_grab_head_id_alpha()
+                    head_data_list.append(head_alpha_id)
+
+                    # Grab a head id number from the db
+                    data = read_sheet.cell_value(ts15.name_row, ts15.name_column)
+                    head_id = dbfnc.find_head_number(data)
+                    head_data_list.append(head_id)
+
+                    # Grab ts date
+                    my_date = ts15.ts_grab_date(read_sheet, r_row, 1)
+                    print(my_date)
+                    head_data_list.append(my_date)
+
+                    # Grab in time w the kris fix
+                    if head_id == 3:
+                        data = ts15.ts_15_kf_format(read_sheet, r_row, 0)
+                        print(data)
+                        head_data_list.append(data)
+                    else:
+                        data = ts15.ts_write_time(read_sheet, r_row, 0)
+                        print(data)
+                        head_data_list.append(data)
+
+                    # Grab out time w the kris fix
+                    if head_id == 3:
+                        data = ts15.ts_15_kf_format(read_sheet, r_row, 1)
+                        print(data)
+                        head_data_list.append(data)
+                    else:
+                        data = ts15.ts_write_time(read_sheet, r_row, 1)
+                        print(data)
+                        head_data_list.append(data)
+
+                    # Grab event year
+                    data = ts15.ts_grab_date(read_sheet, r_row, 1)
+                    evnt_yr = dbfnc.grabeventYR2(data)
+                    head_data_list.append(evnt_yr)
+>>>>>>> methods_w_ifs
 
                     #write date
                     date_loop(r_row, w_row, read_sheet, new_sheet)

@@ -24,6 +24,7 @@ def find_crew_number(crew_name):
 
 def find_crew_Alpha_number(crew_name):
     mylist = (str.split(crew_name))
+    print(mylist)
     query = cfg.conn.execute("""
         SELECT CrewIDAlpha FROM CrewNamesTable
         WHERE FirstName = ?

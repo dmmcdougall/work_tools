@@ -32,11 +32,11 @@ class TimeSheet:
         return blacks
 
     # this is a loop, to iterate over the write_date method
-    def ts_grab_date(self, read_sheet, read_row):
+    def ts_grab_date(self, read_sheet, read_row, data_row_offset):
         i = self.start_data_row
         while i < self.end_data_row:
             if (read_row >= i) and (read_row <= i + 6):
-                data = read_sheet.cell_value(i+1, 0)
+                data = read_sheet.cell_value(i+data_row_offset, 0) # TODO: this data offset could be smarter
                 # print(data)
                 shift_date_tuple = xlrd.xldate_as_tuple(data, 1)
                 day = f"{shift_date_tuple[2]}"
