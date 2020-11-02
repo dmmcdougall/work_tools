@@ -1,7 +1,7 @@
 '''
 
 '''
-
+# TODO:the dbfnc needs contect managers for the sql queries
 # standard library
 import pyodbc
 import pandas as pd
