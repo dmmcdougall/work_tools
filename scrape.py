@@ -77,7 +77,7 @@ def main():
 
         elif read_sheet.cell_value(14, 0) == 'SUNDAY':
             print("This timesheet belongs to a casual. Begin data scrape")
-            ts_cas = TSCasual('ts_cas', 9, 1, 14, 1, 55, 6)
+            ts_cas = TSCasual('ts_cas', 4, 1, 14, 1, 55, 6)
             # r_row = ts_cas.start_data_row
 
             # A loop to iterate through the time slots one at a time
@@ -104,7 +104,7 @@ def main():
                     crew_data_list.append(cas_id)
 
                     # Grab ts date
-                    data = ts_cas.ts_grab_date(read_sheet, r_row)
+                    data = ts_cas.ts_grab_date(read_sheet, r_row, 3)
                     print(data)
                     crew_data_list.append(data)
 
@@ -117,13 +117,13 @@ def main():
                     crew_data_list.append(data)
 
                     # Grab event year
-                    data = ts_cas.ts_grab_date(read_sheet, r_row)
+                    data = ts_cas.ts_grab_date(read_sheet, r_row, 3)
                     evnt_yr = dbfnc.grabeventYR2(data)
                     crew_data_list.append(evnt_yr)
                     # TODO: build a read, function, write to list method
 
                     # Grab Event ID
-                    data = ts_cas.ts_grab_date(read_sheet, r_row)
+                    data = ts_cas.ts_grab_date(read_sheet, r_row, 3)
                     show = ts_cas.ts_cas_write_show_num(data)
                     crew_data_list.append(show)
 
@@ -191,7 +191,7 @@ def main():
                     head_data_list.append(head_id)
 
                     # Grab ts date
-                    my_date = ts15.ts_grab_date(read_sheet, r_row)
+                    my_date = ts15.ts_grab_date(read_sheet, r_row, 1)
                     print(my_date)
                     head_data_list.append(my_date)
 
@@ -216,7 +216,7 @@ def main():
                         head_data_list.append(data)
 
                     # Grab event year
-                    data = ts15.ts_grab_date(read_sheet, r_row)
+                    data = ts15.ts_grab_date(read_sheet, r_row, 1)
                     evnt_yr = dbfnc.grabeventYR2(data)
                     head_data_list.append(evnt_yr)
 
