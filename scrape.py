@@ -21,7 +21,7 @@ from timesheet import TSCasual
 
 
 def main():
-    # set up the column headers
+    # set up the column headers in a list
     crew_keys = ["Shift", "CrewIDLetter", "CrewIDNumber",
                  "Date", "InTime", "OutTime",
                  "EventYrID", "EventID", "Reg",
@@ -56,7 +56,6 @@ def main():
     input()
 
     # a loop to iterate through the read_list
-    # i = 0  # where in the list are we?
     for i in range(len(read_list)):
         read_file = (cfg.my_dir + '\\' + read_list[i])
         print(read_file)
