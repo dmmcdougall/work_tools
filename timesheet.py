@@ -103,7 +103,8 @@ class TS2015(TimeSheet):
         return time
 
     def ts_15_write_acct(self, read_sheet, read_row, col_modifier):
-        data = read_sheet.cell_value(read_row, self.start_data_col + col_modifier)
+        # the .lower() modifier makes the acct_codes not case sensitive
+        data = read_sheet.cell_value(read_row, self.start_data_col + col_modifier).lower()
         print(data)
         acct_num = cfg.acct_codes[data]
         return acct_num
