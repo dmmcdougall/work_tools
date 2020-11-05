@@ -31,7 +31,7 @@ class TimeSheet:
             blacks = 0
         return blacks
 
-    # this is a loop, to iterate over the write_date method
+    # this is a loop, to grab the date of a call
     def ts_grab_date(self, read_sheet, read_row, data_row_offset):
         i = self.start_data_row
         while i < self.end_data_row:
@@ -78,6 +78,67 @@ class TimeSheet:
             half2_time = f"{shift_in_tuple[4]}"
         time = half1_time + ":" + half2_time
         return time
+
+    # this is a loop, to grab the date of a call
+    def eight_hour_day(self, read_sheet, read_row, data_row_offset):
+        i = self.start_data_row
+        while i < self.end_data_row:
+            if (read_row >= i) and (read_row <= i + 6):
+                data = read_sheet.cell_value(i+data_row_offset, 0)
+                if data == "":
+                    return "Not an 8 hour day"
+                else:
+                    return "REG FLAG SET!"
+            else:
+                i += self.spaces_per_day
+
+
+class TS2011(TimeSheet):
+
+    def test2(self):
+        pass
+
+
+class TSCasual(TimeSheet):
+
+    @staticmethod
+    def ts_cas_write_acct():
+        data = '6230-50-504'
+        return data
+
+    @staticmethod
+    def ts_cas_write_shift_type():
+        data = 9
+        return data
+
+    @staticmethod
+    def ts_cas_shift_types_list():
+        return cfg.list_crew_shift_types()
+    # TODO: what is going on with the crew list function?
+
+    @staticmethod
+    def ts_cas_write_show_num(date_str):
+        if date_str[4] == '/':
+            new_date = str.split(date_str, '/')
+        elif date_str[4] == '-':
+            new_date = str.split(date_str, '-')
+        else:
+            new_date = ""
+            print("*****************ERROR************************")
+            print("Your 'Crew Write Show Number' method is broken")
+            print("*****************ERROR************************")
+        if int(new_date[1]) >= 9:
+            addon = 1
+        else:
+            addon = 0
+        test = new_date[0]
+
+        def split(word):
+            return [char for char in word]
+
+        new_list = split(test)
+        dig_4 = int(new_list[3]) + addon
+        return '0-3108' + new_list[2] + str(dig_4)
 
 
 class TS2015(TimeSheet):
@@ -146,49 +207,3 @@ class TS2015(TimeSheet):
     # TODO: re-write this to ping the db, likely move to dbfnc as well
 
 
-class TSCasual(TimeSheet):
-
-    @staticmethod
-    def ts_cas_write_acct():
-        data = '6230-50-504'
-        return data
-
-    @staticmethod
-    def ts_cas_write_shift_type():
-        data = 9
-        return data
-
-    @staticmethod
-    def ts_cas_shift_types_list():
-        return cfg.list_crew_shift_types()
-    # TODO: what is going on with the crew list function?
-
-    @staticmethod
-    def ts_cas_write_show_num(date_str):
-        if date_str[4] == '/':
-            new_date = str.split(date_str, '/')
-        elif date_str[4] == '-':
-            new_date = str.split(date_str, '-')
-        else:
-            new_date = ""
-            print("*****************ERROR************************")
-            print("Your 'Crew Write Show Number' method is broken")
-            print("*****************ERROR************************")
-        if int(new_date[1]) >= 9:
-            addon = 1
-        else:
-            addon = 0
-        test = new_date[0]
-
-        def split(word):
-            return [char for char in word]
-
-        new_list = split(test)
-        dig_4 = int(new_list[3]) + addon
-        return '0-3108' + new_list[2] + str(dig_4)
-
-
-class TS2011(TimeSheet):
-
-    def test2(self):
-        pass

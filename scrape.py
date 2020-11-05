@@ -172,6 +172,13 @@ def main():
             for r_row in range(ts15.start_data_row, ts15.end_data_row):
                 # Find the first slot with data
                 r_col = ts15.start_data_col
+
+                # let's work on a day flag
+                if read_sheet.cell_type(r_row, r_col) == 0:
+                    flag = ts15.eight_hour_day(read_sheet, r_row, 6)
+                    print(flag)
+
+
                 if read_sheet.cell_type(r_row, r_col) != 0:
                     print("writing data")
 
