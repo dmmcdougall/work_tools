@@ -83,7 +83,6 @@ def main():
             for r_row in range(ts_cas.start_data_row, ts_cas.end_data_row):
                 r_col = ts_cas.start_data_col + 1
                 if read_sheet.cell_type(r_row, r_col) != 0:
-                    # TODO: something that chatches the 8 hr reg flag
                     print("writing data")
 
                     # write shift number
