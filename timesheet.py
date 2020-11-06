@@ -85,11 +85,12 @@ class TimeSheet:
         while i < self.end_data_row:
             if (read_row >= i) and (read_row <= i + 6):
                 offset = 5 - ((i - self.start_data_row) % data_row_offset)
-                data = read_sheet.cell_value(i + data_row_offset)
+                data = read_sheet.cell_value(i + data_row_offset, 0)
                 if data == "":
                     return "Not an 8 hour day"
                 else:
                     return "REG FLAG SET!"
+                    i = i + data_row_offset +1
             else:
                 i += self.spaces_per_day
 
