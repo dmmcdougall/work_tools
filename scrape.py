@@ -166,17 +166,17 @@ def main():
         elif read_sheet.cell_value(19, 0) == 'SUNDAY':
             print("This timesheet was designed in 2015. Begin data scrape")
             ts15 = TS2015('ts15', 15, 2, 19, 2, 69, 7)
-            # r_row = ts15.start_data_row
+
+            # let's work on a day flag
+            flag = ts15.eight_hour_day(read_sheet, ts15.start_data_row, 6)
+            print(flag)
 
             # A loop to iterate through the time slots one at a time
             for r_row in range(ts15.start_data_row, ts15.end_data_row):
                 # Find the first slot with data
                 r_col = ts15.start_data_col
 
-                # let's work on a day flag
-                if read_sheet.cell_type(r_row, r_col) == 0:
-                    flag = ts15.eight_hour_day(read_sheet, r_row, 6)
-                    print(flag)
+
 
 
                 if read_sheet.cell_type(r_row, r_col) != 0:
