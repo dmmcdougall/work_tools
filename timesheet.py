@@ -83,11 +83,13 @@ class TimeSheet:
         i = self.start_data_row  + data_row_offset
         while i < self.end_data_row:
             if read_sheet.cell_value(i, 0) == "":
-                print("Not an 8 hour day - cel A" + str(i+1))
-                i+=7
+                # print("Not an 8 hour day - cel A" + str(i+1))
+                yield 0
+                i+=data_row_offset+1
             else:
-                print("REG FLAG SET! - cel A" + str(i+1))
-                i+=7
+                # print("REG FLAG SET! - cel A" + str(i+1))
+                yield 1
+                i+=data_row_offset+1
 
 
 
