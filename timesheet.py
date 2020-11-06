@@ -80,18 +80,29 @@ class TimeSheet:
         return time
 
     # this is a loop check the 8 hr day flag
+    # def eight_hour_day(self, read_sheet, read_row, data_row_offset):
+    #     i = self.start_data_row
+    #     while i < self.end_data_row:
+    #         if (read_row >= i) and (read_row <= i + 6):
+    #             offset = 5 - ((i - self.start_data_row) % data_row_offset)
+    #             data = read_sheet.cell_value(i + data_row_offset)
+    #             if data == "":
+    #                 return "Not an 8 hour day"
+    #             else:
+    #                 return "REG FLAG SET!"
+    #         else:
+    #             i += self.spaces_per_day
+
     def eight_hour_day(self, read_sheet, read_row, data_row_offset):
-        i = self.start_data_row
+        i = self.start_data_row  + data_row_offset
         while i < self.end_data_row:
-            if (read_row >= i) and (read_row <= i + 6):
-                offset = 5 - ((i - self.start_data_row) % data_row_offset)
-                data = read_sheet.cell_value(i + data_row_offset)
-                if data == "":
-                    return "Not an 8 hour day"
-                else:
-                    return "REG FLAG SET!"
+            data = read_sheet.cell_value(i, 0)
+            if data == "":
+                return "Not an 8 hour day"
+                i = i +=6
             else:
-                i += self.spaces_per_day
+                return "REG FLAG SET!"
+                i = i += 6
 
 
 class TS2011(TimeSheet):
