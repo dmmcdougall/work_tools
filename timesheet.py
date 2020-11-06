@@ -79,12 +79,13 @@ class TimeSheet:
         time = half1_time + ":" + half2_time
         return time
 
-    # this is a loop, to grab the date of a call
+    # this is a loop check the 8 hr day flag
     def eight_hour_day(self, read_sheet, read_row, data_row_offset):
         i = self.start_data_row
         while i < self.end_data_row:
             if (read_row >= i) and (read_row <= i + 6):
-                data = read_sheet.cell_value(i+data_row_offset, 0)
+                offset = 5 - ((i - self.start_data_row) % data_row_offset)
+                data = read_sheet.cell_value(i + data_row_offset)
                 if data == "":
                     return "Not an 8 hour day"
                 else:
