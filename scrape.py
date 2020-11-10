@@ -20,6 +20,13 @@ from timesheet import TS2011
 from timesheet import TSCasual
 
 
+# this function takes in a function, runs it, prints to screen the result,
+# and appends the result to a list
+def from_func_2_db(my_list, function, *args):
+    data = function(*args)
+    print(data)
+    my_list.append(data)
+
 def main():
     # set up the column headers in a list
     crew_keys = ["Shift", "CrewIDLetter", "CrewIDNumber",
@@ -118,7 +125,6 @@ def main():
                     data = ts_cas.ts_grab_date(read_sheet, r_row, 3)
                     evnt_yr = dbfnc.grabeventYR2(data)
                     crew_data_list.append(evnt_yr)
-                    # TODO: build a read, function, write to list method
 
                     # Grab Event ID
                     data = ts_cas.ts_grab_date(read_sheet, r_row, 3)
@@ -256,8 +262,7 @@ def main():
 
                     # Grab a salaried head Alpha number from the db
                     # data = read_sheet.cell_value(ts15.name_row, ts15.name_column)
-                    head_alpha_id = ts15.ts_15_grab_head_id_alpha()
-                    head_data_list.append(head_alpha_id)
+                    from_func_2_db(head_data_list,ts15.ts_15_grab_head_id_alpha)
 
                     # Grab a head id number from the db
                     data = read_sheet.cell_value(ts15.name_row, ts15.name_column)
@@ -265,31 +270,22 @@ def main():
                     head_data_list.append(head_id)
 
                     # Grab ts date
-                    my_date = ts15.ts_grab_date(read_sheet, r_row, 1)
-                    print(my_date)
-                    head_data_list.append(my_date)
+                    from_func_2_db(head_data_list, ts15.ts_grab_date, read_sheet, r_row, 1)
 
                     # Grab in time w the kris fix
                     if head_id == 3:
-                        data = ts15.ts_15_kf_format(read_sheet, r_row, 0)
-                        print(data)
-                        head_data_list.append(data)
+                        from_func_2_db(head_data_list, ts15.ts_15_kf_format, read_sheet, r_row, 0)
                     else:
-                        data = ts15.ts_write_time(read_sheet, r_row, 0)
-                        print(data)
-                        head_data_list.append(data)
+                        from_func_2_db(head_data_list, ts15.ts_write_time, read_sheet, r_row,0)
 
                     # Grab out time w the kris fix
                     if head_id == 3:
-                        data = ts15.ts_15_kf_format(read_sheet, r_row, 1)
-                        print(data)
-                        head_data_list.append(data)
+                        from_func_2_db(head_data_list, ts15.ts_15_kf_format, read_sheet, r_row, 1)
                     else:
-                        data = ts15.ts_write_time(read_sheet, r_row, 1)
-                        print(data)
-                        head_data_list.append(data)
+                        from_func_2_db(head_data_list, ts15.ts_write_time, read_sheet, r_row, 1)
 
                     # Grab event year
+                    # this needs to pick up the date
                     data = ts15.ts_grab_date(read_sheet, r_row, 1)
                     evnt_yr = dbfnc.grabeventYR2(data)
                     head_data_list.append(evnt_yr)
@@ -316,14 +312,10 @@ def main():
                     head_data_list.append(head_acct)
 
                     # showcall true/false
-                    data = ts15.ts_blacks_call(read_sheet, r_row, 7)
-                    head_data_list.append(data)
+                    from_func_2_db(head_data_list, ts15.ts_blacks_call, read_sheet, r_row, 7)
 
                     # Grab MP
-                    data = ts15.ts_mp(read_sheet, r_row, 5)
-                    head_data_list.append(data)
-
-                    print(head_data_list)
+                    from_func_2_db(head_data_list, ts15.ts_mp, read_sheet, r_row, 5)
 
                     # add this row to the df
                     print("adding to head df")
