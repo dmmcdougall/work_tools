@@ -187,7 +187,7 @@ def main():
                     head_data_list.append(head_id)
 
                     # Grab ts date
-                    my_date = ts15.ts_grab_date(read_sheet, r_row, -6)
+                    my_date = ts15.ts_grab_date(read_sheet, r_row, 1)
                     print(my_date)
                     head_data_list.append(my_date)
 
