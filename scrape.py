@@ -1,5 +1,5 @@
 """
-This file contains the main function for the timesheet scrapper
+This file contains the main function for the timesheet scrapper.  The scrapper
 is for taking collected timesheets, scrapping them, and placing that data
 into the production database
 """
@@ -21,14 +21,17 @@ from timesheet import TSCasual
 
 
 # this function takes in a function, runs it, prints to screen the result,
-# and appends the result to a list
+# and appends the result to a list.
+# args = (the list to append to, the function to run, the positional arguments of input func)
 def from_func_2_db(my_list, function, *args):
     data = function(*args)
     print(data)
     my_list.append(data)
 
+# and this is the app...
 def main():
-    # set up the column headers in a list
+    # set up the db column headers in lists to receive the scraped data
+    # The order of these comes form teh db and is important, don't change it.
     crew_keys = ["Shift", "CrewIDLetter", "CrewIDNumber",
                  "Date", "InTime", "OutTime",
                  "EventYrID", "EventID", "Reg",
@@ -44,7 +47,8 @@ def main():
     df_head = pd.DataFrame(columns=head_keys)
     df_crew = pd.DataFrame(columns=crew_keys)
 
-    # find the max number in the Shift number lists
+    # find the max number in the Shift number lists so as to correctly
+    # number your ShiftIDs
     # this info is pulled directly from the db
     query = "SELECT * FROM HeadShiftWorkedTable"
     df_h_shift = pd.read_sql(query, cfg.conn)
@@ -56,13 +60,14 @@ def main():
     crew_record = df_c_shift['ShiftWorkedID'].max()
     next_crew_num = crew_record + 1
 
-    # create a list of the read_books
+    # create a list of the read_books this is a list of the files which
+    # we will need to read so we need a list to iterate over
     read_list = os.listdir(cfg.my_dir)
     print(f"We need to read approximately {len(read_list)} files")
     print("Are you ready to read? RETURN for yes, CTRL+C for no.")
     input()
 
-    # a loop to iterate through the read_list
+    # here is the loop to iterate through the read_list
     for i in range(len(read_list)):
         read_file = (cfg.my_dir + '\\' + read_list[i])
         print(read_file)
@@ -70,8 +75,9 @@ def main():
         read_sheet = read_book.sheet_by_index(0)
 
         # is this actually a timesheet? And which one is it?
-        # define timesheets - version, name_row, name_column, start_data_row,
-        # start_data_col, spaces_per_day
+        # the timesheets class arguments are as follows
+        # (version, name_row, name_column, start_data_row,
+        # start_data_col, spaces_per_day)
         if read_sheet.cell_value(7, 0) == 'SUNDAY':
             print("This timesheet was designed in 2011. Begin data scrape")
             ts11 = TS2011('ts11', 3, 1, 7, 1, 55, 7)
@@ -98,9 +104,7 @@ def main():
 
                     # Grab a casual Alpha number from the db
                     data = read_sheet.cell_value(ts_cas.name_row, ts_cas.name_column)
-                    cas_alpha_id = dbfnc.find_crew_Alpha_number(data)
-                    print(cas_alpha_id)
-                    crew_data_list.append(cas_alpha_id)
+                    from_func_2_db(crew_data_list, dbfnc.find_crew_Alpha_number, data)
 
                     # Grab a casual id number from the db
                     data = read_sheet.cell_value(ts_cas.name_row, ts_cas.name_column)
@@ -109,17 +113,13 @@ def main():
                     crew_data_list.append(cas_id)
 
                     # Grab ts date
-                    data = ts_cas.ts_grab_date(read_sheet, r_row, 3)
-                    print(data)
-                    crew_data_list.append(data)
+                    from_func_2_db(crew_data_list, ts_cas.ts_grab_date, read_sheet, r_row, 3)
 
                     # Grab in time
-                    data = ts_cas.ts_write_time(read_sheet, r_row, 0)
-                    crew_data_list.append(data)
+                    from_func_2_db(crew_data_list, ts_cas.ts_write_time, read_sheet, r_row, 0)
 
                     # Grab out time
-                    data = ts_cas.ts_write_time(read_sheet, r_row, 1)
-                    crew_data_list.append(data)
+                    from_func_2_db(crew_data_list, ts_cas.ts_write_time, read_sheet, r_row, 1)
 
                     # Grab event year
                     data = ts_cas.ts_grab_date(read_sheet, r_row, 3)
@@ -146,12 +146,10 @@ def main():
                     crew_data_list.append(data)
 
                     # blackscall true/false
-                    data = ts_cas.ts_blacks_call(read_sheet, r_row, 5)
-                    crew_data_list.append(data)
+                    from_func_2_db(crew_data_list,ts_cas.ts_blacks_call, read_sheet, r_row, 5)
 
                     # Grab MP
-                    data = ts_cas.ts_mp(read_sheet, r_row, 6)
-                    crew_data_list.append(data)
+                    from_func_2_db(crew_data_list, ts_cas.ts_mp, read_sheet, r_row, 6)
 
                     # Grab Shiftype
                     data = ts_cas.ts_cas_write_shift_type()
@@ -183,8 +181,7 @@ def main():
                     next_head_num += 1
 
                     # Grab a salaried head Alpha number from the db
-                    head_alpha_id = ts15.ts_15_grab_head_id_alpha()
-                    head_data_list.append(head_alpha_id)
+                    from_func_2_db(head_data_list, ts15.ts_15_grab_head_id_alpha)
 
                     # Grab a head id number from the db
                     data = read_sheet.cell_value(ts15.name_row, ts15.name_column)
@@ -192,9 +189,7 @@ def main():
                     head_data_list.append(head_id)
 
                     # Grab ts date
-                    my_date = ts15.ts_grab_date(read_sheet, r_row, 1)
-                    print(my_date)
-                    head_data_list.append(my_date)
+                    from_func_2_db(head_data_list, ts15.ts_grab_date, read_sheet, r_row, 1)
 
                     # in time
                     data = ""
@@ -232,12 +227,10 @@ def main():
                     head_data_list.append(head_acct)
 
                     # showcall true/false
-                    data = ts15.ts_blacks_call(read_sheet, r_row, 7)
-                    head_data_list.append(data)
+                    from_func_2_db(head_data_list, ts15.ts_blacks_call, read_sheet, r_row, 7)
 
                     # Grab MP
-                    data = ts15.ts_mp(read_sheet, r_row, 5)
-                    head_data_list.append(data)
+                    from_func_2_db(head_data_list, ts15.ts_mp, read_sheet, r_row, 5)
 
                     print(head_data_list)
 

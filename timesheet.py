@@ -202,6 +202,6 @@ class TS2015(TimeSheet):
     def ts_15_grab_head_id_alpha():
         data = 'z'
         return data
-    # TODO: re-write this to ping the db, likely move to dbfnc as well
+    # TODO: re-write this to ping the db and move to dbfnc as well
 
 
