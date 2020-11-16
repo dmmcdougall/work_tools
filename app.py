@@ -13,15 +13,16 @@ timesheet selection and removes writing to a .xls
 # imported from local directories
 import scrape
 
-if __name__ == '__main__':
-    print()
-    print("++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++")
-    print("               AC - TIMESHEET SCRAPPER APP")
-    print("++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++")
-    print()
-    scrape.main()
-    print()
-    print("++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++")
-    print("                        VICTORY!")
-    print("++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++")
-    print()
+#  gonna try to kill this file
+# if __name__ == '__main__':
+#     print()
+#     print("++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++")
+#     print("               AC - TIMESHEET SCRAPPER APP")
+#     print("++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++")
+#     print()
+#     scrape.main()
+#     print()
+#     print("++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++")
+#     print("                        VICTORY!")
+#     print("++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++")
+#     print()

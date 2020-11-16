@@ -1,6 +1,7 @@
-'''
+"""
+The dbfnc sheet is for queries to the SQL server.
+"""
 
-'''
 # TODO:the dbfnc needs context managers for the sql queries
 # standard library
 import pyodbc
@@ -11,6 +12,9 @@ import config as cfg
 
 # local repo
 
+
+# this query takes a "FirstName lastName" of a Casual Crew member and returns
+#  the numeric portion of an employee number
 def find_crew_number(crew_name):
     mylist = (str.split(crew_name))
     query = cfg.conn.execute("""
@@ -22,6 +26,8 @@ def find_crew_number(crew_name):
 
     return my_record[0]
 
+# this query takes a "FirstName lastName" of a Casual Crew member and returns
+# the Alhabetical portion of an employee number
 def find_crew_Alpha_number(crew_name):
     mylist = (str.split(crew_name))
     print(mylist)
@@ -34,6 +40,8 @@ def find_crew_Alpha_number(crew_name):
 
     return my_record[0]
 
+# this query takes a "FirstName lastName" of a Salaried Head Staff member and returns
+#  the numeric portion of an employee number
 def find_head_number(head_name):
     mylist = (str.split(head_name))
     #print(mylist)
@@ -47,7 +55,8 @@ def find_head_number(head_name):
     return my_record[0]
     # TODO: write using preferred names
 
-# find the number we need to start the new data with
+# find the number we need to start the new data with by checking where
+# the ShiftID numbering ended
 def find_next_row_from_db(my_table, my_column):
     query = ("SELECT * FROM ?", my_table)
     df_hShift = pd.read_sql(query, cfg.conn)
@@ -56,14 +65,16 @@ def find_next_row_from_db(my_table, my_column):
     new_shift = last_shift + 1
     return new_shift
 
+# Using the Date string, create an event ID
 def grabeventYR2(datestr):
     if datestr[4] == '/':
         newdate = str.split(datestr, '/')
     elif datestr[4] == '-':
         newdate = str.split(datestr, '-')
     else:
+        print("****************ERROR******************")
         print("Your 'Grab Event Year' method is broken")
-    #print(newdate)
+        print("****************ERROR******************")
     yr_int = int(newdate[0])
     mos_int = int(newdate[1])
     yr_strt = 2011
@@ -95,6 +106,7 @@ def grabeventYR2(datestr):
 
     return chr(alphayr)
 
+# GENERIC SQL QUERIES THAT WORK
 
 # read from SQL and print to screen
 def read2screen(query, conn):
