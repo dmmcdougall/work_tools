@@ -242,6 +242,78 @@ def main():
 
                     r_row += ts15.spaces_per_day
 
+            # second, lets loop over the stat flags and write those to the list
+            r_row = ts15.start_data_row + ts15.spaces_per_day - 4
+            while r_row < ts15.end_data_row:
+                if read_sheet.cell_value(r_row, 0) == "":
+                    r_row+=ts15.spaces_per_day
+                else:
+                    # write shift number
+                    head_data_list = [next_head_num]
+                    next_head_num += 1
+
+                    # Grab a salaried head Alpha number from the db
+                    from_func_2_db(head_data_list, ts15.ts_15_grab_head_id_alpha)
+
+                    # Grab a head id number from the db
+                    data = read_sheet.cell_value(ts15.name_row, ts15.name_column)
+                    head_id = dbfnc.find_head_number(data)
+                    head_data_list.append(head_id)
+
+                    # Grab ts date
+                    from_func_2_db(head_data_list, ts15.ts_grab_date, read_sheet, r_row, 1)
+
+                    # in time
+                    data = ""
+                    print(data)
+                    head_data_list.append(data)
+
+                    # out time
+                    data = ""
+                    print(data)
+                    head_data_list.append(data)
+
+                    # Grab event year
+                    data = ts15.ts_grab_date(read_sheet, r_row, 1)
+                    evnt_yr = dbfnc.grabeventYR2(data)
+                    head_data_list.append(evnt_yr)
+
+                    # Grab Event ID
+                    # this needs to pick up the acct num,
+                    # but don't post to list yet
+                    my_date = ts15.ts_grab_date(read_sheet, r_row,1)
+                    head_acct = ts15.ts_15_write_acct(read_sheet, r_row, 6)
+                    data = ts15.ts_15_event_id(head_acct, my_date)
+                    head_data_list.append(data)
+
+                    # reg time, ot, dt
+                    data = 8
+                    head_data_list.append(data)
+
+                    data = 0
+                    head_data_list.append(data)
+
+                    data = 0
+                    head_data_list.append(data)
+
+                    # write accounting code
+                    head_data_list.append(head_acct)
+
+                    # showcall true/false
+                    from_func_2_db(head_data_list, ts15.ts_blacks_call, read_sheet, r_row, 7)
+
+                    # Grab MP
+                    from_func_2_db(head_data_list, ts15.ts_mp, read_sheet, r_row, 5)
+
+                    print(head_data_list)
+
+                    # add this row to the df
+                    print("adding to head df")
+                    my_dict = dict(zip(head_keys, head_data_list))
+                    df_head = df_head.append(my_dict, ignore_index=True)
+
+                    r_row += ts15.spaces_per_day
+
             # A loop to iterate through the time slots one at a time
             for r_row in range(ts15.start_data_row, ts15.end_data_row):
                 # Find the first slot with data
