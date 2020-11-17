@@ -181,7 +181,8 @@ def main():
                     next_head_num += 1
 
                     # Grab a salaried head Alpha number from the db
-                    from_func_2_db(head_data_list, ts15.ts_15_grab_head_id_alpha)
+                    data = read_sheet.cell_value(ts15.name_row, ts15.name_column)
+                    from_func_2_db(head_data_list, dbfnc.find_head_alpha_number, data)
 
                     # Grab a head id number from the db
                     data = read_sheet.cell_value(ts15.name_row, ts15.name_column)
@@ -253,7 +254,8 @@ def main():
                     next_head_num += 1
 
                     # Grab a salaried head Alpha number from the db
-                    from_func_2_db(head_data_list, ts15.ts_15_grab_head_id_alpha)
+                    data = read_sheet.cell_value(ts15.name_row, ts15.name_column)
+                    from_func_2_db(head_data_list, dbfnc.find_head_alpha_number, data)
 
                     # Grab a head id number from the db
                     data = read_sheet.cell_value(ts15.name_row, ts15.name_column)
@@ -327,8 +329,8 @@ def main():
                     next_head_num += 1
 
                     # Grab a salaried head Alpha number from the db
-                    # data = read_sheet.cell_value(ts15.name_row, ts15.name_column)
-                    from_func_2_db(head_data_list,ts15.ts_15_grab_head_id_alpha)
+                    data = read_sheet.cell_value(ts15.name_row, ts15.name_column)
+                    from_func_2_db(head_data_list, dbfnc.find_head_alpha_number, data)
 
                     # Grab a head id number from the db
                     data = read_sheet.cell_value(ts15.name_row, ts15.name_column)
