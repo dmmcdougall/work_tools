@@ -282,7 +282,7 @@ def main():
                     # this needs to pick up the acct num,
                     # but don't post to list yet
                     my_date = ts15.ts_grab_date(read_sheet, r_row,1)
-                    head_acct = ts15.ts_15_write_acct(read_sheet, r_row, 6)
+                    head_acct = ts15.ts_15_write_acct(read_sheet, r_row, 6) # TODO: why this no work in first 2 loops?
                     data = ts15.ts_15_event_id(head_acct, my_date)
                     head_data_list.append(data)
 
