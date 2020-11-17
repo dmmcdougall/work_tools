@@ -187,10 +187,10 @@ class TS2015(TimeSheet):
         # TODO: combine the head and casual event num methods
 
     # grab the HeadIDAlpha
-    @staticmethod
-    def ts_15_grab_head_id_alpha():
-        data = 'z'
-        return data
+    # @staticmethod
+    # def ts_15_grab_head_id_alpha():
+    #     data = 'z'
+    #     return data
     # TODO: re-write this to ping the db and move to dbfnc as well
 
 

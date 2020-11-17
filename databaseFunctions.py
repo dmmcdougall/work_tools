@@ -40,6 +40,20 @@ def find_crew_Alpha_number(crew_name):
 
     return my_record[0]
 
+# this query takes a "FirstName lastName" of a Salaried Head staff member and returns
+# the Alhabetical portion of an employee number
+def find_head_alpha_number(head_name):
+    mylist = (str.split(head_name))
+    print(mylist)
+    query = cfg.conn.execute("""
+        SELECT HeadIDAlpha FROM HeadNamesTable
+        WHERE FirstName = ?
+        AND LastName = ?
+    """, (mylist[0],mylist[1]))
+    my_record = (query.fetchone())
+
+    return my_record[0]
+
 # this query takes a "FirstName lastName" of a Salaried Head Staff member and returns
 #  the numeric portion of an employee number
 def find_head_number(head_name):
