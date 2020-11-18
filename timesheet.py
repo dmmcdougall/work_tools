@@ -31,6 +31,34 @@ class TimeSheet:
             blacks = 0
         return blacks
 
+    @staticmethod
+    def ts_event_id(acct_num, date_str):
+        if acct_num != '6210-50-504' and acct_num != '6200-50-504':
+            if date_str[4] == '/':
+                new_date = str.split(date_str, '/')
+            elif date_str[4] == '-':
+                new_date = str.split(date_str, '-')
+            else:
+                new_date = ""
+                print("*****************ERROR************************")
+                print("Your 'Write Show Number' method is broken")
+                print("*****************ERROR************************")
+            if int(new_date[1]) >= 9:
+                addon = 1
+            else:
+                addon = 0
+            test = new_date[0]
+
+            def split1(word):
+                return [char for char in word]
+
+            new_list = split1(test)
+            dig_4 = int(new_list[3]) + addon
+            return '0-3108' + new_list[2] + str(dig_4)
+        else:
+            data = ''
+        return data
+
     # this is a loop, to grab the date of a call
     def ts_grab_date(self, read_sheet, read_row, data_row_offset):
         i = self.start_data_row
@@ -47,30 +75,6 @@ class TimeSheet:
                 return shift_date
             else:
                 i += self.spaces_per_day
-
-    @staticmethod
-    def ts_event_idts_cas_write_show_num(date_str):
-        if date_str[4] == '/':
-            new_date = str.split(date_str, '/')
-        elif date_str[4] == '-':
-            new_date = str.split(date_str, '-')
-        else:
-            new_date = ""
-            print("*****************ERROR************************")
-            print("Your 'Crew Write Show Number' method is broken")
-            print("*****************ERROR************************")
-        if int(new_date[1]) >= 9:
-            addon = 1
-        else:
-            addon = 0
-        test = new_date[0]
-
-        def split(word):
-            return [char for char in word]
-
-        new_list = split(test)
-        dig_4 = int(new_list[3]) + addon
-        return '0-3108' + new_list[2] + str(dig_4)
 
     def ts_grab_hrs(self, read_sheet, read_row, col_modifier):
         data = read_sheet.cell_value(read_row, self.start_data_col + col_modifier)
@@ -127,30 +131,6 @@ class TSCasual(TimeSheet):
         return cfg.list_crew_shift_types()
     # TODO: what is going on with the crew list function?
 
-    @staticmethod
-    def ts_cas_write_show_num(date_str):
-        if date_str[4] == '/':
-            new_date = str.split(date_str, '/')
-        elif date_str[4] == '-':
-            new_date = str.split(date_str, '-')
-        else:
-            new_date = ""
-            print("*****************ERROR************************")
-            print("Your 'Crew Write Show Number' method is broken")
-            print("*****************ERROR************************")
-        if int(new_date[1]) >= 9:
-            addon = 1
-        else:
-            addon = 0
-        test = new_date[0]
-
-        def split(word):
-            return [char for char in word]
-
-        new_list = split(test)
-        dig_4 = int(new_list[3]) + addon
-        return '0-3108' + new_list[2] + str(dig_4)
-
 
 class TS2015(TimeSheet):
 
@@ -180,31 +160,3 @@ class TS2015(TimeSheet):
         print(data)
         acct_num = cfg.acct_codes[data]
         return acct_num
-
-    @staticmethod
-    def ts_15_event_id(acct_num, date_str):
-        if acct_num != '6210-50-504' and acct_num != '6200-50-504':
-            if date_str[4] == '/':
-                new_date = str.split(date_str, '/')
-            elif date_str[4] == '-':
-                new_date = str.split(date_str, '-')
-            else:
-                new_date = ""
-                print("*****************ERROR************************")
-                print("Your 'Head Write Show Number' method is broken")
-                print("*****************ERROR************************")
-            if int(new_date[1]) >= 9:
-                addon = 1
-            else:
-                addon = 0
-            test = new_date[0]
-
-            def split1(word):
-                return [char for char in word]
-
-            new_list = split1(test)
-            dig_4 = int(new_list[3]) + addon
-            return '0-3108' + new_list[2] + str(dig_4)
-        else:
-            data = ''
-        return data

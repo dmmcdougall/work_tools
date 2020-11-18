@@ -127,8 +127,9 @@ def main():
                     crew_data_list.append(evnt_yr)
 
                     # Grab Event ID
-                    data = ts_cas.ts_grab_date(read_sheet, r_row, 3)
-                    show = ts_cas.ts_cas_write_show_num(data)
+                    my_date = ts_cas.ts_grab_date(read_sheet, r_row, 3)
+                    crew_accnt_code = ts_cas.ts_cas_write_acct()
+                    show = ts_cas.ts_event_id(crew_accnt_code, my_date)
                     crew_data_list.append(show)
 
                     # grab reg time, ot, dt
@@ -142,8 +143,7 @@ def main():
                     crew_data_list.append(data)
 
                     # write accounting code
-                    data = ts_cas.ts_cas_write_acct()
-                    crew_data_list.append(data)
+                    crew_data_list.append(crew_accnt_code)
 
                     # blackscall true/false
                     from_func_2_db(crew_data_list,ts_cas.ts_blacks_call, read_sheet, r_row, 5)
@@ -212,7 +212,7 @@ def main():
                     # but don't post to list yet
                     my_date = ts15.ts_grab_date(read_sheet, r_row,1)
                     head_acct = ts15.ts_15_write_acct(read_sheet, r_row, 6)
-                    data = ts15.ts_15_event_id(head_acct, my_date)
+                    data = ts15.ts_event_id(head_acct, my_date)
                     head_data_list.append(data)
 
                     # reg time, ot, dt
@@ -285,7 +285,7 @@ def main():
                     # but don't post to list yet
                     my_date = ts15.ts_grab_date(read_sheet, r_row,1)
                     head_acct = ts15.ts_15_write_acct(read_sheet, r_row, 6) # TODO: why this no work in first 2 loops?
-                    data = ts15.ts_15_event_id(head_acct, my_date)
+                    data = ts15.ts_event_id(head_acct, my_date)
                     head_data_list.append(data)
 
                     # reg time, ot, dt
@@ -362,7 +362,7 @@ def main():
                     # this needs to pick up the acct num,
                     # but don't post to list yet
                     head_acct = ts15.ts_15_write_acct(read_sheet, r_row, 6)
-                    data = ts15.ts_15_event_id(head_acct, my_date)
+                    data = ts15.ts_event_id(head_acct, my_date)
                     head_data_list.append(data)
 
 
