@@ -20,8 +20,7 @@ from timesheet import TS2011
 from timesheet import TSCasual
 
 
-# this function takes in a function, runs it, prints to screen the result,
-# and appends the result to a list.
+# this function takes in a function, runs it, prints to screen the result, and appends the result to a list.
 # args = (the list to append to, the function to run, the positional arguments of input func)
 def from_func_2_db(my_list, function, *args):
     data = function(*args)
@@ -166,6 +165,7 @@ def main():
                     print("no data in cel B" + str((r_row) + 1))  # move on to the next time slot
                     # TODO: what is this pycharm error above?
 
+        # now we move onto the salaried head loops
         elif read_sheet.cell_value(19, 0) == 'SUNDAY':
             print("This timesheet was designed in 2015. Begin data scrape")
             ts15 = TS2015('ts15', 15, 2, 19, 2, 69, 7)
@@ -176,6 +176,10 @@ def main():
                 if read_sheet.cell_value(r_row, 0) == "":
                     r_row+=ts15.spaces_per_day
                 else:
+                    # grab the data you want for more than one action
+                    my_date = ts15.ts_grab_date(read_sheet, r_row, 1)
+                    head_acct = ts15.ts_15_write_acct(read_sheet, r_row, 6)
+
                     # write shift number
                     head_data_list = [next_head_num]
                     next_head_num += 1
@@ -189,8 +193,9 @@ def main():
                     head_id = dbfnc.find_head_number(data)
                     head_data_list.append(head_id)
 
-                    # Grab ts date
-                    from_func_2_db(head_data_list, ts15.ts_grab_date, read_sheet, r_row, 1)
+                    # write ts date
+                    print(my_date)
+                    head_data_list.append(my_date)
 
                     # in time
                     data = ""
@@ -203,15 +208,10 @@ def main():
                     head_data_list.append(data)
 
                     # Grab event year
-                    data = ts15.ts_grab_date(read_sheet, r_row, 1)
-                    evnt_yr = dbfnc.grabeventYR2(data)
+                    evnt_yr = dbfnc.grabeventYR2(my_date)
                     head_data_list.append(evnt_yr)
 
                     # Grab Event ID
-                    # this needs to pick up the acct num,
-                    # but don't post to list yet
-                    my_date = ts15.ts_grab_date(read_sheet, r_row,1)
-                    head_acct = ts15.ts_15_write_acct(read_sheet, r_row, 6)
                     data = ts15.ts_event_id(head_acct, my_date)
                     head_data_list.append(data)
 
@@ -249,6 +249,10 @@ def main():
                 if read_sheet.cell_value(r_row, 0) == "":
                     r_row+=ts15.spaces_per_day
                 else:
+                    # grab the data you want for more than one action
+                    my_date = ts15.ts_grab_date(read_sheet, r_row, 1)
+                    head_acct = ts15.ts_15_write_acct(read_sheet, r_row, 6)
+
                     # write shift number
                     head_data_list = [next_head_num]
                     next_head_num += 1
@@ -262,8 +266,9 @@ def main():
                     head_id = dbfnc.find_head_number(data)
                     head_data_list.append(head_id)
 
-                    # Grab ts date
-                    from_func_2_db(head_data_list, ts15.ts_grab_date, read_sheet, r_row, 1)
+                    # write ts date
+                    print(my_date)
+                    head_data_list.append(my_date)
 
                     # in time
                     data = ""
@@ -276,15 +281,10 @@ def main():
                     head_data_list.append(data)
 
                     # Grab event year
-                    data = ts15.ts_grab_date(read_sheet, r_row, 1)
-                    evnt_yr = dbfnc.grabeventYR2(data)
+                    evnt_yr = dbfnc.grabeventYR2(my_date)
                     head_data_list.append(evnt_yr)
 
                     # Grab Event ID
-                    # this needs to pick up the acct num,
-                    # but don't post to list yet
-                    my_date = ts15.ts_grab_date(read_sheet, r_row,1)
-                    head_acct = ts15.ts_15_write_acct(read_sheet, r_row, 6) # TODO: why this no work in first 2 loops?
                     data = ts15.ts_event_id(head_acct, my_date)
                     head_data_list.append(data)
 
@@ -322,6 +322,9 @@ def main():
                 r_col = ts15.start_data_col
 
                 if read_sheet.cell_type(r_row, r_col) != 0:
+                    # grab the data you want for more than one action
+                    my_date = ts15.ts_grab_date(read_sheet, r_row, 1)
+
                     print("writing data")
 
                     # write shift number
@@ -337,8 +340,9 @@ def main():
                     head_id = dbfnc.find_head_number(data)
                     head_data_list.append(head_id)
 
-                    # Grab ts date
-                    from_func_2_db(head_data_list, ts15.ts_grab_date, read_sheet, r_row, 1)
+                    # write ts date
+                    print(my_date)
+                    head_data_list.append(my_date)
 
                     # Grab in time w the kris fix
                     if head_id == 3:
@@ -353,18 +357,12 @@ def main():
                         from_func_2_db(head_data_list, ts15.ts_write_time, read_sheet, r_row, 1)
 
                     # Grab event year
-                    # this needs to pick up the date
-                    data = ts15.ts_grab_date(read_sheet, r_row, 1)
-                    evnt_yr = dbfnc.grabeventYR2(data)
+                    evnt_yr = dbfnc.grabeventYR2(my_date)
                     head_data_list.append(evnt_yr)
 
                     # Grab Event ID
-                    # this needs to pick up the acct num,
-                    # but don't post to list yet
-                    head_acct = ts15.ts_15_write_acct(read_sheet, r_row, 6)
                     data = ts15.ts_event_id(head_acct, my_date)
                     head_data_list.append(data)
-
 
                     # grab reg time, ot, dt
                     data = ts15.ts_grab_hrs(read_sheet, r_row, 2)
