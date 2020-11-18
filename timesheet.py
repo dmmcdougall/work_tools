@@ -48,6 +48,30 @@ class TimeSheet:
             else:
                 i += self.spaces_per_day
 
+    @staticmethod
+    def ts_event_idts_cas_write_show_num(date_str):
+        if date_str[4] == '/':
+            new_date = str.split(date_str, '/')
+        elif date_str[4] == '-':
+            new_date = str.split(date_str, '-')
+        else:
+            new_date = ""
+            print("*****************ERROR************************")
+            print("Your 'Crew Write Show Number' method is broken")
+            print("*****************ERROR************************")
+        if int(new_date[1]) >= 9:
+            addon = 1
+        else:
+            addon = 0
+        test = new_date[0]
+
+        def split(word):
+            return [char for char in word]
+
+        new_list = split(test)
+        dig_4 = int(new_list[3]) + addon
+        return '0-3108' + new_list[2] + str(dig_4)
+
     def ts_grab_hrs(self, read_sheet, read_row, col_modifier):
         data = read_sheet.cell_value(read_row, self.start_data_col + col_modifier)
         if data == '':
@@ -184,13 +208,3 @@ class TS2015(TimeSheet):
         else:
             data = ''
         return data
-        # TODO: combine the head and casual event num methods
-
-    # grab the HeadIDAlpha
-    # @staticmethod
-    # def ts_15_grab_head_id_alpha():
-    #     data = 'z'
-    #     return data
-    # TODO: re-write this to ping the db and move to dbfnc as well
-
-

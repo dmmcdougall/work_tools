@@ -487,7 +487,7 @@ def main():
 if __name__ == '__main__':
     print()
     print("++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++")
-    print("         timesheetscrapper_python3.py file launched")
+    print("         timesheetscrapper_python3 package launched")
     print("++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++")
     print()
     main()
