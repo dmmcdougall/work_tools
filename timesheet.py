@@ -127,9 +127,10 @@ class TSCasual(TimeSheet):
         return data
 
     @staticmethod
-    def ts_cas_shift_types_list():
-        return cfg.list_crew_shift_types()
-    # TODO: what is going on with the crew list function?
+    def ts_cas_shift_types_list(shift_type):
+        casual_type = cfg.list_crew_shift_types()
+        data = casual_type.get(shift_type)
+        return data
 
 
 class TS2015(TimeSheet):

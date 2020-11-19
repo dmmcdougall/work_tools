@@ -151,7 +151,7 @@ def main():
                     from_func_2_db(crew_data_list, ts_cas.ts_mp, read_sheet, r_row, 6)
 
                     # Grab Shiftype
-                    data = ts_cas.ts_cas_write_shift_type()
+                    data = 9 # default to 9, general hand
                     crew_data_list.append(data)
 
                     print(crew_data_list)
