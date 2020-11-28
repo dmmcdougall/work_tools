@@ -48,7 +48,7 @@ def testheads():
     print(wi)
     print(wi.full_name())
     print(wi.email("@chocolatefactory.com"))
-    print(SalariedHead.headCount)
+    print(f"There are/is {SalariedHead.headCount} salaried head(s)")
 
 
 class SearchDict(dict):

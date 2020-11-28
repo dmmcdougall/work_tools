@@ -16,3 +16,10 @@ def from_func_2_db(my_list, function, *args):
     data = function(*args)
     print(data)
     my_list.append(data)
+
+if __name__ == '__main__':
+    print()
+    print('------------')
+    print("METHOD CHECK")
+    print('------------')
+    print()

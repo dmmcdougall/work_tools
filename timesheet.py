@@ -161,3 +161,10 @@ class TS2015(TimeSheet):
         print(data)
         acct_num = cfg.acct_codes[data]
         return acct_num
+
+if __name__ == '__main__':
+    print()
+    print('------------')
+    print("METHOD CHECK")
+    print('------------')
+    print()
