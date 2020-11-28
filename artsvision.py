@@ -1,8 +1,15 @@
 from bs4 import BeautifulSoup
-import requests
+from requests import Session
 
-source = requests.get('https://artsvision.net/main.asp').text
+# the below prints the contens of the log in page
+# source = requests.get('https://artsvision.net/main.asp').text
+#
+# soup = BeautifulSoup(source, 'lxml')
+#
+# print(soup.prettify())
 
-soup = BeautifulSoup(source, 'lxml')
+# this works at printing the conents of the log in page
+with Session() as s:
+    site = s.get('https://artsvision.net/main.asp')
+    print(site.content)
 
-print(soup.prettify())
