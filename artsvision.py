@@ -9,7 +9,13 @@ from requests import Session
 # print(soup.prettify())
 
 # this works at printing the conents of the log in page
-with Session() as s:
-    site = s.get('https://artsvision.net/main.asp')
-    print(site.content)
+# with Session() as s:
+#     site = s.get('https://artsvision.net/main.asp')
+#     print(site.content)
 
+# no work
+with Session() as s:
+    login_data = {"username": "dmcdougall", "password": "r#L31gh&t"}
+    s.post("https://artsvision.net/epcor.asp", login_data)
+    home_page = s.get("https://artsvision.net/main.asp")
+    print(home_page.content)
