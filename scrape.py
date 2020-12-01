@@ -97,7 +97,7 @@ def main():
 
                     # Grab a casual Alpha number from the db
                     data = read_sheet.cell_value(ts_cas.name_row, ts_cas.name_column)
-                    myfunc.from_func_2_db(crew_data_list, dbfnc.find_crew_Alpha_number, data)
+                    myfunc.from_func_2_db(crew_data_list, dbfnc.find_crew_Alpha_number2, data)
 
                     # Grab a casual id number from the db
                     data = read_sheet.cell_value(ts_cas.name_row, ts_cas.name_column)

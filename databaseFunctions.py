@@ -41,6 +41,33 @@ def find_crew_Alpha_number(crew_name):
 
     return my_record[0]
 
+def find_crew_Alpha_number2(crew_name):
+    mylist = (str.split(crew_name))
+    print(mylist)
+
+    try:
+        fname_query = cfg.conn.execute("""
+              SELECT CrewIDAlpha FROM CrewNamesTable
+              WHERE FirstName = ?
+              AND LastName = ?
+          """, (mylist[0], mylist[1]))
+        my_record = (fname_query.fetchone())
+        return my_record[0]
+    except TypeError:
+        print("No first name found, checking preferred names...")
+        print()
+        try:
+            pname_query = cfg.conn.execute("""
+                SELECT CrewIDAlpha FROM CrewNamesTable
+                WHERE preferred_name = ?
+                AND LastName = ?
+            """, (mylist[0], mylist[1]))
+            my_record = (pname_query.fetchone())
+            return my_record[0]
+        except:
+            print('The name on this timesheet is not in the CrewNamesTable of the database.')
+            print("Please check the name on this timesheet against current records.")
+
 # this query takes a "FirstName lastName" of a Salaried Head staff member and returns
 # the Alhabetical portion of an employee number
 def find_head_alpha_number(head_name):
@@ -162,12 +189,14 @@ def drop_table(self, table):
     pass
     #self._exec(schema.DropTable(table))
 
+
 if __name__ == '__main__':
     print()
     print('------------')
     print("METHOD CHECK")
     print('------------')
-    print(find_crew_Alpha_number('fName lName'))
+    # print(test(2))
+    print(find_crew_Alpha_number2('Kimberly Creller'))
     print()
     # query = "SELECT * FROM sys.tables"
     # read2(query, cfg.conn)
