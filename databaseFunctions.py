@@ -166,8 +166,9 @@ if __name__ == '__main__':
     print('------------')
     print("METHOD CHECK")
     print('------------')
+    print(find_crew_Alpha_number('fName lName'))
     print()
-    query = "SELECT * FROM sys.tables"
-    read2(query, cfg.conn)
+    # query = "SELECT * FROM sys.tables"
+    # read2(query, cfg.conn)
 
 
