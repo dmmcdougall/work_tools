@@ -15,7 +15,7 @@ from requests import Session
 
 # no work
 with Session() as s:
-    login_data = {"username": "dmcdougall", "password": "r#L31gh&t"}
+    login_data = {"username": USER, "password": PASSWORD}
     s.post("https://artsvision.net/epcor.asp", login_data)
     home_page = s.get("https://artsvision.net/main.asp")
     print(home_page.content)
