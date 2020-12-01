@@ -6,6 +6,7 @@ The dbfnc sheet is for queries to the SQL server.
 # standard library
 import pyodbc
 import pandas as pd
+from contextlib import contextmanager
 
 # third part libraries
 import config as cfg
