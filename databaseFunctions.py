@@ -13,6 +13,24 @@ import config as cfg
 
 # local repo
 
+# this context manager ensures the sql connection closes after use.
+@contextmanager
+def connection(my_driver, my_server, my_db):
+    connection = pyodbc.connect(
+        f"Driver={my_driver};"
+        f"Server={my_server};"
+        f"Database={my_db};"
+        "Trusted_Connection=yes;"
+    )
+    try:
+        yield connection
+    except Exception:
+        connection.rollback()
+        raise
+    else:
+        connection.commit()
+    finally:
+        connection.close()
 
 # this query takes a "FirstName lastName" of a Casual Crew member and returns
 #  the numeric portion of an employee number
@@ -233,5 +251,12 @@ if __name__ == '__main__':
     print()
     # query = "SELECT * FROM sys.tables"
     # read2(query, cfg.conn)
+    with connection(cfg.my_driver, cfg.my_server, cfg.my_db) as conn:
+        query = ("SELECT * FROM HeadShiftWorkedTable")
+        df_hShift = pd.read_sql(query, conn)
+        last_shift = df_hShift["HeadShiftWorkedID"].max()
+        print(last_shift)  # for testing
+        # new_shift = last_shift + 1
+        # print(new_shift)
 
 
