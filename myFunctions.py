@@ -22,7 +22,7 @@ def from_func_2_db(my_list, function, *args):
 def from_func_2_db_clean(my_list, function, *args):
     data = function(*args)
     my_list.append(data)
-    # TODO: should this be decorator?
+    # TODO: should this be decorator?  yes it should
 
 if __name__ == '__main__':
     print()
