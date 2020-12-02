@@ -65,7 +65,6 @@ class TimeSheet:
         while i < self.end_data_row:
             if (read_row >= i) and (read_row <= i + 6):
                 data = read_sheet.cell_value(i+data_row_offset, 0) # TODO: this data offset could be smarter
-                # print(data)
                 shift_date_tuple = xlrd.xldate_as_tuple(data, 1)
                 day = f"{shift_date_tuple[2]}"
                 month = f"{shift_date_tuple[1]}"
@@ -89,6 +88,9 @@ class TimeSheet:
         else:
             mp = 0
         return mp
+
+    def ts_print_my_name(self, read_sheet):
+        print("~~~~"+read_sheet.cell_value(self.name_row, self.name_column)+"~~~~")
 
     def ts_write_time(self, read_sheet, read_row, col_modifier):
         data = read_sheet.cell_value(read_row, self.start_data_col + col_modifier)
@@ -154,11 +156,11 @@ class TS2015(TimeSheet):
 
         time = str(kris_tuple[0]) + str(kris_tuple[1]) + ":" + str(kris_tuple[2]) + str(kris_tuple[3])
         return time
+    # TODO: some form of the kris fix is required for teh casuals
 
     def ts_15_write_acct(self, read_sheet, read_row, col_modifier):
         # the .lower() modifier makes the acct_codes not case sensitive
         data = read_sheet.cell_value(read_row, self.start_data_col + col_modifier).lower()
-        print(data)
         acct_num = cfg.acct_codes[data]
         return acct_num
 

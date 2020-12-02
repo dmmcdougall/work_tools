@@ -36,7 +36,6 @@ def connection(my_driver, my_server, my_db):
 def find_crew_number2(crew_name):
     with connection(cfg.my_driver, cfg.my_server, cfg.my_db) as conn:
         mylist = (str.split(crew_name))
-        print(mylist)
 
         try:
             fname_query = cfg.conn.execute("""
@@ -66,7 +65,6 @@ def find_crew_number2(crew_name):
 def find_crew_Alpha_number2(crew_name):
     with connection(cfg.my_driver, cfg.my_server, cfg.my_db) as conn:
         mylist = (str.split(crew_name))
-        print(mylist)
 
         try:
             fname_query = cfg.conn.execute("""
@@ -96,7 +94,6 @@ def find_crew_Alpha_number2(crew_name):
 def find_head_alpha_number2(head_name):
     with connection(cfg.my_driver, cfg.my_server, cfg.my_db) as conn:
         mylist = (str.split(head_name))
-        print(mylist)
 
         try:
             fname_query = cfg.conn.execute("""
@@ -126,7 +123,6 @@ def find_head_alpha_number2(head_name):
 def find_head_number2(head_name):
     with connection(cfg.my_driver, cfg.my_server, cfg.my_db) as conn:
         mylist = (str.split(head_name))
-        print(mylist)
 
         try:
             fname_query = cfg.conn.execute("""
@@ -158,7 +154,6 @@ def find_next_row_from_db(my_table, my_column):
         query = ("SELECT * FROM ?", my_table)
         df_hShift = pd.read_sql(query, conn)
         last_shift = df_hShift[my_column].max()
-        # print(last_shift) # for testing
         new_shift = last_shift + 1
         return new_shift
 

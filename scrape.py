@@ -17,8 +17,6 @@ import config as cfg
 import databaseFunctions as dbfnc
 import myFunctions as myfnc
 from timesheet import TS2015, TS2011, TSCasual
-# from timesheet import TS2011
-# from timesheet import TSCasual
 
 
 # and this is the app...
@@ -83,13 +81,12 @@ def main():
         elif read_sheet.cell_value(14, 0) == 'SUNDAY':
             print("This timesheet belongs to a casual. Begin data scrape")
             ts_cas = TSCasual('ts_cas', 4, 1, 14, 1, 55, 6)
-            # r_row = ts_cas.start_data_row
+            ts_cas.ts_print_my_name(read_sheet)
 
             # A loop to iterate through the time slots one at a time
             for r_row in range(ts_cas.start_data_row, ts_cas.end_data_row):
                 r_col = ts_cas.start_data_col + 1
                 if read_sheet.cell_type(r_row, r_col) != 0:
-                    print("writing data")
 
                     # write shift number
                     crew_data_list = [next_crew_num]
@@ -102,7 +99,6 @@ def main():
                     # Grab a casual id number from the db
                     data = read_sheet.cell_value(ts_cas.name_row, ts_cas.name_column)
                     cas_id = dbfnc.find_crew_number2(data)
-                    print(cas_id)
                     crew_data_list.append(cas_id)
 
                     # Grab ts date
@@ -163,6 +159,7 @@ def main():
         elif read_sheet.cell_value(19, 0) == 'SUNDAY':
             print("This timesheet was designed in 2015. Begin data scrape")
             ts15 = TS2015('ts15', 15, 2, 19, 2, 69, 7)
+            ts15.ts_print_my_name(read_sheet)
 
             # first, lets loop over the 8 hr flags and write those to the list
             r_row = ts15.start_data_row + ts15.spaces_per_day - 1
@@ -188,17 +185,14 @@ def main():
                     head_data_list.append(head_id)
 
                     # write ts date
-                    print(my_date)
                     head_data_list.append(my_date)
 
                     # in time
                     data = ""
-                    print(data)
                     head_data_list.append(data)
 
                     # out time
                     data = ""
-                    print(data)
                     head_data_list.append(data)
 
                     # Grab event year
@@ -261,17 +255,14 @@ def main():
                     head_data_list.append(head_id)
 
                     # write ts date
-                    print(my_date)
                     head_data_list.append(my_date)
 
                     # in time
                     data = ""
-                    print(data)
                     head_data_list.append(data)
 
                     # out time
                     data = ""
-                    print(data)
                     head_data_list.append(data)
 
                     # Grab event year
@@ -319,8 +310,6 @@ def main():
                     # grab the data you want for more than one action
                     my_date = ts15.ts_grab_date(read_sheet, r_row, 1)
 
-                    print("writing data")
-
                     # write shift number
                     head_data_list = [next_head_num]
                     next_head_num += 1
@@ -335,7 +324,6 @@ def main():
                     head_data_list.append(head_id)
 
                     # write ts date
-                    print(my_date)
                     head_data_list.append(my_date)
 
                     # Grab in time w the kris fix
@@ -376,6 +364,8 @@ def main():
 
                     # Grab MP
                     myfnc.from_func_2_db(head_data_list, ts15.ts_mp, read_sheet, r_row, 5)
+
+                    print(head_data_list)
 
                     # add this row to the df
                     print("adding to head df")
@@ -435,7 +425,7 @@ def main():
     tbl_exist = dbfnc.checkTableExists(cfg.conn, tbl)
 
     if tbl_exist:
-        with dbfunc.connection(cfg.my_driver, cfg.my_server, cfg.my_db) as conn:
+        with dbfnc.connection(cfg.my_driver, cfg.my_server, cfg.my_db) as conn:
             print("let's empty the Crew table")
             cur = conn.cursor()
             # cur.execute("TRUNCATE Table TMPtblWeeklyCrewData")
