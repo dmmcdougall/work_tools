@@ -101,7 +101,7 @@ def main():
 
                     # Grab a casual id number from the db
                     data = read_sheet.cell_value(ts_cas.name_row, ts_cas.name_column)
-                    cas_id = dbfnc.find_crew_number(data)
+                    cas_id = dbfnc.find_crew_number2(data)
                     print(cas_id)
                     crew_data_list.append(cas_id)
 
@@ -180,11 +180,11 @@ def main():
 
                     # Grab a salaried head Alpha number from the db
                     data = read_sheet.cell_value(ts15.name_row, ts15.name_column)
-                    myfunc.from_func_2_db(head_data_list, dbfnc.find_head_alpha_number, data)
+                    myfunc.from_func_2_db(head_data_list, dbfnc.find_head_alpha_number2, data)
 
                     # Grab a head id number from the db
                     data = read_sheet.cell_value(ts15.name_row, ts15.name_column)
-                    head_id = dbfnc.find_head_number(data)
+                    head_id = dbfnc.find_head_number2(data)
                     head_data_list.append(head_id)
 
                     # write ts date
@@ -253,11 +253,11 @@ def main():
 
                     # Grab a salaried head Alpha number from the db
                     data = read_sheet.cell_value(ts15.name_row, ts15.name_column)
-                    myfunc.from_func_2_db(head_data_list, dbfnc.find_head_alpha_number, data)
+                    myfunc.from_func_2_db(head_data_list, dbfnc.find_head_alpha_number2, data)
 
                     # Grab a head id number from the db
                     data = read_sheet.cell_value(ts15.name_row, ts15.name_column)
-                    head_id = dbfnc.find_head_number(data)
+                    head_id = dbfnc.find_head_number2(data)
                     head_data_list.append(head_id)
 
                     # write ts date
@@ -327,11 +327,11 @@ def main():
 
                     # Grab a salaried head Alpha number from the db
                     data = read_sheet.cell_value(ts15.name_row, ts15.name_column)
-                    myfunc.from_func_2_db(head_data_list, dbfnc.find_head_alpha_number, data)
+                    myfunc.from_func_2_db(head_data_list, dbfnc.find_head_alpha_number2, data)
 
                     # Grab a head id number from the db
                     data = read_sheet.cell_value(ts15.name_row, ts15.name_column)
-                    head_id = dbfnc.find_head_number(data)
+                    head_id = dbfnc.find_head_number2(data)
                     head_data_list.append(head_id)
 
                     # write ts date
