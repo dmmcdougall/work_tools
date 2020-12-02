@@ -7,8 +7,7 @@ This file is where my general functions are stored
 # imported from third party repos
 
 # imported from local directories
-import config as cfg
-import databaseFunctions as dbfunc
+
 
 # this function takes in a function, runs it, prints to screen the result, and appends the result to a list.
 # it is for reducing the repeats on the scrape.py loop

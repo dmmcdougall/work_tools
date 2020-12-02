@@ -15,10 +15,10 @@ import xlrd
 # imported from local directories
 import config as cfg
 import databaseFunctions as dbfnc
-import myFunctions as myfunc
-from timesheet import TS2015
-from timesheet import TS2011
-from timesheet import TSCasual
+import myFunctions as myfnc
+from timesheet import TS2015, TS2011, TSCasual
+# from timesheet import TS2011
+# from timesheet import TSCasual
 
 
 # and this is the app...
@@ -97,7 +97,7 @@ def main():
 
                     # Grab a casual Alpha number from the db
                     data = read_sheet.cell_value(ts_cas.name_row, ts_cas.name_column)
-                    myfunc.from_func_2_db(crew_data_list, dbfnc.find_crew_Alpha_number2, data)
+                    myfnc.from_func_2_db(crew_data_list, dbfnc.find_crew_Alpha_number2, data)
 
                     # Grab a casual id number from the db
                     data = read_sheet.cell_value(ts_cas.name_row, ts_cas.name_column)
@@ -106,13 +106,13 @@ def main():
                     crew_data_list.append(cas_id)
 
                     # Grab ts date
-                    myfunc.from_func_2_db(crew_data_list, ts_cas.ts_grab_date, read_sheet, r_row, 3)
+                    myfnc.from_func_2_db(crew_data_list, ts_cas.ts_grab_date, read_sheet, r_row, 3)
 
                     # Grab in time
-                    myfunc.from_func_2_db(crew_data_list, ts_cas.ts_write_time, read_sheet, r_row, 0)
+                    myfnc.from_func_2_db(crew_data_list, ts_cas.ts_write_time, read_sheet, r_row, 0)
 
                     # Grab out time
-                    myfunc.from_func_2_db(crew_data_list, ts_cas.ts_write_time, read_sheet, r_row, 1)
+                    myfnc.from_func_2_db(crew_data_list, ts_cas.ts_write_time, read_sheet, r_row, 1)
 
                     # Grab event year
                     data = ts_cas.ts_grab_date(read_sheet, r_row, 3)
@@ -139,10 +139,10 @@ def main():
                     crew_data_list.append(crew_accnt_code)
 
                     # blackscall true/false
-                    myfunc.from_func_2_db(crew_data_list,ts_cas.ts_blacks_call, read_sheet, r_row, 5)
+                    myfnc.from_func_2_db(crew_data_list,ts_cas.ts_blacks_call, read_sheet, r_row, 5)
 
                     # Grab MP
-                    myfunc.from_func_2_db(crew_data_list, ts_cas.ts_mp, read_sheet, r_row, 6)
+                    myfnc.from_func_2_db(crew_data_list, ts_cas.ts_mp, read_sheet, r_row, 6)
 
                     # Grab Shiftype
                     data = 9 # default to 9, general hand
@@ -180,7 +180,7 @@ def main():
 
                     # Grab a salaried head Alpha number from the db
                     data = read_sheet.cell_value(ts15.name_row, ts15.name_column)
-                    myfunc.from_func_2_db(head_data_list, dbfnc.find_head_alpha_number2, data)
+                    myfnc.from_func_2_db(head_data_list, dbfnc.find_head_alpha_number2, data)
 
                     # Grab a head id number from the db
                     data = read_sheet.cell_value(ts15.name_row, ts15.name_column)
@@ -223,10 +223,10 @@ def main():
                     head_data_list.append(head_acct)
 
                     # showcall true/false
-                    myfunc.from_func_2_db(head_data_list, ts15.ts_blacks_call, read_sheet, r_row, 7)
+                    myfnc.from_func_2_db(head_data_list, ts15.ts_blacks_call, read_sheet, r_row, 7)
 
                     # Grab MP
-                    myfunc.from_func_2_db(head_data_list, ts15.ts_mp, read_sheet, r_row, 5)
+                    myfnc.from_func_2_db(head_data_list, ts15.ts_mp, read_sheet, r_row, 5)
 
                     print(head_data_list)
 
@@ -253,7 +253,7 @@ def main():
 
                     # Grab a salaried head Alpha number from the db
                     data = read_sheet.cell_value(ts15.name_row, ts15.name_column)
-                    myfunc.from_func_2_db(head_data_list, dbfnc.find_head_alpha_number2, data)
+                    myfnc.from_func_2_db(head_data_list, dbfnc.find_head_alpha_number2, data)
 
                     # Grab a head id number from the db
                     data = read_sheet.cell_value(ts15.name_row, ts15.name_column)
@@ -296,10 +296,10 @@ def main():
                     head_data_list.append(head_acct)
 
                     # showcall true/false
-                    myfunc.from_func_2_db(head_data_list, ts15.ts_blacks_call, read_sheet, r_row, 7)
+                    myfnc.from_func_2_db(head_data_list, ts15.ts_blacks_call, read_sheet, r_row, 7)
 
                     # Grab MP
-                    myfunc.from_func_2_db(head_data_list, ts15.ts_mp, read_sheet, r_row, 5)
+                    myfnc.from_func_2_db(head_data_list, ts15.ts_mp, read_sheet, r_row, 5)
 
                     print(head_data_list)
 
@@ -327,7 +327,7 @@ def main():
 
                     # Grab a salaried head Alpha number from the db
                     data = read_sheet.cell_value(ts15.name_row, ts15.name_column)
-                    myfunc.from_func_2_db(head_data_list, dbfnc.find_head_alpha_number2, data)
+                    myfnc.from_func_2_db(head_data_list, dbfnc.find_head_alpha_number2, data)
 
                     # Grab a head id number from the db
                     data = read_sheet.cell_value(ts15.name_row, ts15.name_column)
@@ -340,15 +340,15 @@ def main():
 
                     # Grab in time w the kris fix
                     if head_id == 3:
-                        myfunc.from_func_2_db(head_data_list, ts15.ts_15_kf_format, read_sheet, r_row, 0)
+                        myfnc.from_func_2_db(head_data_list, ts15.ts_15_kf_format, read_sheet, r_row, 0)
                     else:
-                        myfunc.from_func_2_db(head_data_list, ts15.ts_write_time, read_sheet, r_row,0)
+                        myfnc.from_func_2_db(head_data_list, ts15.ts_write_time, read_sheet, r_row,0)
 
                     # Grab out time w the kris fix
                     if head_id == 3:
-                        myfunc.from_func_2_db(head_data_list, ts15.ts_15_kf_format, read_sheet, r_row, 1)
+                        myfnc.from_func_2_db(head_data_list, ts15.ts_15_kf_format, read_sheet, r_row, 1)
                     else:
-                        myfunc.from_func_2_db(head_data_list, ts15.ts_write_time, read_sheet, r_row, 1)
+                        myfnc.from_func_2_db(head_data_list, ts15.ts_write_time, read_sheet, r_row, 1)
 
                     # Grab event year
                     evnt_yr = dbfnc.grabeventYR2(my_date)
@@ -372,10 +372,10 @@ def main():
                     head_data_list.append(head_acct)
 
                     # showcall true/false
-                    myfunc.from_func_2_db(head_data_list, ts15.ts_blacks_call, read_sheet, r_row, 7)
+                    myfnc.from_func_2_db(head_data_list, ts15.ts_blacks_call, read_sheet, r_row, 7)
 
                     # Grab MP
-                    myfunc.from_func_2_db(head_data_list, ts15.ts_mp, read_sheet, r_row, 5)
+                    myfnc.from_func_2_db(head_data_list, ts15.ts_mp, read_sheet, r_row, 5)
 
                     # add this row to the df
                     print("adding to head df")
