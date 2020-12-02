@@ -42,12 +42,14 @@ def main():
     # number your ShiftIDs
     # this info is pulled directly from the db
     query = "SELECT * FROM HeadShiftWorkedTable"
-    df_h_shift = pd.read_sql(query, cfg.conn)
+    with dbfnc.connection(cfg.my_driver, cfg.my_server, cfg.my_db) as conn:
+        df_h_shift = pd.read_sql(query, conn)
     head_record = df_h_shift['HeadShiftWorkedID'].max()
     next_head_num = head_record + 1
 
     query = "SELECT * FROM CrewShiftWorkedTable"
-    df_c_shift = pd.read_sql(query, cfg.conn)
+    with dbfnc.connection(cfg.my_driver, cfg.my_server, cfg.my_db) as conn:
+        df_c_shift = pd.read_sql(query, conn)
     crew_record = df_c_shift['ShiftWorkedID'].max()
     next_crew_num = crew_record + 1
 
@@ -376,24 +378,22 @@ def main():
                     print("no data in cel E" + str((r_row) + 1))  # move on to the next time slot
 
     else:
-        print("this is NOT a timesheet")
+        print()
+        print("We are done")
     print()
 
     # send the df to the db
     tbl = 'TMPtblWeeklyHeadsData'
-    tbl_exist = dbfnc.checkTableExists(cfg.conn, tbl)
+    with dbfnc.connection(cfg.my_driver, cfg.my_server, cfg.my_db) as conn:
+        tbl_exist = dbfnc.checkTableExists(conn, tbl)
 
     if tbl_exist:
-        print("let's empty Heads the table")
-        cur = cfg.conn.cursor()
-        # cur.execute("TRUNCATE Table TMPtblWeeklyHeadsData")
-        cur.execute("DROP Table TMPtblWeeklyHeadsData")
-        cfg.conn.commit()
+        with dbfnc.connection(cfg.my_driver, cfg.my_server, cfg.my_db) as conn:
+            print("let's empty Heads the table")
+            cur = conn.cursor()
+            cur.execute("DROP Table TMPtblWeeklyHeadsData")
 
     else:
-        print("let's build the Head table")
-        # with engine.connect() as con:
-        #     con.execute('ALTER TABLE TMPtblWeeklyHeadsData ADD PRIMARY KEY (Shift);')
         print("OOPS! IF YOU ARE READING THIS WE HAVE A PROBLEM!")
         print("NEXT COMES THE ERROR MESSAGE!")
 
@@ -422,18 +422,16 @@ def main():
 
     # send the df to the db
     tbl = 'TMPtblWeeklyCrewData'
-    tbl_exist = dbfnc.checkTableExists(cfg.conn, tbl)
+    with dbfnc.connection(cfg.my_driver, cfg.my_server, cfg.my_db) as conn:
+        tbl_exist = dbfnc.checkTableExists(conn, tbl)
 
     if tbl_exist:
         with dbfnc.connection(cfg.my_driver, cfg.my_server, cfg.my_db) as conn:
             print("let's empty the Crew table")
             cur = conn.cursor()
-            # cur.execute("TRUNCATE Table TMPtblWeeklyCrewData")
             cur.execute("DROP Table TMPtblWeeklyCrewData")
-            # cfg.conn.commit()
 
     else:
-        print("let's build the Crew table")
         print("OOPS! IF YOU ARE READING THIS WE HAVE A PROBLEM!")
         print("NEXT COMES THE ERROR MESSAGE!")
 
@@ -460,9 +458,6 @@ def main():
                           'ShiftType': sa.types.INT}
                    )
     print()
-
-    # cfg.conn.close()
-
     print("All done! Time to bailout")
     print()
 

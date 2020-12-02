@@ -38,7 +38,7 @@ def find_crew_number2(crew_name):
         mylist = (str.split(crew_name))
 
         try:
-            fname_query = cfg.conn.execute("""
+            fname_query = conn.execute("""
                   SELECT CrewID FROM CrewNamesTable
                   WHERE FirstName = ?
                   AND LastName = ?
@@ -49,7 +49,7 @@ def find_crew_number2(crew_name):
             print("No first name found, checking preferred names...")
             print()
             try:
-                pname_query = cfg.conn.execute("""
+                pname_query = conn.execute("""
                     SELECT CrewID FROM CrewNamesTable
                     WHERE preferred_name = ?
                     AND LastName = ?
@@ -67,7 +67,7 @@ def find_crew_Alpha_number2(crew_name):
         mylist = (str.split(crew_name))
 
         try:
-            fname_query = cfg.conn.execute("""
+            fname_query = conn.execute("""
                   SELECT CrewIDAlpha FROM CrewNamesTable
                   WHERE FirstName = ?
                   AND LastName = ?
@@ -78,7 +78,7 @@ def find_crew_Alpha_number2(crew_name):
             print("No first name found, checking preferred names...")
             print()
             try:
-                pname_query = cfg.conn.execute("""
+                pname_query = conn.execute("""
                     SELECT CrewIDAlpha FROM CrewNamesTable
                     WHERE preferred_name = ?
                     AND LastName = ?
@@ -96,7 +96,7 @@ def find_head_alpha_number2(head_name):
         mylist = (str.split(head_name))
 
         try:
-            fname_query = cfg.conn.execute("""
+            fname_query = conn.execute("""
                   SELECT HeadIDAlpha FROM HeadNamesTable
                   WHERE FirstName = ?
                   AND LastName = ?
@@ -107,7 +107,7 @@ def find_head_alpha_number2(head_name):
             print("No first name found, checking preferred names...")
             print()
             try:
-                pname_query = cfg.conn.execute("""
+                pname_query = conn.execute("""
                     SELECT HeadIDAlpha FROM HeadNamesTable
                     WHERE preferred_name = ?
                     AND LastName = ?
@@ -125,7 +125,7 @@ def find_head_number2(head_name):
         mylist = (str.split(head_name))
 
         try:
-            fname_query = cfg.conn.execute("""
+            fname_query = conn.execute("""
                   SELECT HeadID FROM HeadNamesTable
                   WHERE FirstName = ?
                   AND LastName = ?
@@ -136,7 +136,7 @@ def find_head_number2(head_name):
             print("No first name found, checking preferred names...")
             print()
             try:
-                pname_query = cfg.conn.execute("""
+                pname_query = conn.execute("""
                     SELECT HeadID FROM HeadNamesTable
                     WHERE preferred_name = ?
                     AND LastName = ?
