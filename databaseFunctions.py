@@ -2,7 +2,6 @@
 The dbfnc sheet is for queries to the SQL server.
 """
 
-# TODO:the dbfnc needs context managers for the sql queries
 # standard library
 import pyodbc
 import pandas as pd
