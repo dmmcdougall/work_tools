@@ -35,128 +35,133 @@ def connection(my_driver, my_server, my_db):
 # this query takes a "FirstName lastName" of a Casual Crew member and returns
 #  the numeric portion of an employee number
 def find_crew_number2(crew_name):
-    mylist = (str.split(crew_name))
-    print(mylist)
+    with connection(cfg.my_driver, cfg.my_server, cfg.my_db) as conn:
+        mylist = (str.split(crew_name))
+        print(mylist)
 
-    try:
-        fname_query = cfg.conn.execute("""
-              SELECT CrewID FROM CrewNamesTable
-              WHERE FirstName = ?
-              AND LastName = ?
-          """, (mylist[0], mylist[1]))
-        my_record = (fname_query.fetchone())
-        return my_record[0]
-    except TypeError:
-        print("No first name found, checking preferred names...")
-        print()
         try:
-            pname_query = cfg.conn.execute("""
-                SELECT CrewID FROM CrewNamesTable
-                WHERE preferred_name = ?
-                AND LastName = ?
-            """, (mylist[0], mylist[1]))
-            my_record = (pname_query.fetchone())
+            fname_query = cfg.conn.execute("""
+                  SELECT CrewID FROM CrewNamesTable
+                  WHERE FirstName = ?
+                  AND LastName = ?
+              """, (mylist[0], mylist[1]))
+            my_record = (fname_query.fetchone())
             return my_record[0]
-        except:
-            print('The name on this timesheet is not in the CrewNamesTable of the database.')
-            print("Please check the name on this timesheet against current records.")
+        except TypeError:
+            print("No first name found, checking preferred names...")
+            print()
+            try:
+                pname_query = cfg.conn.execute("""
+                    SELECT CrewID FROM CrewNamesTable
+                    WHERE preferred_name = ?
+                    AND LastName = ?
+                """, (mylist[0], mylist[1]))
+                my_record = (pname_query.fetchone())
+                return my_record[0]
+            except:
+                print('The name on this timesheet is not in the CrewNamesTable of the database.')
+                print("Please check the name on this timesheet against current records.")
 
 # this query takes a "FirstName lastName" of a Casual Crew member and returns
 # the Alhabetical portion of an employee number
 def find_crew_Alpha_number2(crew_name):
-    mylist = (str.split(crew_name))
-    print(mylist)
+    with connection(cfg.my_driver, cfg.my_server, cfg.my_db) as conn:
+        mylist = (str.split(crew_name))
+        print(mylist)
 
-    try:
-        fname_query = cfg.conn.execute("""
-              SELECT CrewIDAlpha FROM CrewNamesTable
-              WHERE FirstName = ?
-              AND LastName = ?
-          """, (mylist[0], mylist[1]))
-        my_record = (fname_query.fetchone())
-        return my_record[0]
-    except TypeError:
-        print("No first name found, checking preferred names...")
-        print()
         try:
-            pname_query = cfg.conn.execute("""
-                SELECT CrewIDAlpha FROM CrewNamesTable
-                WHERE preferred_name = ?
-                AND LastName = ?
-            """, (mylist[0], mylist[1]))
-            my_record = (pname_query.fetchone())
+            fname_query = cfg.conn.execute("""
+                  SELECT CrewIDAlpha FROM CrewNamesTable
+                  WHERE FirstName = ?
+                  AND LastName = ?
+              """, (mylist[0], mylist[1]))
+            my_record = (fname_query.fetchone())
             return my_record[0]
-        except:
-            print('The name on this timesheet is not in the CrewNamesTable of the database.')
-            print("Please check the name on this timesheet against current records.")
+        except TypeError:
+            print("No first name found, checking preferred names...")
+            print()
+            try:
+                pname_query = cfg.conn.execute("""
+                    SELECT CrewIDAlpha FROM CrewNamesTable
+                    WHERE preferred_name = ?
+                    AND LastName = ?
+                """, (mylist[0], mylist[1]))
+                my_record = (pname_query.fetchone())
+                return my_record[0]
+            except:
+                print('The name on this timesheet is not in the CrewNamesTable of the database.')
+                print("Please check the name on this timesheet against current records.")
 
 # this query takes a "FirstName lastName" of a Salaried Head staff member and returns
 # the Alhabetical portion of an employee number
 def find_head_alpha_number2(head_name):
-    mylist = (str.split(head_name))
-    print(mylist)
+    with connection(cfg.my_driver, cfg.my_server, cfg.my_db) as conn:
+        mylist = (str.split(head_name))
+        print(mylist)
 
-    try:
-        fname_query = cfg.conn.execute("""
-              SELECT HeadIDAlpha FROM HeadNamesTable
-              WHERE FirstName = ?
-              AND LastName = ?
-          """, (mylist[0], mylist[1]))
-        my_record = (fname_query.fetchone())
-        return my_record[0]
-    except TypeError:
-        print("No first name found, checking preferred names...")
-        print()
         try:
-            pname_query = cfg.conn.execute("""
-                SELECT HeadIDAlpha FROM HeadNamesTable
-                WHERE preferred_name = ?
-                AND LastName = ?
-            """, (mylist[0], mylist[1]))
-            my_record = (pname_query.fetchone())
+            fname_query = cfg.conn.execute("""
+                  SELECT HeadIDAlpha FROM HeadNamesTable
+                  WHERE FirstName = ?
+                  AND LastName = ?
+              """, (mylist[0], mylist[1]))
+            my_record = (fname_query.fetchone())
             return my_record[0]
-        except:
-            print('The name on this timesheet is not in the HeadNamesTable of the database.')
-            print("Please check the name on this timesheet against current records.")
+        except TypeError:
+            print("No first name found, checking preferred names...")
+            print()
+            try:
+                pname_query = cfg.conn.execute("""
+                    SELECT HeadIDAlpha FROM HeadNamesTable
+                    WHERE preferred_name = ?
+                    AND LastName = ?
+                """, (mylist[0], mylist[1]))
+                my_record = (pname_query.fetchone())
+                return my_record[0]
+            except:
+                print('The name on this timesheet is not in the HeadNamesTable of the database.')
+                print("Please check the name on this timesheet against current records.")
 
 # this query takes a "FirstName lastName" of a Salaried Head Staff member and returns
 #  the numeric portion of an employee number
 def find_head_number2(head_name):
-    mylist = (str.split(head_name))
-    print(mylist)
+    with connection(cfg.my_driver, cfg.my_server, cfg.my_db) as conn:
+        mylist = (str.split(head_name))
+        print(mylist)
 
-    try:
-        fname_query = cfg.conn.execute("""
-              SELECT HeadID FROM HeadNamesTable
-              WHERE FirstName = ?
-              AND LastName = ?
-          """, (mylist[0], mylist[1]))
-        my_record = (fname_query.fetchone())
-        return my_record[0]
-    except TypeError:
-        print("No first name found, checking preferred names...")
-        print()
         try:
-            pname_query = cfg.conn.execute("""
-                SELECT HeadID FROM HeadNamesTable
-                WHERE preferred_name = ?
-                AND LastName = ?
-            """, (mylist[0], mylist[1]))
-            my_record = (pname_query.fetchone())
+            fname_query = cfg.conn.execute("""
+                  SELECT HeadID FROM HeadNamesTable
+                  WHERE FirstName = ?
+                  AND LastName = ?
+              """, (mylist[0], mylist[1]))
+            my_record = (fname_query.fetchone())
             return my_record[0]
-        except:
-            print('The name on this timesheet is not in the HeadNamesTable of the database.')
-            print("Please check the name on this timesheet against current records.")
+        except TypeError:
+            print("No first name found, checking preferred names...")
+            print()
+            try:
+                pname_query = cfg.conn.execute("""
+                    SELECT HeadID FROM HeadNamesTable
+                    WHERE preferred_name = ?
+                    AND LastName = ?
+                """, (mylist[0], mylist[1]))
+                my_record = (pname_query.fetchone())
+                return my_record[0]
+            except:
+                print('The name on this timesheet is not in the HeadNamesTable of the database.')
+                print("Please check the name on this timesheet against current records.")
 
 # find the number we need to start the new data with by checking where
 # the ShiftID numbering ended
 def find_next_row_from_db(my_table, my_column):
-    query = ("SELECT * FROM ?", my_table)
-    df_hShift = pd.read_sql(query, cfg.conn)
-    last_shift = df_hShift[my_column].max()
-    # print(last_shift) # for testing
-    new_shift = last_shift + 1
-    return new_shift
+    with connection(cfg.my_driver, cfg.my_server, cfg.my_db) as conn:
+        query = ("SELECT * FROM ?", my_table)
+        df_hShift = pd.read_sql(query, conn)
+        last_shift = df_hShift[my_column].max()
+        # print(last_shift) # for testing
+        new_shift = last_shift + 1
+        return new_shift
 
 # Using the Date string, create an event ID
 def grabeventYR2(datestr):
