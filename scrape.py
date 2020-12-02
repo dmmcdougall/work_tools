@@ -435,11 +435,12 @@ def main():
     tbl_exist = dbfnc.checkTableExists(cfg.conn, tbl)
 
     if tbl_exist:
-        print("let's empty the Crew table")
-        cur = cfg.conn.cursor()
-        # cur.execute("TRUNCATE Table TMPtblWeeklyCrewData")
-        cur.execute("DROP Table TMPtblWeeklyCrewData")
-        cfg.conn.commit()
+        with dbfunc.connection(cfg.my_driver, cfg.my_server, cfg.my_db) as conn:
+            print("let's empty the Crew table")
+            cur = conn.cursor()
+            # cur.execute("TRUNCATE Table TMPtblWeeklyCrewData")
+            cur.execute("DROP Table TMPtblWeeklyCrewData")
+            # cfg.conn.commit()
 
     else:
         print("let's build the Crew table")
@@ -470,7 +471,7 @@ def main():
                    )
     print()
 
-    cfg.conn.close()
+    # cfg.conn.close()
 
     print("All done! Time to bailout")
     print()
