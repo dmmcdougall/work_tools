@@ -16,17 +16,6 @@ import config as cfg
 
 # this query takes a "FirstName lastName" of a Casual Crew member and returns
 #  the numeric portion of an employee number
-# def find_crew_number(crew_name):
-#     mylist = (str.split(crew_name))
-#     query = cfg.conn.execute("""
-#         SELECT CrewID FROM CrewNamesTable
-#         WHERE FirstName = ?
-#         AND LastName = ?
-#     """, (mylist[0],mylist[1]))
-#     my_record = (query.fetchone())
-#
-#     return my_record[0]
-
 def find_crew_number2(crew_name):
     mylist = (str.split(crew_name))
     print(mylist)
@@ -56,18 +45,6 @@ def find_crew_number2(crew_name):
 
 # this query takes a "FirstName lastName" of a Casual Crew member and returns
 # the Alhabetical portion of an employee number
-# def find_crew_Alpha_number(crew_name):
-#     mylist = (str.split(crew_name))
-#     print(mylist)
-#     query = cfg.conn.execute("""
-#         SELECT CrewIDAlpha FROM CrewNamesTable
-#         WHERE FirstName = ?
-#         AND LastName = ?
-#     """, (mylist[0],mylist[1]))
-#     my_record = (query.fetchone())
-#
-#     return my_record[0]
-
 def find_crew_Alpha_number2(crew_name):
     mylist = (str.split(crew_name))
     print(mylist)
@@ -97,18 +74,6 @@ def find_crew_Alpha_number2(crew_name):
 
 # this query takes a "FirstName lastName" of a Salaried Head staff member and returns
 # the Alhabetical portion of an employee number
-# def find_head_alpha_number(head_name):
-#     mylist = (str.split(head_name))
-#     print(mylist)
-#     query = cfg.conn.execute("""
-#         SELECT HeadIDAlpha FROM HeadNamesTable
-#         WHERE FirstName = ?
-#         AND LastName = ?
-#     """, (mylist[0],mylist[1]))
-#     my_record = (query.fetchone())
-#
-#     return my_record[0]
-
 def find_head_alpha_number2(head_name):
     mylist = (str.split(head_name))
     print(mylist)
@@ -138,18 +103,6 @@ def find_head_alpha_number2(head_name):
 
 # this query takes a "FirstName lastName" of a Salaried Head Staff member and returns
 #  the numeric portion of an employee number
-# def find_head_number(head_name):
-#     mylist = (str.split(head_name))
-#     #print(mylist)
-#     query = cfg.conn.execute("""
-#         SELECT HeadID FROM HeadNamesTable
-#         WHERE FirstName = ?
-#         AND LastName = ?
-#     """, (mylist[0],mylist[1]))
-#     my_record = (query.fetchone())
-#
-#     return my_record[0]
-
 def find_head_number2(head_name):
     mylist = (str.split(head_name))
     print(mylist)

@@ -18,11 +18,16 @@ def from_func_2_db(my_list, function, *args):
     print(data)
     my_list.append(data)
 
+# above but without the print function
+def from_func_2_db_clean(my_list, function, *args):
+    data = function(*args)
+    my_list.append(data)
+    # TODO: should this be decorator?
+
 if __name__ == '__main__':
     print()
     print('------------')
     print("METHOD CHECK")
     print('------------')
-    my_new_list = []
-    from_func_2_db(my_new_list, dbfunc.find_crew_Alpha_number, '')
-    # print(my_list)
+    print()
+
