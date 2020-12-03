@@ -62,6 +62,9 @@ def main():
 
     # here is the loop to iterate through the read_list
     for i in range(len(read_list)):
+        print()
+        print()
+        print("-----------------------------------------------------------------------------------")
         read_file = (cfg.my_dir + '\\' + read_list[i])
         print(read_file)
         read_book = xlrd.open_workbook(read_file)
@@ -311,6 +314,7 @@ def main():
                 if read_sheet.cell_type(r_row, r_col) != 0:
                     # grab the data you want for more than one action
                     my_date = ts15.ts_grab_date(read_sheet, r_row, 1)
+                    head_acct = ts15.ts_15_write_acct(read_sheet, r_row, 6)
 
                     # write shift number
                     head_data_list = [next_head_num]
@@ -376,7 +380,7 @@ def main():
 
                 else:
                     print("no data in cel E" + str((r_row) + 1))  # move on to the next time slot
-
+        print("-----------------------------------------------------------------------------------")
     else:
         print()
         print("We are done")
