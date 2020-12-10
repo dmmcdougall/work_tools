@@ -6,6 +6,9 @@
 config.py
 myscratch.py
 
+# ignore error logs
+*.log
+
 # ignore dir
 .idea/
 __pycache__/
