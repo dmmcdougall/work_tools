@@ -22,11 +22,11 @@ from timesheet import TS2015, TS2011, TSCasual
 # logging info
 logger = logging.getLogger(__name__)
 # logger.setLevel(logging.INFO)
-logger.setLevel(logging.DEBUG)
+logger.setLevel(logging.DEBUG) # comment out after debugging
 
 formatter = logging.Formatter('%(asctime)s:%(name)s:%(levelname)s:%(message)s')
 
-file_handler = logging.FileHandler('scrape.log')
+file_handler = logging.FileHandler(cfg.log_files + '\\' + 'scrape.log')
 file_handler.setFormatter(formatter)
 
 logger.addHandler(file_handler)
@@ -71,7 +71,9 @@ def main():
     read_list = os.listdir(cfg.my_dir)
     print(f"We need to read approximately {len(read_list)} files")
     print("Are you ready to read? RETURN for yes, CTRL+C for no.")
+    logger.info('Waiting for input from user')
     input()
+    logger.info('Input from user received')
 
     # here is the loop to iterate through the read_list
     for i in range(len(read_list)):
@@ -481,7 +483,7 @@ def main():
 
 
 if __name__ == '__main__':
-    logger.info('The fiile scrape.py has started')
+    logger.info('~~~The fiile scrape.py has started~~~')
     print()
     print("++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++")
     print("         timesheetscrapper_python3 package launched")
@@ -493,4 +495,4 @@ if __name__ == '__main__':
     print("                        VICTORY!")
     print("++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++")
     print()
-    logger.info('The fiile scrape.py has finished OK')
+    logger.info('~~~~The fiile scrape.py has finished OK~~~')
