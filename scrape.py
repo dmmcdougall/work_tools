@@ -6,6 +6,7 @@ into the production database
 
 # imported from standard library
 import os
+import logging
 import pandas as pd
 import sqlalchemy as sa
 import xlrd
@@ -17,6 +18,18 @@ import config as cfg
 import databaseFunctions as dbfnc
 import myFunctions as myfnc
 from timesheet import TS2015, TS2011, TSCasual
+
+# logging info
+logger = logging.getLogger(__name__)
+# logger.setLevel(logging.INFO)
+logger.setLevel(logging.DEBUG)
+
+formatter = logging.Formatter('%(asctime)s:%(name)s:%(levelname)s:%(message)s')
+
+file_handler = logging.FileHandler('scrape.log')
+file_handler.setFormatter(formatter)
+
+logger.addHandler(file_handler)
 
 
 # and this is the app...
@@ -466,7 +479,9 @@ def main():
     print()
 
 
+
 if __name__ == '__main__':
+    logger.info('The fiile scrape.py has started')
     print()
     print("++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++")
     print("         timesheetscrapper_python3 package launched")
@@ -478,3 +493,4 @@ if __name__ == '__main__':
     print("                        VICTORY!")
     print("++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++")
     print()
+    logger.info('The fiile scrape.py has finished OK')
