@@ -12,7 +12,7 @@ import config as cfg
 
 # local repo
 
-# this context manager ensures the sql connection closes after use.
+# this context manager takes care of the conn commits and closes.
 @contextmanager
 def connection(my_driver, my_server, my_db):
     connection = pyodbc.connect(
@@ -245,17 +245,5 @@ if __name__ == '__main__':
     print('------------')
     print("METHOD CHECK")
     print('------------')
-    # print(test(2))
-    print(find_crew_Alpha_number2('Kimberly Creller'))
-    print()
-    # query = "SELECT * FROM sys.tables"
-    # read2(query, cfg.conn)
-    with connection(cfg.my_driver, cfg.my_server, cfg.my_db) as conn:
-        query = ("SELECT * FROM HeadShiftWorkedTable")
-        df_hShift = pd.read_sql(query, conn)
-        last_shift = df_hShift["HeadShiftWorkedID"].max()
-        print(last_shift)  # for testing
-        # new_shift = last_shift + 1
-        # print(new_shift)
 
 

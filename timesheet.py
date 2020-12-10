@@ -90,7 +90,9 @@ class TimeSheet:
         return mp
 
     def ts_print_my_name(self, read_sheet):
+        print()
         print("~~~~"+read_sheet.cell_value(self.name_row, self.name_column)+"~~~~")
+        print()
 
     def ts_write_time(self, read_sheet, read_row, col_modifier):
         data = read_sheet.cell_value(read_row, self.start_data_col + col_modifier)
