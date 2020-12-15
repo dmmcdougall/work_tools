@@ -6,8 +6,10 @@ into the production database
 
 # imported from standard library
 import os
+import logging
 import pandas as pd
 import xlrd
+from xlutils.copy import copy
 
 # imported from third party repos
 
@@ -15,10 +17,23 @@ import xlrd
 import config as cfg
 import myFunctions as myfnc
 
+# logging info
+logger = logging.getLogger(__name__)
+logger.setLevel(logging.INFO) # change to DEBUG when required
+
+formatter = logging.Formatter('%(asctime)s:%(name)s:%(levelname)s:%(message)s')
+
+file_handler = logging.FileHandler(cfg.log_files + '\\' + 'resco_bill_scrape.log')
+file_handler.setFormatter(formatter)
+
+logger.addHandler(file_handler)
+
 
 def date_grabber(read_sheet,r,c):
     data = read_sheet.cell_value(r, c)
+    logger.info(f'the date_grabber has grabbed {data} to parse')
     shift_date_tuple = xlrd.xldate_as_tuple(data, 1)
+    logger.info(f'the date_grabber has turned it into {shift_date_tuple}')
     day = f"{shift_date_tuple[2]}"
     month = f"{shift_date_tuple[1]}"
     year = f"{shift_date_tuple[0]}"
@@ -27,21 +42,29 @@ def date_grabber(read_sheet,r,c):
 
 def mos_grabber(read_sheet, r,c):
     data = read_sheet.cell_value(r, c)
+    logger.info(f'the mos_grabber has grabbed {data} to parse')
     shift_date_tuple = xlrd.xldate_as_tuple(data, 1)
+    logger.info(f'the mos_grabber has turned it into {shift_date_tuple}')
     month = f"{shift_date_tuple[1]}"
     return month
 
 def start_time(old):
+    logger.info(f'the start_time has grabbed {old} to parse')
     new = old.split()
     new2 = new[1].split('-')
+    logger.info(f'the start_time has turned it into {new2}')
     return new2[0]
 
 def end_time(old):
+    logger.info(f'the end_time has grabbed {old} to parse')
     new = old.split('-')
+    logger.info(f'the end_time has turned it into {new}')
     return new[1]
 
 def grab_call_type(call):
+    logger.info(f'the grab_call_type has grabbed {call} to parse')
     data = call.split()
+    logger.info(f'the grab_call_type has turned it into {data}')
     return data[0]
 
 
@@ -78,97 +101,245 @@ def main():
         # A loop to iterate through the time slots one at a time
         # first block starts at A103, last block starts at A1192
         # blocks are 33 rows wide, useful data is 22 rows wide
+
+        # offset = 0
+        i = 1
         r_row = 104
-        offset = 22
-        while r_row < 1212:
-            if (r_row >= i) and (r_row <= i+18):
-                if read_sheet.cell_value(r_row, 1)='' and read_sheet.cell_value(r_row, 5)='' and read_sheet.cell_value(r_row, 9)='':
-                    r_row +1
 
-                else:
-                    cpo_bill_list = []
+        # this loop is the call block
+        info_block = 102
 
-                    # grab date
-                    myfnc.from_func_2_db(cpo_bill_list, date_grabber, read_sheet, r_row -1+offset, 10)
+        for i in range(5):
+            # reg loop
+            reg = read_sheet.cell_value(r_row, 1)
+            if reg != '':
+                cpo_bill_list = []
 
-                    # grab month
-                    myfnc.from_func_2_db(cpo_bill_list, mos_grabber, read_sheet, r_row -1+offset, 10)
+                # grab date
+                myfnc.from_func_2_db(cpo_bill_list, date_grabber, read_sheet, info_block +1, 0)
 
-                    # grab start time
-                    data = read_sheet.cell_value(r_row - 2 + offset, 0)
-                    myfnc.from_func_2_db(cpo_bill_list, start_time, data)
+                # grab month
+                myfnc.from_func_2_db(cpo_bill_list, mos_grabber, read_sheet, info_block +1 , 0)
 
-                    # grab end time
-                    data = read_sheet.cell_value(r_row -1+offset, 0)
-                    myfnc.from_func_2_db(cpo_bill_list, end_time, data)
+                # grab start time
+                data = read_sheet.cell_value(info_block, 0)
+                myfnc.from_func_2_db(cpo_bill_list, start_time, data)
 
-                    # payee
-                    data = "Arts Commons"
-                    cpo_bill_list.append(data)
+                # grab end time
+                data = read_sheet.cell_value(info_block, 0)
+                myfnc.from_func_2_db(cpo_bill_list, end_time, data)
 
-                    # Show Title (type)
-                    data = read_sheet.cell_value(0, 0)
-                    cpo_bill_list.append(data)
+                # payee
+                data = "Arts Commons"
+                cpo_bill_list.append(data)
 
-                    # Crew Member (resource_name)
-                    data = read_sheet.cell_value(r_row, 0)
-                    cpo_bill_list.append(data)
+                # Show Title (type)
+                data = read_sheet.cell_value(0, 0)
+                cpo_bill_list.append(data)
 
-                    # Setup or showcall, etc (description)
-                    data = read_sheet.cell_value(r_row-2+offset, 0)
-                    myfnc.from_func_2_db(cpo_bill_list, grab_call_type, data)
+                # Setup or showcall, etc (description)
+                data = read_sheet.cell_value(info_block, 0)
+                myfnc.from_func_2_db(cpo_bill_list, grab_call_type, data)
 
-                    # pay scale (unit_price)
-                    if read_sheet.cell_value(r_row, 1) != '':
-                        data = read_sheet.cell_value(r_row, 2)
-                        cpo_bill_list.append(data)
-                    elif read_sheet.cell_value(r_row, 5) != '':
-                        data = read_sheet.cell_value(r_row, 6)
-                        cpo_bill_list.append(data)
-                    else:
-                        data = read_sheet.cell_value(r_row, 10)
-                        cpo_bill_list.append(data)
+                # Crew Member (resource_name)
+                data = read_sheet.cell_value(r_row, 0)
+                cpo_bill_list.append(data)
 
-                    # discount
-                    cpo_bill_list.append('N/A')
+                # pay scale (unit_price)
+                data = read_sheet.cell_value(r_row, 2)
+                cpo_bill_list.append(data)
 
-                    # adj_price
-                    cpo_bill_list.append('N/A')
+                # discount
+                cpo_bill_list.append('N/A')
 
-                    # qty
-                    cpo_bill_list.append('N/A')
+                # adj_price
+                cpo_bill_list.append('N/A')
 
-                    # number of hours (unit_hrs)
-                    if read_sheet.cell_value(r_row, 1) != '':
-                        data = read_sheet.cell_value(r_row, 1)
-                        cpo_bill_list.append(data)
-                    elif read_sheet.cell_value(r_row, 5) != '':
-                        data = read_sheet.cell_value(r_row, 5)
-                        cpo_bill_list.append(data)
-                    else:
-                        data = read_sheet.cell_value(r_row, 9)
-                        cpo_bill_list.append(data)
+                # qty
+                cpo_bill_list.append('N/A')
 
-                    # total hours (subtotal)
-                    data = cpo_bill_list[8]*cpo_bill_list[11]
-                    cpo_bill_list.append(data)
+                # number of hours (unit_hrs)
+                data = read_sheet.cell_value(r_row, 1)
+                cpo_bill_list.append(data)
 
-                    #  gst
-                    cpo_bill_list.append(1.00)
+                # total hours (subtotal)
+                logger.info(f'the list has {cpo_bill_list[8]} and {cpo_bill_list[12]} to multiple')
+                data = cpo_bill_list[8]*cpo_bill_list[12]
+                cpo_bill_list.append(data)
 
-                    # total
-                    data = cpo_bill_list[12]*cpo_bill_list[13]
-                    cpo_bill_list.append(data)
+                #  gst
+                cpo_bill_list.append(1.00)
 
-                    # gl_code
-                    cpo_bill_list.append('N/A')
+                # total
+                data = cpo_bill_list[13]*cpo_bill_list[14]
+                cpo_bill_list.append(data)
 
-                    my_dict = dict(zip(col_headers, cpo_bill_list))
-                    df_cpo_bills = df_cpo_bills.append(my_dict, ignore_index=True)
+                # gl_code
+                cpo_bill_list.append('N/A')
 
-                    r_row + 1
-        else:
-            i += 18
+                print(cpo_bill_list)
+
+                my_dict = dict(zip(col_headers, cpo_bill_list))
+                df_cpo_bills = df_cpo_bills.append(my_dict, ignore_index=True)
+
+                r_row += 1
+
+            else:
+                r_row += 1
+
+            # ot loop
+            ot = read_sheet.cell_value(r_row, 5)
+            if ot != '':
+                cpo_bill_list = []
+
+                # grab date
+                myfnc.from_func_2_db(cpo_bill_list, date_grabber, read_sheet, info_block + 1, 0)
+
+                # grab month
+                myfnc.from_func_2_db(cpo_bill_list, mos_grabber, read_sheet, info_block + 1, 0)
+
+                # grab start time
+                data = read_sheet.cell_value(info_block, 0)
+                myfnc.from_func_2_db(cpo_bill_list, start_time, data)
+
+                # grab end time
+                data = read_sheet.cell_value(info_block, 0)
+                myfnc.from_func_2_db(cpo_bill_list, end_time, data)
+
+                # payee
+                data = "Arts Commons"
+                cpo_bill_list.append(data)
+
+                # Show Title (type)
+                data = read_sheet.cell_value(0, 0)
+                cpo_bill_list.append(data)
+
+                # Setup or showcall, etc (description)
+                data = read_sheet.cell_value(info_block, 0)
+                myfnc.from_func_2_db(cpo_bill_list, grab_call_type, data)
+
+                # Crew Member (resource_name)
+                data = read_sheet.cell_value(r_row, 0)
+                cpo_bill_list.append(data)
+
+                # pay scale (unit_price)
+                data = read_sheet.cell_value(r_row, 6)
+                cpo_bill_list.append(data)
+
+                # discount
+                cpo_bill_list.append('N/A')
+
+                # adj_price
+                cpo_bill_list.append('N/A')
+
+                # qty
+                cpo_bill_list.append('N/A')
+
+                # number of hours (unit_hrs)
+                data = read_sheet.cell_value(r_row, 5)
+                cpo_bill_list.append(data)
+
+                # total hours (subtotal)
+                logger.info(f'the list has {cpo_bill_list[8]} and {cpo_bill_list[12]} to multiple')
+                data = cpo_bill_list[8] * cpo_bill_list[12]
+                cpo_bill_list.append(data)
+
+                #  gst
+                cpo_bill_list.append(1.00)
+
+                # total
+                data = cpo_bill_list[13] * cpo_bill_list[14]
+                cpo_bill_list.append(data)
+
+                # gl_code
+                cpo_bill_list.append('N/A')
+
+                print(cpo_bill_list)
+
+                my_dict = dict(zip(col_headers, cpo_bill_list))
+                df_cpo_bills = df_cpo_bills.append(my_dict, ignore_index=True)
+
+                r_row += 1
+
+            else:
+                r_row += 1
+
+            # dt loop
+            dt = read_sheet.cell_value(r_row, 9)
+            if dt != '':
+                cpo_bill_list = []
+
+                # grab date
+                myfnc.from_func_2_db(cpo_bill_list, date_grabber, read_sheet, info_block + 1, 0)
+
+                # grab month
+                myfnc.from_func_2_db(cpo_bill_list, mos_grabber, read_sheet, info_block + 1, 0)
+
+                # grab start time
+                data = read_sheet.cell_value(info_block, 0)
+                myfnc.from_func_2_db(cpo_bill_list, start_time, data)
+
+                # grab end time
+                data = read_sheet.cell_value(info_block, 0)
+                myfnc.from_func_2_db(cpo_bill_list, end_time, data)
+
+                # payee
+                data = "Arts Commons"
+                cpo_bill_list.append(data)
+
+                # Show Title (type)
+                data = read_sheet.cell_value(0, 0)
+                cpo_bill_list.append(data)
+
+                # Setup or showcall, etc (description)
+                data = read_sheet.cell_value(info_block, 0)
+                myfnc.from_func_2_db(cpo_bill_list, grab_call_type, data)
+
+                # Crew Member (resource_name)
+                data = read_sheet.cell_value(r_row, 0)
+                cpo_bill_list.append(data)
+
+                # pay scale (unit_price)
+                data = read_sheet.cell_value(r_row, 10)
+                cpo_bill_list.append(data)
+
+                # discount
+                cpo_bill_list.append('N/A')
+
+                # adj_price
+                cpo_bill_list.append('N/A')
+
+                # qty
+                cpo_bill_list.append('N/A')
+
+                # number of hours (unit_hrs)
+                data = read_sheet.cell_value(r_row, 9)
+                cpo_bill_list.append(data)
+
+                # total hours (subtotal)
+                logger.info(f'the list has {cpo_bill_list[8]} and {cpo_bill_list[12]} to multiple')
+                data = cpo_bill_list[8] * cpo_bill_list[12]
+                cpo_bill_list.append(data)
+
+                #  gst
+                cpo_bill_list.append(1.00)
+
+                # total
+                data = cpo_bill_list[13] * cpo_bill_list[14]
+                cpo_bill_list.append(data)
+
+                # gl_code
+                cpo_bill_list.append('N/A')
+
+                print(cpo_bill_list)
+
+                my_dict = dict(zip(col_headers, cpo_bill_list))
+                df_cpo_bills = df_cpo_bills.append(my_dict, ignore_index=True)
+
+                r_row += 1
+
+            else:
+                r_row += 1
 
         print("-----------------------------------------------------------------------------------")
     else:
@@ -177,17 +348,20 @@ def main():
 
     print()
     print("All done! Time to save to...")
-    print(f"{cfg.cpo_bills_dir}\cpo_bills_records.xls")
+    print(f"{cfg.desktop_dir}\cpo_bills_records.xls")
 
-    # load the write workbook
-    write_book = xlrd.open_workbook(cfg.write_file)
-    write_sheet = write_book.sheet_by_index(0)
-    new_book = copy(write_book)
-    new_sheet = new_book.get_sheet(0)
-    new_book.save(f"{cfg.cpo_bills_dir}\cpo_bills_records.xls")
-    print("Opening saved file")
-    os.system(f"start EXCEL.EXE {cfg.cpo_bills_dir}\cpo_bills_recordsn.xls")
-    print()
+    # df.to_excel(r'Path to store the exported excel file\File Name.xlsx', index=False)
+    df_cpo_bills.to_excel(f'{cfg.desktop_dir}\cpo_bills_records.xlsx', index=False)
+
+    # # load the write workbook
+    # write_book = xlrd.open_workbook(cfg.write_file)
+    # write_sheet = write_book.sheet_by_index(0)
+    # new_book = copy(write_book)
+    # new_sheet = new_book.get_sheet(0)
+    # new_book.save(f"{cfg.desktop_dir}\cpo_bills_records.xls")
+    # print("Opening saved file")
+    # os.system(f"start EXCEL.EXE {cfg.desktop_dir}\cpo_bills_recordsn.xls")
+    # print()
 
 
 if __name__ == '__main__':
