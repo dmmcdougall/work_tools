@@ -4,6 +4,7 @@
 
 # imported from standard library
 import os
+import xlsxwriter
 from win32com.client import Dispatch
 
 # imported from third party repos
@@ -11,10 +12,12 @@ from win32com.client import Dispatch
 # imported from local directories
 import config as cfg
 
-
 def main():
-    # grab a write book
-    write_file = cfg.write_file
+    # create a write book
+    filename = "House Crew Timesheets - Week Ends 0000000.xlsx"
+    workbook = xlsxwriter.Workbook(cfg.desktop_dir+"\\"+filename)
+    write_file = cfg.desktop_dir+"\\"+filename
+    workbook.close()
 
     # create a list of the read_books
     read_dir = cfg.my_dir  # CHANGE THIS FOR YOUR NEEDS
@@ -33,3 +36,16 @@ def main():
 
         wb2.Close(SaveChanges=True)
     xl.Quit()
+
+if __name__ == '__main__':
+    print()
+    print("++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++")
+    print("                      file launched")
+    print("++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++")
+    print()
+    main()
+    print()
+    print("++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++")
+    print("                        VICTORY!")
+    print("++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++")
+    print()
