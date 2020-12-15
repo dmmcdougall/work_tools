@@ -21,8 +21,7 @@ from timesheet import TS2015, TS2011, TSCasual
 
 # logging info
 logger = logging.getLogger(__name__)
-# logger.setLevel(logging.INFO)
-logger.setLevel(logging.DEBUG) # comment out after debugging
+logger.setLevel(logging.INFO) # change to DEBUG when required
 
 formatter = logging.Formatter('%(asctime)s:%(name)s:%(levelname)s:%(message)s')
 

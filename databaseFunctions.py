@@ -3,6 +3,7 @@ The dbfnc sheet is for queries to the SQL server.
 """
 
 # standard library
+import logging
 import pyodbc
 import pandas as pd
 from contextlib import contextmanager
@@ -11,6 +12,17 @@ from contextlib import contextmanager
 import config as cfg
 
 # local repo
+
+# logging info
+logger = logging.getLogger(__name__)
+logger.setLevel(logging.INFO) # change to DEBUG when required
+
+formatter = logging.Formatter('%(asctime)s:%(name)s:%(levelname)s:%(message)s')
+
+file_handler = logging.FileHandler(cfg.log_files + '\\' + 'databaseFunctions.log')
+file_handler.setFormatter(formatter)
+
+logger.addHandler(file_handler)
 
 # this context manager takes care of the conn commits and closes.
 @contextmanager
@@ -22,14 +34,17 @@ def connection(my_driver, my_server, my_db):
         "Trusted_Connection=yes;"
     )
     try:
+        logger.info('Connecting to database')
         yield connection
     except Exception:
+        logger.info('***Connection to database FAILED***')
         connection.rollback()
         raise
     else:
         connection.commit()
     finally:
         connection.close()
+        logger.info('Closing connection to database')
 
 # this query takes a "FirstName lastName" of a Casual Crew member and returns
 #  the numeric portion of an employee number
