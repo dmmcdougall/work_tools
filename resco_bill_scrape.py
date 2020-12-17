@@ -30,7 +30,7 @@ logger.addHandler(file_handler)
 # TODO: refactor the fuck out of this trash heap
 # TODO: the prep time picker upper
 # TODO: reverse type and description notes
-
+# TODO: make a genertaor loop
 
 def date_grabber(read_sheet,r,c):
     data = read_sheet.cell_value(r, c)
@@ -321,6 +321,72 @@ def main():
 
             else:
                 r_row += 1
+
+        # MP
+        mp = data = read_sheet.cell_value(60, 2)
+        if mp != '':
+            cpo_bill_list = []
+
+            # grab month
+            myfnc.from_func_2_db(cpo_bill_list, mos_grabber, read_sheet, 0, 10)
+
+            # grab date
+            myfnc.from_func_2_db(cpo_bill_list, date_grabber, read_sheet, 0, 10)
+
+            # grab start time
+            cpo_bill_list.append('')
+
+            # grab end time
+            cpo_bill_list.append('')
+
+            # payee
+            data = "Arts Commons"
+            cpo_bill_list.append(data)
+
+            # Show Title (type)
+            cpo_bill_list.append('')
+
+            # Crew Member (resource_name)
+            data = "Meal Penalty"
+            cpo_bill_list.append(data)
+
+            # Setup or showcall, etc (description)
+            data = read_sheet.cell_value(0, 0)
+            cpo_bill_list.append(data)
+
+            # pay scale (unit_price)
+            data = read_sheet.cell_value(60, 3)
+            cpo_bill_list.append(data)
+
+            # discount
+            cpo_bill_list.append('')
+
+            # adj_price
+            cpo_bill_list.append('')
+
+            # qty
+            data = read_sheet.cell_value(60, 2)
+            cpo_bill_list.append(data)
+
+            # number of hours (unit_hrs)
+            cpo_bill_list.append('')
+
+            # total hours (subtotal)
+            logger.info(f'the list has {cpo_bill_list[8]} and {cpo_bill_list[11]} to multiple')
+            data = cpo_bill_list[8] * cpo_bill_list[11]
+            cpo_bill_list.append(data)
+
+            #  gst
+            cpo_bill_list.append('')
+
+            # total
+            data = cpo_bill_list[13]
+            cpo_bill_list.append(data)
+
+            print(cpo_bill_list)
+
+            my_dict = dict(zip(col_headers, cpo_bill_list))
+            df_cpo_bills = df_cpo_bills.append(my_dict, ignore_index=True)
 
 
 
