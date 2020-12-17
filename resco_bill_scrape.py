@@ -29,6 +29,7 @@ logger.addHandler(file_handler)
 
 # TODO: refactor the fuck out of this trash heap
 # TODO: the prep time picker upper
+# TODO: reverse type and description notes
 
 def date_grabber(read_sheet,r,c):
     data = read_sheet.cell_value(r, c)
@@ -124,8 +125,6 @@ def main():
 
                 # Show Title (type)
                 cpo_bill_list.append('PREP TIME')
-                data = read_sheet.cell_value(0, 0)
-                cpo_bill_list.append(data)
 
                 # Crew Member (resource_name)
                 data = read_sheet.cell_value(r_row, 0)
@@ -135,7 +134,6 @@ def main():
                 # Setup or showcall, etc (description)
                 data = read_sheet.cell_value(0, 0)
                 cpo_bill_list.append(data)
-
 
                 # pay scale (unit_price)
                 data = read_sheet.cell_value(r_row, 2)
@@ -329,28 +327,30 @@ def main():
         # first block starts at A103, last block starts at A1192
         # blocks are 33 rows wide, useful data is 22 rows wide
 
-        # offset = 0
-        loop = 0
+        # this loops over the crew membres within a call
+        # crew_loop = 0
         start_r_row = 104
 
-        # this loop is the call block
-        first_loop = 0
+        # this loop is the carious call blocks
+        # call_loop = 0
         info_block = 102
 
-        for first_loop in range(33):
+        for call_loop in range(33):
             # info_block = first loop + start_info_block
             logger.debug("")
             logger.debug(f'**NEW CALL** info_block = {info_block}')
+            r_row = start_r_row + info_block - 102
             if read_sheet.cell_value(info_block, 0) == 'CALL':
                 break
             else:
-                for loop in range(18):
+                for crew_loop in range(18):
                     # reg loop
-                    r_row = start_r_row+loop
+                    # r_row = start_r_row+crew_loop
+                    logger.debug(f'r_row = {r_row}')
                     reg = read_sheet.cell_value(r_row, 1)
 
                     if reg != '':
-                        logger.debug(f'r_row = {r_row}')
+
                         logger.debug(f'reg = {reg}')
                         cpo_bill_list = []
 
@@ -418,7 +418,7 @@ def main():
                         cpo_bill_list.append('')
 
                         # total
-                        data = cpo_bill_list[13]*cpo_bill_list[14]
+                        data = cpo_bill_list[13]
                         cpo_bill_list.append(data)
 
 
@@ -433,7 +433,7 @@ def main():
                     else:
                         r_row += 1
 
-                r_row = 104
+                r_row = start_r_row + info_block - 102
                 for i in range(18):
                     # ot loop
                     ot = read_sheet.cell_value(r_row, 5)
@@ -522,7 +522,7 @@ def main():
                     else:
                         r_row += 1
 
-                r_row = 104
+                r_row = start_r_row + info_block - 102
                 for i in range(18):
                     # dt loop
                     dt = read_sheet.cell_value(r_row, 9)
