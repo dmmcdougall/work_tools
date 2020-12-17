@@ -9,7 +9,6 @@ import os
 import logging
 import pandas as pd
 import xlrd
-from xlutils.copy import copy
 
 # imported from third party repos
 
@@ -39,7 +38,7 @@ def date_grabber(read_sheet,r,c):
     day = f"{shift_date_tuple[2]}"
     month = f"{shift_date_tuple[1]}"
     year = f"{shift_date_tuple[0]}"
-    shift_date = year + '-' + month + '-' + day
+    shift_date = month + '-' + day + '-' + year
     return shift_date
 
 def mos_grabber(read_sheet, r,c):
@@ -78,7 +77,7 @@ def main():
                    'resource_name', 'description', 'unit_price',
                    'discount', 'adj_price', 'qty',
                    'unit_hrs', 'subtotal', 'gst',
-                   'total', 'gl_code']
+                   'total']
 
     # Creating empty dataframes with column names only
     df_cpo_bills = pd.DataFrame(columns=col_headers)
@@ -114,16 +113,17 @@ def main():
                 myfnc.from_func_2_db(cpo_bill_list, date_grabber, read_sheet, 0, 10)
 
                 # grab start time
-                cpo_bill_list.append('N/A')
+                cpo_bill_list.append('')
 
                 # grab end time
-                cpo_bill_list.append('N/A')
+                cpo_bill_list.append('')
 
                 # payee
                 data = "Arts Commons"
                 cpo_bill_list.append(data)
 
                 # Show Title (type)
+                cpo_bill_list.append('PREP TIME')
                 data = read_sheet.cell_value(0, 0)
                 cpo_bill_list.append(data)
 
@@ -133,20 +133,22 @@ def main():
                 cpo_bill_list.append(data)
 
                 # Setup or showcall, etc (description)
-                cpo_bill_list.append('PREP TIME')
+                data = read_sheet.cell_value(0, 0)
+                cpo_bill_list.append(data)
+
 
                 # pay scale (unit_price)
                 data = read_sheet.cell_value(r_row, 2)
                 cpo_bill_list.append(data)
 
                 # discount
-                cpo_bill_list.append('N/A')
+                cpo_bill_list.append('')
 
                 # adj_price
-                cpo_bill_list.append('N/A')
+                cpo_bill_list.append('')
 
                 # qty
-                cpo_bill_list.append('N/A')
+                cpo_bill_list.append('')
 
                 # number of hours (unit_hrs)
                 data = read_sheet.cell_value(r_row, 1)
@@ -158,14 +160,11 @@ def main():
                 cpo_bill_list.append(data)
 
                 #  gst
-                cpo_bill_list.append(1.00)
+                cpo_bill_list.append('')
 
                 # total
-                data = cpo_bill_list[13] * cpo_bill_list[14]
+                data = cpo_bill_list[13] 
                 cpo_bill_list.append(data)
-
-                # gl_code
-                cpo_bill_list.append('N/A')
 
                 print(cpo_bill_list)
 
@@ -189,39 +188,39 @@ def main():
                 myfnc.from_func_2_db(cpo_bill_list, date_grabber, read_sheet, 0, 10)
 
                 # grab start time
-                cpo_bill_list.append('N/A')
+                cpo_bill_list.append('')
 
                 # grab end time
-                cpo_bill_list.append('N/A')
+                cpo_bill_list.append('')
 
                 # payee
                 data = "Arts Commons"
                 cpo_bill_list.append(data)
 
                 # Show Title (type)
-                data = read_sheet.cell_value(0, 0)
-                cpo_bill_list.append(data)
-
+                cpo_bill_list.append('PREP TIME')
+                
                 # Crew Member (resource_name)
                 data = read_sheet.cell_value(r_row, 0)
                 logger.info(data)
                 cpo_bill_list.append(data)
 
                 # Setup or showcall, etc (description)
-                cpo_bill_list.append('PREP TIME')
+                data = read_sheet.cell_value(0, 0)
+                cpo_bill_list.append(data)
 
                 # pay scale (unit_price)
                 data = read_sheet.cell_value(r_row, 6)
                 cpo_bill_list.append(data)
 
                 # discount
-                cpo_bill_list.append('N/A')
+                cpo_bill_list.append('')
 
                 # adj_price
-                cpo_bill_list.append('N/A')
+                cpo_bill_list.append('')
 
                 # qty
-                cpo_bill_list.append('N/A')
+                cpo_bill_list.append('')
 
                 # number of hours (unit_hrs)
                 data = read_sheet.cell_value(r_row, 5)
@@ -233,14 +232,12 @@ def main():
                 cpo_bill_list.append(data)
 
                 #  gst
-                cpo_bill_list.append(1.00)
+                cpo_bill_list.append('')
 
                 # total
-                data = cpo_bill_list[13] * cpo_bill_list[14]
+                data = cpo_bill_list[13] 
                 cpo_bill_list.append(data)
 
-                # gl_code
-                cpo_bill_list.append('N/A')
 
                 print(cpo_bill_list)
 
@@ -264,18 +261,17 @@ def main():
                 myfnc.from_func_2_db(cpo_bill_list, date_grabber, read_sheet, 0, 10)
 
                 # grab start time
-                cpo_bill_list.append('N/A')
+                cpo_bill_list.append('')
 
                 # grab end time
-                cpo_bill_list.append('N/A')
+                cpo_bill_list.append('')
 
                 # payee
                 data = "Arts Commons"
                 cpo_bill_list.append(data)
 
                 # Show Title (type)
-                data = read_sheet.cell_value(0, 0)
-                cpo_bill_list.append(data)
+                cpo_bill_list.append('PREP TIME')
 
                 # Crew Member (resource_name)
                 data = read_sheet.cell_value(r_row, 0)
@@ -283,20 +279,21 @@ def main():
                 cpo_bill_list.append(data)
 
                 # Setup or showcall, etc (description)
-                cpo_bill_list.append('PREP TIME')
+                data = read_sheet.cell_value(0, 0)
+                cpo_bill_list.append(data)
 
                 # pay scale (unit_price)
                 data = read_sheet.cell_value(r_row, 10)
                 cpo_bill_list.append(data)
 
                 # discount
-                cpo_bill_list.append('N/A')
+                cpo_bill_list.append('')
 
                 # adj_price
-                cpo_bill_list.append('N/A')
+                cpo_bill_list.append('')
 
                 # qty
-                cpo_bill_list.append('N/A')
+                cpo_bill_list.append('')
 
                 # number of hours (unit_hrs)
                 data = read_sheet.cell_value(r_row, 9)
@@ -308,14 +305,13 @@ def main():
                 cpo_bill_list.append(data)
 
                 #  gst
-                cpo_bill_list.append(1.00)
+                cpo_bill_list.append('')
 
                 # total
-                data = cpo_bill_list[13] * cpo_bill_list[14]
+                data = cpo_bill_list[13] 
                 cpo_bill_list.append(data)
 
-                # gl_code
-                cpo_bill_list.append('N/A')
+
 
                 print(cpo_bill_list)
 
@@ -383,8 +379,8 @@ def main():
                         cpo_bill_list.append(data)
 
                         # Show Title (type)
-                        data = read_sheet.cell_value(0, 0)
-                        cpo_bill_list.append(data)
+                        data = read_sheet.cell_value(info_block, 0)
+                        myfnc.from_func_2_db(cpo_bill_list, grab_call_type, data)
 
                         # Crew Member (resource_name)
                         data = read_sheet.cell_value(r_row, 0)
@@ -392,21 +388,22 @@ def main():
                         cpo_bill_list.append(data)
 
                         # Setup or showcall, etc (description)
-                        data = read_sheet.cell_value(info_block, 0)
-                        myfnc.from_func_2_db(cpo_bill_list, grab_call_type, data)
+                        data = read_sheet.cell_value(0, 0)
+                        cpo_bill_list.append(data)
+                        
 
                         # pay scale (unit_price)
                         data = read_sheet.cell_value(r_row, 2)
                         cpo_bill_list.append(data)
 
                         # discount
-                        cpo_bill_list.append('N/A')
+                        cpo_bill_list.append('')
 
                         # adj_price
-                        cpo_bill_list.append('N/A')
+                        cpo_bill_list.append('')
 
                         # qty
-                        cpo_bill_list.append('N/A')
+                        cpo_bill_list.append('')
 
                         # number of hours (unit_hrs)
                         data = read_sheet.cell_value(r_row, 1)
@@ -418,14 +415,13 @@ def main():
                         cpo_bill_list.append(data)
 
                         #  gst
-                        cpo_bill_list.append(1.00)
+                        cpo_bill_list.append('')
 
                         # total
                         data = cpo_bill_list[13]*cpo_bill_list[14]
                         cpo_bill_list.append(data)
 
-                        # gl_code
-                        cpo_bill_list.append('N/A')
+
 
                         print(cpo_bill_list)
 
@@ -471,8 +467,9 @@ def main():
                         cpo_bill_list.append(data)
 
                         # Show Title (type)
-                        data = read_sheet.cell_value(0, 0)
-                        cpo_bill_list.append(data)
+                        data = read_sheet.cell_value(info_block, 0)
+                        myfnc.from_func_2_db(cpo_bill_list, grab_call_type, data)
+
 
                         # Crew Member (resource_name)
                         data = read_sheet.cell_value(r_row, 0)
@@ -480,21 +477,22 @@ def main():
                         cpo_bill_list.append(data)
 
                         # Setup or showcall, etc (description)
-                        data = read_sheet.cell_value(info_block, 0)
-                        myfnc.from_func_2_db(cpo_bill_list, grab_call_type, data)
+                        data = read_sheet.cell_value(0, 0)
+                        cpo_bill_list.append(data)
+                        
 
                         # pay scale (unit_price)
                         data = read_sheet.cell_value(r_row, 6)
                         cpo_bill_list.append(data)
 
                         # discount
-                        cpo_bill_list.append('N/A')
+                        cpo_bill_list.append('')
 
                         # adj_price
-                        cpo_bill_list.append('N/A')
+                        cpo_bill_list.append('')
 
                         # qty
-                        cpo_bill_list.append('N/A')
+                        cpo_bill_list.append('')
 
                         # number of hours (unit_hrs)
                         data = read_sheet.cell_value(r_row, 5)
@@ -506,14 +504,13 @@ def main():
                         cpo_bill_list.append(data)
 
                         #  gst
-                        cpo_bill_list.append(1.00)
+                        cpo_bill_list.append('')
 
                         # total
-                        data = cpo_bill_list[13] * cpo_bill_list[14]
+                        data = cpo_bill_list[13] 
                         cpo_bill_list.append(data)
 
-                        # gl_code
-                        cpo_bill_list.append('N/A')
+
 
                         print(cpo_bill_list)
 
@@ -559,8 +556,8 @@ def main():
                         cpo_bill_list.append(data)
 
                         # Show Title (type)
-                        data = read_sheet.cell_value(0, 0)
-                        cpo_bill_list.append(data)
+                        data = read_sheet.cell_value(info_block, 0)
+                        myfnc.from_func_2_db(cpo_bill_list, grab_call_type, data)
 
                         # Crew Member (resource_name)
                         data = read_sheet.cell_value(r_row, 0)
@@ -568,21 +565,23 @@ def main():
                         cpo_bill_list.append(data)
 
                         # Setup or showcall, etc (description)
-                        data = read_sheet.cell_value(info_block, 0)
-                        myfnc.from_func_2_db(cpo_bill_list, grab_call_type, data)
+                        data = read_sheet.cell_value(0, 0)
+                        cpo_bill_list.append(data)
+                        
+                        
 
                         # pay scale (unit_price)
                         data = read_sheet.cell_value(r_row, 10)
                         cpo_bill_list.append(data)
 
                         # discount
-                        cpo_bill_list.append('N/A')
+                        cpo_bill_list.append('')
 
                         # adj_price
-                        cpo_bill_list.append('N/A')
+                        cpo_bill_list.append('')
 
                         # qty
-                        cpo_bill_list.append('N/A')
+                        cpo_bill_list.append('')
 
                         # number of hours (unit_hrs)
                         data = read_sheet.cell_value(r_row, 9)
@@ -594,14 +593,13 @@ def main():
                         cpo_bill_list.append(data)
 
                         #  gst
-                        cpo_bill_list.append(1.00)
+                        cpo_bill_list.append('')
 
                         # total
-                        data = cpo_bill_list[13] * cpo_bill_list[14]
+                        data = cpo_bill_list[13] 
                         cpo_bill_list.append(data)
 
-                        # gl_code
-                        cpo_bill_list.append('N/A')
+
 
                         print(cpo_bill_list)
 
