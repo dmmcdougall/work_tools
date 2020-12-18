@@ -8,6 +8,27 @@ This file is where my general functions are stored
 
 # imported from local directories
 
+# takes a list and a list of column headers and adds it to a df
+def add_row_to_db(my_list, my_headers, my_df):
+    my_dict = dict(zip(my_headers, my_list))
+    my_df = my_df.append(my_dict, ignore_index=True)
+
+# runs multiple functions with the same number of arguments
+# IE: a = my_test(mult, add, sub, mult1=6, add1=6, sub1=6, mult2=3, add2=3, sub2=3)
+def function_spinner(*args, **kwargs):
+    for i in range(len(args)):
+        func = args[i]
+        function_name = func.__name__
+        first_param = kwargs.get(function_name+"1")
+        second_param = kwargs.get(function_name+"2")
+        yield func(first_param, second_param)
+
+# this generator goes along a row of data and scrapes the data using the appropriate function
+def row_scrapper(read_sheet, info_block, r_row, col, *args):
+    for i in range(len(args)):
+        func = args[i]
+        function_name = func.__name__
+        yield func(read_sheet, info_block, r_row, col)
 
 # this function takes in a function, runs it, prints to screen the result, and appends the result to a list.
 # it is for reducing the repeats on the scrape.py loop

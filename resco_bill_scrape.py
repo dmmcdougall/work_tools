@@ -26,30 +26,22 @@ file_handler.setFormatter(formatter)
 
 logger.addHandler(file_handler)
 
-# TODO: refactor the fuck out of this trash heap
-
-# this loop goes along a row of data and scrapes the data using the appropriate function
-def bill_row_scrapper(read_sheet, info_block, r_row, col, *args):
-    for i in range(len(args)):
-        func = args[i]
-        function_name = func.__name__
-        yield func(read_sheet, info_block, r_row, col)
-
+# these methods are each one component of one complete row of data
 # grab the month - this first one grabs from the info block
 def resco_0_mos(read_sheet, info_block, dummy2, dummy3):
     data = read_sheet.cell_value(info_block+1, 0)
-    logger.info(f'the resco_0_mos has grabbed {data} to parse')
+    # logger.info(f'the resco_0_mos has grabbed {data} to parse')
     shift_date_tuple = xlrd.xldate_as_tuple(data, 1)
-    logger.info(f'the resco_0_mos has turned it into {shift_date_tuple}')
+    # logger.info(f'the resco_0_mos has turned it into {shift_date_tuple}')
     month = f"{shift_date_tuple[1]}"
     return month
 
 # this one grabs from the date in the header.  good for prep time and inventory items
 def resco_0b_mos(read_sheet, dummy1, dummy2, dummy3):
     data = read_sheet.cell_value(0, 10)
-    logger.info(f'the resco_0b_mos has grabbed {data} to parse')
+    # logger.info(f'the resco_0b_mos has grabbed {data} to parse')
     shift_date_tuple = xlrd.xldate_as_tuple(data, 1)
-    logger.info(f'the resco_0b_mos has turned it into {shift_date_tuple}')
+    # logger.info(f'the resco_0b_mos has turned it into {shift_date_tuple}')
     month = f"{shift_date_tuple[1]}"
     return month
 
@@ -109,9 +101,9 @@ def resco_4_payee(dummy, dummy1, dummy2, dummy3):
 # what type of call is it Setup, Strike...- this first one grabs from the info block
 def resco_5_type(read_sheet, info_block, dummy2, dummy3):
     data = read_sheet.cell_value(info_block, 0)
-    logger.info(f'the grab_call_type has grabbed {data} to parse')
+    # logger.info(f'the grab_call_type has grabbed {data} to parse')
     call = data.rsplit(' ', 1)
-    logger.info(f'the grab_call_type has turned it into {call}')
+    # logger.info(f'the grab_call_type has turned it into {call}')
     return call[0]
 
 # this one is only for the preptime loop
@@ -139,7 +131,7 @@ def resco_8_unitprice(read_sheet, dummy1,row, col):
     data = read_sheet.cell_value(row, col)
     return data
 
-# 9, 10, 11 is null
+# 9, 10, 11 are null
 
 # this quantity is MP only
 def resco_11b_qty(read_sheet, dummy1, row, col):
@@ -165,6 +157,11 @@ def resco_15_total(read_sheet, dummy1,row, col):
     rate_price = read_sheet.cell_value(row, col +1)
     return hrs_qty*rate_price
 
+# just grab it and return it
+def resco_x_generic(dummy, dummy1, dummy2, dummy3):
+    data = read_sheet.cell_value(row, col)
+    return data
+
 # insert a NULL value
 def resco_x_NULL(dummy, dummy1, dummy2, dummy3):
     data = ""
@@ -181,7 +178,7 @@ def main():
                    'unit_hrs', 'subtotal', 'gst',
                    'total']
 
-    # these are required for the labour_loop
+    # these are required for the row_scrapper
     dummy, dummy1, dummy2, dummy3 = 0, 0, 0, 0
 
     # Creating empty dataframes with column names only
@@ -215,7 +212,7 @@ def main():
             logger.debug(f"r_row Now = {r_row}")
             units = read_sheet.cell_value(r_row, col)
             if units !='':
-                prep_time_reg = bill_row_scrapper(read_sheet, dummy, r_row, col,
+                prep_time_reg = myfnc.row_scrapper(read_sheet, dummy, r_row, col,
                                            resco_0b_mos, resco_1b_date, resco_x_NULL,
                                            resco_x_NULL, resco_4_payee, resco_5b_type,
                                            resco_6_resource, resco_7_description, resco_8_unitprice,
@@ -225,10 +222,7 @@ def main():
 
                 row_data_list = [cel for cel in prep_time_reg]
                 print(row_data_list)
-
-                my_dict = dict(zip(col_headers, row_data_list))
-                df_bill_data = df_bill_data.append(my_dict, ignore_index=True)
-
+                myfnc.add_row_to_db(row_data_list,col_headers,df_bill_data)
                 r_row += 1
 
             else:
@@ -242,7 +236,7 @@ def main():
             col = 5 # this is the location of the ot time data
             units = read_sheet.cell_value(r_row, col)
             if units !='':
-                prep_time_ot = bill_row_scrapper(read_sheet, dummy, r_row, col,
+                prep_time_ot = myfnc.row_scrapper(read_sheet, dummy, r_row, col,
                                           resco_0b_mos, resco_1b_date, resco_x_NULL,
                                           resco_x_NULL, resco_4_payee, resco_5b_type,
                                           resco_6_resource, resco_7_description, resco_8_unitprice,
@@ -252,10 +246,7 @@ def main():
 
                 row_data_list = [cel for cel in prep_time_ot]
                 print(row_data_list)
-
-                my_dict = dict(zip(col_headers, row_data_list))
-                df_bill_data = df_bill_data.append(my_dict, ignore_index=True)
-
+                myfnc.add_row_to_db(row_data_list, col_headers, df_bill_data)
                 r_row += 1
 
             else:
@@ -269,7 +260,7 @@ def main():
             col = 9 # this is the location of the dt time data
             units = read_sheet.cell_value(r_row, col)
             if units !='':
-                prep_time_dt = bill_row_scrapper(read_sheet, dummy, r_row, col,
+                prep_time_dt = myfnc.row_scrapper(read_sheet, dummy, r_row, col,
                                           resco_0b_mos, resco_1b_date, resco_x_NULL,
                                           resco_x_NULL, resco_4_payee, resco_5b_type,
                                           resco_6_resource, resco_7_description, resco_8_unitprice,
@@ -279,10 +270,7 @@ def main():
 
                 row_data_list = [cel for cel in prep_time_dt]
                 print(row_data_list)
-
-                my_dict = dict(zip(col_headers, row_data_list))
-                df_bill_data = df_bill_data.append(my_dict, ignore_index=True)
-
+                myfnc.add_row_to_db(row_data_list, col_headers, df_bill_data)
                 r_row += 1
 
             else:
@@ -294,19 +282,17 @@ def main():
         col = 2
         units = read_sheet.cell_value(r_row, col)
         if units != '':
-            mp = bill_row_scrapper(read_sheet, dummy, r_row, col,
+            mp = myfnc.row_scrapper(read_sheet, dummy, r_row, col,
                             resco_0b_mos, resco_1b_date, resco_x_NULL,
                             resco_x_NULL, resco_4_payee, resco_x_NULL,
                             resco_6b_resource, resco_7_description, resco_8_unitprice,
                             resco_x_NULL, resco_x_NULL, resco_11b_qty,
-                            resco_x, resco_13_subtotal, resco_x_NULL,
+                            resco_x_NULL, resco_13_subtotal, resco_x_NULL,
                             resco_15_total)
 
             row_data_list = [cel for cel in mp]
             print(row_data_list)
-
-            my_dict = dict(zip(col_headers, row_data_list))
-            df_bill_data = df_bill_data.append(my_dict, ignore_index=True)
+            myfnc.add_row_to_db(row_data_list, col_headers, df_bill_data)
 
         # Now we come to the call blocks. 
         # 
@@ -331,7 +317,7 @@ def main():
                     col = 1
                     units = read_sheet.cell_value(r_row, col)
                     if units != '':
-                        call_time_reg = bill_row_scrapper(read_sheet, info_block, r_row, col,
+                        call_time_reg = myfnc.row_scrapper(read_sheet, info_block, r_row, col,
                                                    resco_0_mos, resco_1_date, resco_2_IN,
                                                    resco_3_OUT, resco_4_payee, resco_5_type,
                                                    resco_6_resource, resco_7_description, resco_8_unitprice,
@@ -341,10 +327,7 @@ def main():
 
                         row_data_list = [cel for cel in call_time_reg]
                         print(row_data_list)
-
-                        my_dict = dict(zip(col_headers, row_data_list))
-                        df_bill_data = df_bill_data.append(my_dict, ignore_index=True)
-
+                        myfnc.add_row_to_db(row_data_list, col_headers, df_bill_data)
                         r_row += 1
 
                     else:
@@ -357,7 +340,7 @@ def main():
                     col = 5
                     units = read_sheet.cell_value(r_row, col)
                     if units != '':
-                        call_time_ot = bill_row_scrapper(read_sheet, info_block, r_row, col,
+                        call_time_ot = myfnc.row_scrapper(read_sheet, info_block, r_row, col,
                                                    resco_0_mos, resco_1_date, resco_2_IN,
                                                    resco_3_OUT, resco_4_payee, resco_5_type,
                                                    resco_6_resource, resco_7_description, resco_8_unitprice,
@@ -367,10 +350,7 @@ def main():
 
                         row_data_list = [cel for cel in call_time_ot]
                         print(row_data_list)
-
-                        my_dict = dict(zip(col_headers, row_data_list))
-                        df_bill_data = df_bill_data.append(my_dict, ignore_index=True)
-
+                        myfnc.add_row_to_db(row_data_list, col_headers, df_bill_data)
                         r_row += 1
 
                     else:
@@ -384,7 +364,7 @@ def main():
                     col = 9
                     units = read_sheet.cell_value(r_row, col)
                     if units != '':
-                        call_time_dt = bill_row_scrapper(read_sheet, info_block, r_row, col,
+                        call_time_dt = myfnc.row_scrapper(read_sheet, info_block, r_row, col,
                                                    resco_0_mos, resco_1_date, resco_2_IN,
                                                    resco_3_OUT, resco_4_payee, resco_5_type,
                                                    resco_6_resource, resco_7_description, resco_8_unitprice,
@@ -394,10 +374,7 @@ def main():
 
                         row_data_list = [cel for cel in call_time_dt]
                         print(row_data_list)
-
-                        my_dict = dict(zip(col_headers, row_data_list))
-                        df_bill_data = df_bill_data.append(my_dict, ignore_index=True)
-
+                        myfnc.add_row_to_db(row_data_list, col_headers, df_bill_data)
                         r_row += 1
 
                     else:
