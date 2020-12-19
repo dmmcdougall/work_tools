@@ -14,7 +14,7 @@ def add_row_to_db(my_list, my_headers, my_df):
     my_df = my_df.append(my_dict, ignore_index=True)
 
 # runs multiple functions with the same number of arguments
-# IE: a = my_test(mult, add, sub, mult1=6, add1=6, sub1=6, mult2=3, add2=3, sub2=3)
+# IE: a = function_spinner(mult, add, sub, mult1=6, add1=6, sub1=6, mult2=3, add2=3, sub2=3)
 def function_spinner(*args, **kwargs):
     for i in range(len(args)):
         func = args[i]

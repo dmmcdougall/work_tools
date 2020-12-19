@@ -128,7 +128,7 @@ def resco_7_description(read_sheet, dummy1, dummy2, dummy3):
 
 # grab cost per hour/unit
 def resco_8_unitprice(read_sheet, dummy1,row, col):
-    data = read_sheet.cell_value(row, col)
+    data = read_sheet.cell_value(row, col +1)
     return data
 
 # 9, 10, 11 are null
@@ -158,7 +158,7 @@ def resco_15_total(read_sheet, dummy1,row, col):
     return hrs_qty*rate_price
 
 # just grab it and return it
-def resco_x_generic(dummy, dummy1, dummy2, dummy3):
+def resco_x_generic(read_sheet, dummy1, row, col):
     data = read_sheet.cell_value(row, col)
     return data
 
@@ -168,7 +168,6 @@ def resco_x_NULL(dummy, dummy1, dummy2, dummy3):
     return data
 
 
-# and this is the app...
 def main():
     # set up the column headers in lists to receive the scraped data
     col_headers = ['month', 'date', 'IN_time',
@@ -202,7 +201,6 @@ def main():
         print(read_file)
         read_book = xlrd.open_workbook(read_file)
         read_sheet = read_book.sheet_by_name('Entry Form')
-
         # the prep time grab
         # reg time
         logger.debug(f"Entering Prep Time Reg")
@@ -224,10 +222,8 @@ def main():
                 print(row_data_list)
                 myfnc.add_row_to_db(row_data_list,col_headers,df_bill_data)
                 r_row += 1
-
             else:
                 r_row += 1
-
         # this loop covers the first two ot rows, FULLTIME and CASUAL
         logger.debug(f"Entering Prep Time OT")
         r_row = 95
@@ -248,7 +244,6 @@ def main():
                 print(row_data_list)
                 myfnc.add_row_to_db(row_data_list, col_headers, df_bill_data)
                 r_row += 1
-
             else:
                 r_row += 1
 
@@ -272,7 +267,6 @@ def main():
                 print(row_data_list)
                 myfnc.add_row_to_db(row_data_list, col_headers, df_bill_data)
                 r_row += 1
-
             else:
                 r_row += 1
                 
@@ -329,7 +323,6 @@ def main():
                         print(row_data_list)
                         myfnc.add_row_to_db(row_data_list, col_headers, df_bill_data)
                         r_row += 1
-
                     else:
                         r_row += 1
                 # ot
@@ -352,10 +345,8 @@ def main():
                         print(row_data_list)
                         myfnc.add_row_to_db(row_data_list, col_headers, df_bill_data)
                         r_row += 1
-
                     else:
                         r_row += 1
-                    
                 # dt
                 logger.debug(f"Entering callblock DT")
                 r_row = start_r_row + info_block - 102
@@ -376,7 +367,6 @@ def main():
                         print(row_data_list)
                         myfnc.add_row_to_db(row_data_list, col_headers, df_bill_data)
                         r_row += 1
-
                     else:
                         r_row += 1
                     
@@ -390,9 +380,7 @@ def main():
     print()
     print("All done! Time to save to...")
     print(f"{cfg.desktop_dir}\cpo_bills_records.xls")
-
     df_bill_data.to_excel(f'{cfg.desktop_dir}\cpo_bills_records.xlsx', index=False)
-
 
 if __name__ == '__main__':
     logger.info('~~~The fiile resco_bill_scrape.py has started~~~')
