@@ -31,7 +31,7 @@ logger.addHandler(file_handler)
 def resco_0_mos(read_sheet, info_block, dummy2, dummy3):
     data = read_sheet.cell_value(info_block+1, 0)
     # logger.info(f'the resco_0_mos has grabbed {data} to parse')
-    shift_date_tuple = xlrd.xldate_as_tuple(data, 1)
+    shift_date_tuple = xlrd.xldate_as_tuple(data, 0)
     # logger.info(f'the resco_0_mos has turned it into {shift_date_tuple}')
     month = f"{shift_date_tuple[1]}"
     return month
@@ -40,7 +40,7 @@ def resco_0_mos(read_sheet, info_block, dummy2, dummy3):
 def resco_0b_mos(read_sheet, dummy1, dummy2, dummy3):
     data = read_sheet.cell_value(0, 10)
     # logger.info(f'the resco_0b_mos has grabbed {data} to parse')
-    shift_date_tuple = xlrd.xldate_as_tuple(data, 1)
+    shift_date_tuple = xlrd.xldate_as_tuple(data, 0)
     # logger.info(f'the resco_0b_mos has turned it into {shift_date_tuple}')
     month = f"{shift_date_tuple[1]}"
     return month
@@ -49,7 +49,7 @@ def resco_0b_mos(read_sheet, dummy1, dummy2, dummy3):
 def resco_1_date(read_sheet, info_block, dummy2, dummy3):
     data = read_sheet.cell_value(info_block+1, 0)
     # logger.info(f'the date_grabber has grabbed {data} to parse')
-    shift_date_tuple = xlrd.xldate_as_tuple(data, 1)
+    shift_date_tuple = xlrd.xldate_as_tuple(data, 0)
     # logger.info(f'the date_grabber has turned it into {shift_date_tuple}')
     day = f"{shift_date_tuple[2]}"
     month = f"{shift_date_tuple[1]}"
@@ -61,18 +61,20 @@ def resco_1_date(read_sheet, info_block, dummy2, dummy3):
 def resco_1b_date(read_sheet, dummy1, dummy2, dummy3):
     data = read_sheet.cell_value(0, 10)
     # logger.info(f'the date_grabber has grabbed {data} to parse')
-    shift_date_tuple = xlrd.xldate_as_tuple(data, 1)
+    shift_date_tuple = xlrd.xldate_as_tuple(data, 0)
     # logger.info(f'the date_grabber has turned it into {shift_date_tuple}')
     day = f"{shift_date_tuple[2]}"
     month = f"{shift_date_tuple[1]}"
     year = f"{shift_date_tuple[0]}"
-    shift_date = month + '-' + day + '-' + year
+    shift_date = day + '-' + month + '-' + year
     return shift_date
 
 # grab the in time of a labour call
 def resco_2_IN(read_sheet, info_block, dummy2, dummy3):
     data = read_sheet.cell_value(info_block, 0)
     if data == 'Strike':
+        return data
+    elif data == 'JSL Strike':
         return data
     else:
         #logger.info(f'the start_time has grabbed {old} to parse')
@@ -86,6 +88,8 @@ def resco_2_IN(read_sheet, info_block, dummy2, dummy3):
 def resco_3_OUT(read_sheet, info_block, dummy2, dummy3):
     data = read_sheet.cell_value(info_block, 0)
     if data == 'Strike':
+        return data
+    elif data == 'JSL Strike':
         return data
     else:
         # logger.info(f'the end_time has grabbed {old} to parse')
