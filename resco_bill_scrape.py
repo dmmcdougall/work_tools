@@ -54,7 +54,7 @@ def resco_1_date(read_sheet, info_block, dummy2, dummy3):
     day = f"{shift_date_tuple[2]}"
     month = f"{shift_date_tuple[1]}"
     year = f"{shift_date_tuple[0]}"
-    shift_date = month + '-' + day + '-' + year
+    shift_date = day + '-' + month + '-' + year
     return shift_date
 
 # this one grabs from the date in the header.  good for prep time and inventory items
