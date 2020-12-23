@@ -33,6 +33,139 @@ file_handler.setFormatter(formatter)
 logger.addHandler(file_handler)
 
 
+
+def fnc_spinner(sheet, row, my_cls, *args, **kwargs):
+    for i in range(len(args)):
+        func = args[i]
+        function_name = func.__name__
+        key_list = list(kwargs.keys())
+        argument_list = [my_str for my_str in key_list if function_name in my_str]
+        sorted_keys = sorted(argument_list)
+        if not argument_list:
+            logger.info(f'the function spinner is going to pass...{function_name}({sheet}, {row})')
+            yield func(sheet, row, my_cls)
+        else:
+            my_val = [kwargs[x] for x in sorted_keys]
+            logger.info(f'arguments for this function are {my_val}')
+            logger.info(f'the function spinner is going to pass...{function_name}({sheet}, {row}, {my_val})')
+            yield func(sheet, row, my_cls, *my_val)
+
+def grab_01_head_alpha(sheet, dummy1, dummy2, name_row, name_col):
+    data = sheet.cell_value(name_row, name_col)
+    logger.info(f'the head in question is named: {data}')
+    head_alpha = dbfnc.find_head_alpha_number2(data)
+    return head_alpha
+
+def grab_01_crew_alpha(sheet, dummy1, dummy2, name_row, name_col):
+    data = sheet.cell_value(name_row, name_col)
+    logger.info(f'the crew in question is named: {data}')
+    crew_alpha = dbfnc.find_crew_Alpha_number2(data)
+    return crew_alpha
+
+def grab_02_head_id(sheet, dummy1, dummy2, name_row, name_col):
+    data = sheet.cell_value(name_row, name_col)
+    head_id = dbfnc.find_head_number2(data)
+    return head_id
+
+def grab_02_crew_id(sheet, dummy1, dummy2, name_row, name_col):
+    data = sheet.cell_value(name_row, name_col)
+    crew_id = dbfnc.find_crew_number2(data)
+    return crew_id
+
+def grab_03_date(sheet, row, my_cls, col):
+    data = my_cls.ts_grab_date(sheet, row, col)
+    return data
+
+def grab_04_in_time(sheet, row, my_cls, col_modifier):
+    data = my_cls.ts_write_time(sheet, row, col_modifier)
+    return data
+
+def grab_05_out_time(sheet, row, my_cls, col_modifier):
+    data = my_cls.ts_write_time(sheet, row, col_modifier)
+    return data
+
+def grab_06_evnt_yr(sheet, row, my_cls, col_modifier):
+    my_date = my_cls.ts_grab_date(sheet, row, col_modifier)
+    evnt_yr = dbfnc.grabeventYR2(my_date)
+    return evnt_yr
+
+def grab_07_head_evnt_id(sheet, row, my_cls, accnt_col, date_col):
+    head_acct = my_cls.ts_15_write_acct(sheet, row, accnt_col)
+    my_date = my_cls.ts_grab_date(sheet, row, date_col)
+    evnt_id = my_cls.ts_event_id(head_acct, my_date)
+    return evnt_id
+
+def grab_07_crew_evnt_id(sheet, row, my_cls, date_col):
+    crew_acct = my_cls.ts_cas_write_acct()
+    my_date = my_cls.ts_grab_date(sheet, row, date_col)
+    evnt_id = my_cls.ts_event_id(crew_acct, my_date)
+    return evnt_id
+
+def grab_08_reg(sheet, row, my_cls, col):
+    data = my_cls.ts_grab_hrs(sheet, row, col)
+    return data
+
+def grab_09_ot(sheet, row, my_cls, col):
+    data = my_cls.ts_grab_hrs(sheet, row, col)
+    return data
+
+def grab_10_dt(sheet, row, my_cls, col):
+    data = my_cls.ts_grab_hrs(sheet, row, col)
+    return data
+
+def grab_11_head_acct(sheet, row,my_cls, col):
+    data = my_cls.ts_15_write_acct(sheet, row, col)
+    return data
+
+def grab_11_crew_acct(dummy, dummy1, dummy2):
+    data = my_cls.ts_cas_write_acct()
+    return data
+
+def grab_12_blacks(sheet, row, my_cls, col):
+    data = my_cls.ts_blacks_call(sheet, row, col)
+    return data
+
+def grab_13_MP(sheet, row, my_cls, col):
+    data = my_cls.ts_mp(sheet, row, col)
+    return data
+
+def grab_14_crew_shifttype(dummy, dummy1, dummy2):
+    data = 9
+    return data
+
+def create_null(dummy, dummy1, dummy2):
+    data = ""
+    return data
+
+def create_eight(dummy, dummy1, dummy2):
+    data = 8
+    return data
+
+def create_zero(dummy, dummy1, dummy2):
+    data = 0
+    return data
+
+def kris_fix_in(sheet, row, my_cls, col, name_row, name_col):
+    data = sheet.cell_value(name_row, name_col)
+    head_id = dbfnc.find_head_number2(data)
+    if head_id == 3:
+        data = my_cls.ts_15_kf_format(sheet, row, col)
+        return data
+    else:
+        data = grab_04_in_time(sheet, row, my_cls, col)
+        return data
+
+def kris_fix_out(sheet, row, my_cls, col_modifier, name_row, name_col):
+    data = sheet.cell_value(name_row, name_col)
+    head_id = dbfnc.find_head_number2(data)
+    if head_id == 3:
+        data = my_cls.ts_15_kf_format(sheet, row, col_modifier)
+        return data
+    else:
+        data = grab_04_in_time(sheet, row, my_cls, col_modifier)
+        return data
+
+
 # and this is the app...
 def main():
     # set up the db column headers in lists to receive the scraped data
@@ -108,68 +241,35 @@ def main():
             for r_row in range(ts_cas.start_data_row, ts_cas.end_data_row):
                 r_col = ts_cas.start_data_col + 1
                 if read_sheet.cell_type(r_row, r_col) != 0:
-
                     # write shift number
-                    crew_data_list = [next_crew_num]
+                    data_list = [next_crew_num]
                     next_crew_num += 1
 
-                    # Grab a casual Alpha number from the db
-                    data = read_sheet.cell_value(ts_cas.name_row, ts_cas.name_column)
-                    myfnc.from_func_2_db(crew_data_list, dbfnc.find_crew_Alpha_number2, data)
+                    cas_hrs = fnc_spinner(read_sheet, r_row, ts_cas,
+                                          grab_01_crew_alpha, grab_02_crew_id, grab_03_date,
+                                          grab_04_in_time, grab_05_out_time, grab_06_evnt_yr,
+                                          grab_07_crew_evnt_id, grab_08_reg, grab_09_ot,
+                                          grab_10_dt, grab_11_crew_acct, grab_12_blacks,
+                                          grab_13_MP, grab_14_crew_shifttype,
+                                          grab_01_crew_alpha1=ts_cas.name_row, grab_01_crew_alpha2=ts_cas.name_column,
+                                          grab_02_crew_id1=ts_cas.name_row, grab_02_crew_id2=ts_cas.name_column,
+                                          grab_03_date1=3,
+                                          grab_04_in_time1=0,
+                                          grab_05_out_time1=1,
+                                          grab_06_evnt_yr1=3,
+                                          grab_07_head_evnt_id1=3,
+                                          grab_08_reg1=2,
+                                          grab_09_ot1=3,
+                                          grab_10_dt1=4,
+                                          grab_12_blacks1=5,
+                                          grab_13_MP=6)
 
-                    # Grab a casual id number from the db
-                    data = read_sheet.cell_value(ts_cas.name_row, ts_cas.name_column)
-                    cas_id = dbfnc.find_crew_number2(data)
-                    crew_data_list.append(cas_id)
-
-                    # Grab ts date
-                    myfnc.from_func_2_db(crew_data_list, ts_cas.ts_grab_date, read_sheet, r_row, 3)
-
-                    # Grab in time
-                    myfnc.from_func_2_db(crew_data_list, ts_cas.ts_write_time, read_sheet, r_row, 0)
-
-                    # Grab out time
-                    myfnc.from_func_2_db(crew_data_list, ts_cas.ts_write_time, read_sheet, r_row, 1)
-
-                    # Grab event year
-                    data = ts_cas.ts_grab_date(read_sheet, r_row, 3)
-                    evnt_yr = dbfnc.grabeventYR2(data)
-                    crew_data_list.append(evnt_yr)
-
-                    # Grab Event ID
-                    my_date = ts_cas.ts_grab_date(read_sheet, r_row, 3)
-                    crew_accnt_code = ts_cas.ts_cas_write_acct()
-                    show = ts_cas.ts_event_id(crew_accnt_code, my_date)
-                    crew_data_list.append(show)
-
-                    # grab reg time, ot, dt
-                    data = ts_cas.ts_grab_hrs(read_sheet, r_row, 2)
-                    crew_data_list.append(data)
-
-                    data = ts_cas.ts_grab_hrs(read_sheet, r_row, 3)
-                    crew_data_list.append(data)
-
-                    data = ts_cas.ts_grab_hrs(read_sheet, r_row, 4)
-                    crew_data_list.append(data)
-
-                    # write accounting code
-                    crew_data_list.append(crew_accnt_code)
-
-                    # blackscall true/false
-                    myfnc.from_func_2_db(crew_data_list,ts_cas.ts_blacks_call, read_sheet, r_row, 5)
-
-                    # Grab MP
-                    myfnc.from_func_2_db(crew_data_list, ts_cas.ts_mp, read_sheet, r_row, 6)
-
-                    # Grab Shiftype
-                    data = 9 # default to 9, general hand
-                    crew_data_list.append(data)
-
-                    print(crew_data_list)
-
+                    scraped_data_list = [cel for cel in cas_hrs]
+                    data_list.extend(scraped_data_list)
+                    print(data_list)
                     # add this row to the df
                     print("adding to crew df")
-                    my_dict = dict(zip(crew_keys, crew_data_list))
+                    my_dict = dict(zip(crew_keys, data_list))
                     df_crew = df_crew.append(my_dict, ignore_index=True)
 
                 else:
@@ -188,68 +288,31 @@ def main():
                 if read_sheet.cell_value(r_row, 0) == "":
                     r_row+=ts15.spaces_per_day
                 else:
-                    # grab the data you want for more than one action
-                    my_date = ts15.ts_grab_date(read_sheet, r_row, 1)
-                    head_acct = ts15.ts_15_write_acct(read_sheet, r_row, 6)
-
                     # write shift number
-                    head_data_list = [next_head_num]
+                    data_list = [next_head_num]
                     next_head_num += 1
 
-                    # Grab a salaried head Alpha number from the db
-                    data = read_sheet.cell_value(ts15.name_row, ts15.name_column)
-                    myfnc.from_func_2_db(head_data_list, dbfnc.find_head_alpha_number2, data)
+                    eight_hr_flg = fnc_spinner(read_sheet, r_row, ts15,
+                                               grab_01_head_alpha, grab_02_head_id, grab_03_date,
+                                               create_null, create_null, grab_06_evnt_yr,
+                                               grab_07_head_evnt_id, create_eight,create_zero, create_zero,
+                                               grab_11_head_acct, grab_12_blacks, grab_13_MP,
+                                               grab_01_head_alpha1=ts15.name_row, grab_01_head_alpha2=ts15.name_column,
+                                               grab_02_head_id1=ts15.name_row, grab_02_head_id2=ts15.name_column,
+                                               grab_03_date1=1,
+                                               grab_06_evnt_yr1=1,
+                                               grab_07_head_evnt_id1=6, grab_07_head_evnt_id2=1,
+                                               grab_11_head_acct1=6,
+                                               grab_12_blacks1=7,
+                                               grab_13_MP=5)
 
-                    # Grab a head id number from the db
-                    data = read_sheet.cell_value(ts15.name_row, ts15.name_column)
-                    head_id = dbfnc.find_head_number2(data)
-                    head_data_list.append(head_id)
-
-                    # write ts date
-                    head_data_list.append(my_date)
-
-                    # in time
-                    data = ""
-                    head_data_list.append(data)
-
-                    # out time
-                    data = ""
-                    head_data_list.append(data)
-
-                    # Grab event year
-                    evnt_yr = dbfnc.grabeventYR2(my_date)
-                    head_data_list.append(evnt_yr)
-
-                    # Grab Event ID
-                    data = ts15.ts_event_id(head_acct, my_date)
-                    head_data_list.append(data)
-
-                    # reg time, ot, dt
-                    data = 8
-                    head_data_list.append(data)
-
-                    data = 0
-                    head_data_list.append(data)
-
-                    data = 0
-                    head_data_list.append(data)
-
-                    # write accounting code
-                    head_data_list.append(head_acct)
-
-                    # showcall true/false
-                    myfnc.from_func_2_db(head_data_list, ts15.ts_blacks_call, read_sheet, r_row, 7)
-
-                    # Grab MP
-                    myfnc.from_func_2_db(head_data_list, ts15.ts_mp, read_sheet, r_row, 5)
-
-                    print(head_data_list)
-
+                    scraped_data_list = [cel for cel in eight_hr_flg]
+                    data_list.extend(scraped_data_list)
+                    print(data_list)
                     # add this row to the df
                     print("adding to head df")
-                    my_dict = dict(zip(head_keys, head_data_list))
+                    my_dict = dict(zip(head_keys, data_list))
                     df_head = df_head.append(my_dict, ignore_index=True)
-
                     r_row += ts15.spaces_per_day
 
             # second, lets loop over the stat flags and write those to the list
@@ -258,68 +321,31 @@ def main():
                 if read_sheet.cell_value(r_row, 0) == "":
                     r_row+=ts15.spaces_per_day
                 else:
-                    # grab the data you want for more than one action
-                    my_date = ts15.ts_grab_date(read_sheet, r_row, 1)
-                    head_acct = ts15.ts_15_write_acct(read_sheet, r_row, 6)
-
                     # write shift number
-                    head_data_list = [next_head_num]
+                    data_list = [next_head_num]
                     next_head_num += 1
 
-                    # Grab a salaried head Alpha number from the db
-                    data = read_sheet.cell_value(ts15.name_row, ts15.name_column)
-                    myfnc.from_func_2_db(head_data_list, dbfnc.find_head_alpha_number2, data)
+                    stat_flg = fnc_spinner(read_sheet, r_row, ts15,
+                                               grab_01_head_alpha, grab_02_head_id, grab_03_date,
+                                               create_null, create_null, grab_06_evnt_yr,
+                                               grab_07_head_evnt_id, create_eight,create_zero, create_zero,
+                                               grab_11_head_acct, grab_12_blacks, grab_13_MP,
+                                               grab_01_head_alpha1=ts15.name_row, grab_01_head_alpha2=ts15.name_column,
+                                               grab_02_head_id1=ts15.name_row, grab_02_head_id2=ts15.name_column,
+                                               grab_03_date1=1,
+                                               grab_06_evnt_yr1=1,
+                                               grab_07_head_evnt_id1=6, grab_07_head_evnt_id2=1,
+                                               grab_11_head_acct1=6,
+                                               grab_12_blacks1=7,
+                                               grab_13_MP=5)
 
-                    # Grab a head id number from the db
-                    data = read_sheet.cell_value(ts15.name_row, ts15.name_column)
-                    head_id = dbfnc.find_head_number2(data)
-                    head_data_list.append(head_id)
-
-                    # write ts date
-                    head_data_list.append(my_date)
-
-                    # in time
-                    data = ""
-                    head_data_list.append(data)
-
-                    # out time
-                    data = ""
-                    head_data_list.append(data)
-
-                    # Grab event year
-                    evnt_yr = dbfnc.grabeventYR2(my_date)
-                    head_data_list.append(evnt_yr)
-
-                    # Grab Event ID
-                    data = ts15.ts_event_id(head_acct, my_date)
-                    head_data_list.append(data)
-
-                    # reg time, ot, dt
-                    data = 8
-                    head_data_list.append(data)
-
-                    data = 0
-                    head_data_list.append(data)
-
-                    data = 0
-                    head_data_list.append(data)
-
-                    # write accounting code
-                    head_data_list.append(head_acct)
-
-                    # showcall true/false
-                    myfnc.from_func_2_db(head_data_list, ts15.ts_blacks_call, read_sheet, r_row, 7)
-
-                    # Grab MP
-                    myfnc.from_func_2_db(head_data_list, ts15.ts_mp, read_sheet, r_row, 5)
-
-                    print(head_data_list)
-
+                    scraped_data_list = [cel for cel in stat_flg]
+                    data_list.extend(scraped_data_list)
+                    print(data_list)
                     # add this row to the df
                     print("adding to head df")
-                    my_dict = dict(zip(head_keys, head_data_list))
+                    my_dict = dict(zip(head_keys, data_list))
                     df_head = df_head.append(my_dict, ignore_index=True)
-
                     r_row += ts15.spaces_per_day
 
             # A loop to iterate through the time slots one at a time
@@ -328,71 +354,38 @@ def main():
                 r_col = ts15.start_data_col
 
                 if read_sheet.cell_type(r_row, r_col) != 0:
-                    # grab the data you want for more than one action
-                    my_date = ts15.ts_grab_date(read_sheet, r_row, 1)
-                    head_acct = ts15.ts_15_write_acct(read_sheet, r_row, 6)
-
                     # write shift number
-                    head_data_list = [next_head_num]
+                    data_list = [next_head_num]
                     next_head_num += 1
 
-                    # Grab a salaried head Alpha number from the db
-                    data = read_sheet.cell_value(ts15.name_row, ts15.name_column)
-                    myfnc.from_func_2_db(head_data_list, dbfnc.find_head_alpha_number2, data)
+                    head_hrs = fnc_spinner(read_sheet, r_row, ts15,
+                                           grab_01_head_alpha, grab_02_head_id, grab_03_date,
+                                           kris_fix_in, kris_fix_out, grab_06_evnt_yr,
+                                           grab_07_head_evnt_id, grab_08_reg, grab_09_ot,
+                                           grab_10_dt, grab_11_head_acct, grab_12_blacks,
+                                           grab_13_MP,
+                                           grab_01_head_alpha1=ts15.name_row, grab_01_head_alpha2=ts15.name_column,
+                                           grab_02_head_id1=ts15.name_row, grab_02_head_id2=ts15.name_column,
+                                           grab_03_date1=1,
+                                           kris_fix_in1=0, kris_fix_in2=ts15.name_row, kris_fix_in3=ts15.name_column,
+                                           kris_fix_out1=1, kris_fix_out2=ts15.name_row, kris_fix_out3=ts15.name_column,
+                                           grab_06_evnt_yr1=1,
+                                           grab_07_head_evnt_id1=6, grab_07_head_evnt_id2=1,
+                                           grab_08_reg1=2,
+                                           grab_09_ot1=3,
+                                           grab_10_dt1=4,
+                                           grab_11_head_acct1=6,
+                                           grab_12_blacks1=7,
+                                           grab_13_MP=5)
 
-                    # Grab a head id number from the db
-                    data = read_sheet.cell_value(ts15.name_row, ts15.name_column)
-                    head_id = dbfnc.find_head_number2(data)
-                    head_data_list.append(head_id)
-
-                    # write ts date
-                    head_data_list.append(my_date)
-
-                    # Grab in time w the kris fix
-                    if head_id == 3:
-                        myfnc.from_func_2_db(head_data_list, ts15.ts_15_kf_format, read_sheet, r_row, 0)
-                    else:
-                        myfnc.from_func_2_db(head_data_list, ts15.ts_write_time, read_sheet, r_row,0)
-
-                    # Grab out time w the kris fix
-                    if head_id == 3:
-                        myfnc.from_func_2_db(head_data_list, ts15.ts_15_kf_format, read_sheet, r_row, 1)
-                    else:
-                        myfnc.from_func_2_db(head_data_list, ts15.ts_write_time, read_sheet, r_row, 1)
-
-                    # Grab event year
-                    evnt_yr = dbfnc.grabeventYR2(my_date)
-                    head_data_list.append(evnt_yr)
-
-                    # Grab Event ID
-                    data = ts15.ts_event_id(head_acct, my_date)
-                    head_data_list.append(data)
-
-                    # grab reg time, ot, dt
-                    data = ts15.ts_grab_hrs(read_sheet, r_row, 2)
-                    head_data_list.append(data)
-
-                    data = ts15.ts_grab_hrs(read_sheet, r_row, 3)
-                    head_data_list.append(data)
-
-                    data = ts15.ts_grab_hrs(read_sheet, r_row, 4)
-                    head_data_list.append(data)
-
-                    # write accounting code
-                    head_data_list.append(head_acct)
-
-                    # showcall true/false
-                    myfnc.from_func_2_db(head_data_list, ts15.ts_blacks_call, read_sheet, r_row, 7)
-
-                    # Grab MP
-                    myfnc.from_func_2_db(head_data_list, ts15.ts_mp, read_sheet, r_row, 5)
-
-                    print(head_data_list)
-
+                    scraped_data_list = [cel for cel in head_hrs]
+                    data_list.extend(scraped_data_list)
+                    print(data_list)
                     # add this row to the df
                     print("adding to head df")
-                    my_dict = dict(zip(head_keys, head_data_list))
+                    my_dict = dict(zip(head_keys, data_list))
                     df_head = df_head.append(my_dict, ignore_index=True)
+
 
                 else:
                     print("no data in cel E" + str((r_row) + 1))  # move on to the next time slot

@@ -49,6 +49,7 @@ def connection(my_driver, my_server, my_db):
 # this query takes a "FirstName lastName" of a Casual Crew member and returns
 #  the numeric portion of an employee number
 def find_crew_number2(crew_name):
+    logger.info(f'the function find_crew_number2 recieved this argument: {crew_name}')
     with connection(cfg.my_driver, cfg.my_server, cfg.my_db) as conn:
         mylist = (str.split(crew_name))
 
@@ -61,7 +62,7 @@ def find_crew_number2(crew_name):
             my_record = (fname_query.fetchone())
             return my_record[0]
         except TypeError:
-            print("No first name found, checking preferred names...")
+            print("The find_crew_number2 method found no matching name, checking preferred names...")
             print()
             try:
                 pname_query = conn.execute("""
@@ -78,6 +79,7 @@ def find_crew_number2(crew_name):
 # this query takes a "FirstName lastName" of a Casual Crew member and returns
 # the Alhabetical portion of an employee number
 def find_crew_Alpha_number2(crew_name):
+    logger.info(f'the function find_crew_alpha_number2 recieved this argument: {crew_name}')
     with connection(cfg.my_driver, cfg.my_server, cfg.my_db) as conn:
         mylist = (str.split(crew_name))
 
@@ -90,7 +92,7 @@ def find_crew_Alpha_number2(crew_name):
             my_record = (fname_query.fetchone())
             return my_record[0]
         except TypeError:
-            print("No first name found, checking preferred names...")
+            print("The find_crew_Alpha_number2 method found no matching name, checking preferred names...")
             print()
             try:
                 pname_query = conn.execute("""
@@ -107,6 +109,7 @@ def find_crew_Alpha_number2(crew_name):
 # this query takes a "FirstName lastName" of a Salaried Head staff member and returns
 # the Alhabetical portion of an employee number
 def find_head_alpha_number2(head_name):
+    logger.info(f'the function find_head_alpha_number2 recieved this argument: {head_name}')
     with connection(cfg.my_driver, cfg.my_server, cfg.my_db) as conn:
         mylist = (str.split(head_name))
 
@@ -119,7 +122,7 @@ def find_head_alpha_number2(head_name):
             my_record = (fname_query.fetchone())
             return my_record[0]
         except TypeError:
-            print("No first name found, checking preferred names...")
+            print("The find_head_alpha_number2 method found no matching name, checking preferred names...")
             print()
             try:
                 pname_query = conn.execute("""
@@ -136,6 +139,7 @@ def find_head_alpha_number2(head_name):
 # this query takes a "FirstName lastName" of a Salaried Head Staff member and returns
 #  the numeric portion of an employee number
 def find_head_number2(head_name):
+    logger.info(f'the function find_head_number2 recieved this argument: {head_name}')
     with connection(cfg.my_driver, cfg.my_server, cfg.my_db) as conn:
         mylist = (str.split(head_name))
 
@@ -148,7 +152,7 @@ def find_head_number2(head_name):
             my_record = (fname_query.fetchone())
             return my_record[0]
         except TypeError:
-            print("No first name found, checking preferred names...")
+            print("The find_head_number2 method found no matching name, checking preferred names...")
             print()
             try:
                 pname_query = conn.execute("""
