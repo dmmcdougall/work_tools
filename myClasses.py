@@ -10,6 +10,9 @@ import re
 
 # imported from local directories
 
+class IterRegistry(type):
+    def __iter__(cls):
+        return iter(cls)
 
 class SalariedHead:
 

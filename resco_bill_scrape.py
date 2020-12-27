@@ -12,6 +12,7 @@ import xlrd
 # imported from third party repos
 
 # imported from local directories
+from bill_templates import MyBill
 import config as cfg
 import myFunctions as myfnc
 
@@ -29,72 +30,84 @@ logger.addHandler(file_handler)
 # these methods are each one component of one complete row of data
 # grab the month - this first one grabs from the info block
 def resco_0_mos(read_sheet, info_block, dummy2, dummy3):
-    data = read_sheet.cell_value(info_block+1, 0)
-    # logger.info(f'the resco_0_mos has grabbed {data} to parse')
-    shift_date_tuple = xlrd.xldate_as_tuple(data, 0)
-    # logger.info(f'the resco_0_mos has turned it into {shift_date_tuple}')
-    month = f"{shift_date_tuple[1]}"
-    return month
+    try:
+        data = read_sheet.cell_value(info_block+1, 0)
+        logger.info(f'the resco_0_mos has grabbed {data} to parse')
+        shift_date_tuple = xlrd.xldate_as_tuple(data, 0)
+        logger.info(f'the resco_0_mos has turned it into {shift_date_tuple}')
+        month = f"{shift_date_tuple[1]}"
+        return month
+    except:
+        data = "No Date data available"
+        return data
 
 # this one grabs from the date in the header.  good for prep time and inventory items
 def resco_0b_mos(read_sheet, dummy1, dummy2, dummy3):
-    data = read_sheet.cell_value(0, 10)
-    # logger.info(f'the resco_0b_mos has grabbed {data} to parse')
-    shift_date_tuple = xlrd.xldate_as_tuple(data, 0)
-    # logger.info(f'the resco_0b_mos has turned it into {shift_date_tuple}')
-    month = f"{shift_date_tuple[1]}"
-    return month
+    try:
+        data = read_sheet.cell_value(0, 10)
+        logger.info(f'the resco_0b_mos has grabbed {data} to parse')
+        shift_date_tuple = xlrd.xldate_as_tuple(data, 0)
+        logger.info(f'the resco_0b_mos has turned it into {shift_date_tuple}')
+        month = f"{shift_date_tuple[1]}"
+        return month
+    except:
+        data = "No Date data available"
+        return data
 
 # grab the date - this first one grabs from the info block
 def resco_1_date(read_sheet, info_block, dummy2, dummy3):
-    data = read_sheet.cell_value(info_block+1, 0)
-    # logger.info(f'the date_grabber has grabbed {data} to parse')
-    shift_date_tuple = xlrd.xldate_as_tuple(data, 0)
-    # logger.info(f'the date_grabber has turned it into {shift_date_tuple}')
-    day = f"{shift_date_tuple[2]}"
-    month = f"{shift_date_tuple[1]}"
-    year = f"{shift_date_tuple[0]}"
-    shift_date = day + '-' + month + '-' + year
-    return shift_date
+    try:
+        data = read_sheet.cell_value(info_block+1, 0)
+        logger.info(f'the date_grabber has grabbed {data} to parse')
+        shift_date_tuple = xlrd.xldate_as_tuple(data, 0)
+        logger.info(f'the date_grabber has turned it into {shift_date_tuple}')
+        day = f"{shift_date_tuple[2]}"
+        month = f"{shift_date_tuple[1]}"
+        year = f"{shift_date_tuple[0]}"
+        shift_date = day + '-' + month + '-' + year
+        return shift_date
+    except:
+        data = "No Date data available"
+        return data
 
 # this one grabs from the date in the header.  good for prep time and inventory items
 def resco_1b_date(read_sheet, dummy1, dummy2, dummy3):
-    data = read_sheet.cell_value(0, 10)
-    # logger.info(f'the date_grabber has grabbed {data} to parse')
-    shift_date_tuple = xlrd.xldate_as_tuple(data, 0)
-    # logger.info(f'the date_grabber has turned it into {shift_date_tuple}')
-    day = f"{shift_date_tuple[2]}"
-    month = f"{shift_date_tuple[1]}"
-    year = f"{shift_date_tuple[0]}"
-    shift_date = day + '-' + month + '-' + year
-    return shift_date
+    try:
+        data = read_sheet.cell_value(0, 10)
+        logger.info(f'the date_grabber has grabbed {data} to parse')
+        shift_date_tuple = xlrd.xldate_as_tuple(data, 0)
+        logger.info(f'the date_grabber has turned it into {shift_date_tuple}')
+        day = f"{shift_date_tuple[2]}"
+        month = f"{shift_date_tuple[1]}"
+        year = f"{shift_date_tuple[0]}"
+        shift_date = day + '-' + month + '-' + year
+        return shift_date
+    except:
+        data = "No Date data available"
+        return data
 
 # grab the in time of a labour call
 def resco_2_IN(read_sheet, info_block, dummy2, dummy3):
     data = read_sheet.cell_value(info_block, 0)
-    if data == 'Strike':
-        return data
-    elif data == 'JSL Strike':
+    if "Strike" in data:
         return data
     else:
-        #logger.info(f'the start_time has grabbed {old} to parse')
+        logger.info(f'the start_time has grabbed {data} to parse')
         data = read_sheet.cell_value(info_block, 0)
         new = data.split('-')
         new2 = new[0].split()
-        # logger.info(f'the start_time has turned it into {new2}')
+        logger.info(f'the start_time has turned it into {new2}')
         return new2[-1]
 
 # grab the out time of a labour call
 def resco_3_OUT(read_sheet, info_block, dummy2, dummy3):
     data = read_sheet.cell_value(info_block, 0)
-    if data == 'Strike':
-        return data
-    elif data == 'JSL Strike':
+    if "Strike" in data:
         return data
     else:
-        # logger.info(f'the end_time has grabbed {old} to parse')
+        logger.info(f'the end_time has grabbed {data} to parse')
         new = data.rsplit('-')
-        # logger.info(f'the end_time has turned it into {new}')
+        logger.info(f'the end_time has turned it into {new}')
         return new[1]
 
 # create a payee
@@ -105,9 +118,9 @@ def resco_4_payee(dummy, dummy1, dummy2, dummy3):
 # what type of call is it Setup, Strike...- this first one grabs from the info block
 def resco_5_type(read_sheet, info_block, dummy2, dummy3):
     data = read_sheet.cell_value(info_block, 0)
-    # logger.info(f'the grab_call_type has grabbed {data} to parse')
+    logger.info(f'the grab_call_type has grabbed {data} to parse')
     call = data.rsplit(' ', 1)
-    # logger.info(f'the grab_call_type has turned it into {call}')
+    logger.info(f'the grab_call_type has turned it into {call}')
     return call[0]
 
 # this one is only for the preptime loop
@@ -150,7 +163,9 @@ def resco_12_hrs(read_sheet, dummy1, row, col):
 # subtotal = unit hrs * rate
 def resco_13_subtotal(read_sheet, dummy1, row, col):
     hrs_qty = read_sheet.cell_value(row, col)
+    logger.info(f'hrs_qty = {hrs_qty}')
     rate_price = read_sheet.cell_value(row, col + 1)
+    logger.info(f'rate_price = {rate_price}')
     return hrs_qty * rate_price
 
 # 14 is NULL
@@ -184,6 +199,11 @@ def main():
     # these are required for the row_scrapper
     dummy, dummy1, dummy2, dummy3 = 0, 0, 0, 0
 
+    # these are the bill instances
+    # version_name, check, prep_row, first_infoblock_row, first_data_block_row, mp_row)
+    bill1 = MyBill('bill_1819_version6', "Meal Penalty", 95, 102, 104, 60)
+    bill2 = MyBill('bill_1819_version5', "Long & McQuade Rental", 81, 88, 90, 43)
+
     # Creating empty dataframes with column names only
     df_bill_data = pd.DataFrame(columns=col_headers)
 
@@ -206,187 +226,194 @@ def main():
         read_book = xlrd.open_workbook(read_file)
         read_sheet = read_book.sheet_by_name('Entry Form')
 
-        # the prep time grab
-        # reg time
-        logger.debug(f"Entering Prep Time Reg")
-        r_row = 95
-        col = 1
-        for i in range(2):
-            logger.debug(f"r_row Now = {r_row}")
-            units = read_sheet.cell_value(r_row, col)
+        # start with this, let's find a cel unique to each template and save the data.
+        checker = read_sheet.cell_value(60,0)
 
-            if units !='':
-                prep_time_reg = myfnc.row_scrapper(read_sheet, dummy, r_row, col,
-                                                   resco_0b_mos, resco_1b_date, resco_x_NULL,
-                                                   resco_x_NULL, resco_4_payee, resco_5b_type,
-                                                   resco_6_resource, resco_7_description, resco_8_unitprice,
-                                                   resco_x_NULL, resco_x_NULL, resco_x_NULL,
-                                                   resco_12_hrs, resco_13_subtotal, resco_x_NULL,
-                                                   resco_15_total)
+        for bill_template in MyBill._registry:
+            if bill_template.check == checker:
+               print(f"this is the {bill_template.version_name} template")
+               # the prep time grab
+               # reg time
+               logger.debug(f"Entering Prep Time Reg")
+               r_row = bill_template.prep_row
+               col = 1
+               for i in range(2):
+                   logger.debug(f"r_row Now = {r_row}")
+                   units = read_sheet.cell_value(r_row, col)
 
-                row_data_list = [cel for cel in prep_time_reg]
-                print(row_data_list)
-                my_dict = dict(zip(col_headers, row_data_list))
-                df_bill_data = df_bill_data.append(my_dict, ignore_index=True)
-                r_row += 1
-            else:
-                r_row += 1
-        # this loop covers the first two ot rows, FULLTIME and CASUAL
-        logger.debug(f"Entering Prep Time OT")
-        r_row = 95
-        for i in range(2):
-            logger.debug(f"r_row Now = {r_row}")
-            col = 5 # this is the location of the ot time data
-            units = read_sheet.cell_value(r_row, col)
-            if units !='':
-                prep_time_ot = myfnc.row_scrapper(read_sheet, dummy, r_row, col,
-                                                  resco_0b_mos, resco_1b_date, resco_x_NULL,
-                                                  resco_x_NULL, resco_4_payee, resco_5b_type,
-                                                  resco_6_resource, resco_7_description, resco_8_unitprice,
-                                                  resco_x_NULL, resco_x_NULL, resco_x_NULL,
-                                                  resco_12_hrs, resco_13_subtotal, resco_x_NULL,
-                                                  resco_15_total)
-
-                row_data_list = [cel for cel in prep_time_ot]
-                print(row_data_list)
-                my_dict = dict(zip(col_headers, row_data_list))
-                df_bill_data = df_bill_data.append(my_dict, ignore_index=True)
-                r_row += 1
-            else:
-                r_row += 1
-
-        # this loop covers the first two dt rows, FULLTIME and CASUAL
-        logger.debug(f"Entering Prep Time DT")
-        r_row = 95
-        for i in range(2):
-            logger.debug(f"r_row Now = {r_row}")
-            col = 9 # this is the location of the dt time data
-            units = read_sheet.cell_value(r_row, col)
-            if units !='':
-                prep_time_dt = myfnc.row_scrapper(read_sheet, dummy, r_row, col,
-                                                  resco_0b_mos, resco_1b_date, resco_x_NULL,
-                                                  resco_x_NULL, resco_4_payee, resco_5b_type,
-                                                  resco_6_resource, resco_7_description, resco_8_unitprice,
-                                                  resco_x_NULL, resco_x_NULL, resco_x_NULL,
-                                                  resco_12_hrs, resco_13_subtotal, resco_x_NULL,
-                                                  resco_15_total)
-
-                row_data_list = [cel for cel in prep_time_dt]
-                print(row_data_list)
-                my_dict = dict(zip(col_headers, row_data_list))
-                df_bill_data = df_bill_data.append(my_dict, ignore_index=True)
-                r_row += 1
-            else:
-                r_row += 1
-                
-        # MP
-        logger.debug(f"Entering MP")
-        r_row = 60
-        col = 2
-        # this list of arguments is for the row_scrapper function
-        units = read_sheet.cell_value(r_row, col)
-        if units != '':
-            mp = myfnc.row_scrapper(read_sheet, dummy, r_row, col,
-                                    resco_0b_mos, resco_1b_date, resco_x_NULL,
-                                    resco_x_NULL, resco_4_payee, resco_x_NULL,
-                                    resco_6b_resource, resco_7_description, resco_8_unitprice,
-                                    resco_x_NULL, resco_x_NULL, resco_11b_qty,
-                                    resco_x_NULL, resco_13_subtotal, resco_x_NULL,
-                                    resco_15_total)
-
-            row_data_list = [cel for cel in mp]
-            print(row_data_list)
-            my_dict = dict(zip(col_headers, row_data_list))
-            df_bill_data = df_bill_data.append(my_dict, ignore_index=True)
-
-        # Now we come to the call blocks. 
-        # 
-        # first block starts at A103, last block starts at A1192
-        # blocks are 33 rows wide, useful data is 22 rows wide
-
-        start_r_row = 104 # tis is the first row of each call block
-        info_block = 102 # this is where the data and call info are
-
-        # this is the loop over the differnt call blocks
-        for call_loop in range(33):
-            logger.debug(f"r_row Now = {r_row}")
-            r_row = start_r_row + info_block - 102
-            # this is the check for running out of calls
-            if read_sheet.cell_value(info_block, 0) == 'CALL':
-                break
-            else:
-                # this is a loop over the rows within a call block
-                # reg time
-                logger.debug(f"Entering callblock Reg")
-                for crew_loop in range(18):
-                    col = 1
-                    units = read_sheet.cell_value(r_row, col)
-                    if units != '':
-                        call_time_reg = myfnc.row_scrapper(read_sheet, info_block, r_row, col,
-                                                           resco_0_mos, resco_1_date, resco_2_IN,
-                                                           resco_3_OUT, resco_4_payee, resco_5_type,
-                                                           resco_6_resource, resco_7_description, resco_8_unitprice,
-                                                           resco_x_NULL, resco_x_NULL, resco_x_NULL,
-                                                           resco_12_hrs, resco_13_subtotal, resco_x_NULL,
-                                                           resco_15_total)
-
-                        row_data_list = [cel for cel in call_time_reg]
-                        print(row_data_list)
-                        my_dict = dict(zip(col_headers, row_data_list))
-                        df_bill_data = df_bill_data.append(my_dict, ignore_index=True)
-                        r_row += 1
-                    else:
-                        r_row += 1
-                # ot
-                logger.debug(f"Entering callblock OT")
-                r_row = start_r_row + info_block - 102
-                for i in range(18):
-                    logger.debug(f"r_row Now = {r_row}")
-                    col = 5
-                    units = read_sheet.cell_value(r_row, col)
-                    if units != '':
-                        call_time_ot = myfnc.row_scrapper(read_sheet, info_block, r_row, col,
-                                                          resco_0_mos, resco_1_date, resco_2_IN,
-                                                          resco_3_OUT, resco_4_payee, resco_5_type,
+                   if units !='':
+                       prep_time_reg = myfnc.row_scrapper(read_sheet, dummy, r_row, col,
+                                                          resco_0b_mos, resco_1b_date, resco_x_NULL,
+                                                          resco_x_NULL, resco_4_payee, resco_5b_type,
                                                           resco_6_resource, resco_7_description, resco_8_unitprice,
                                                           resco_x_NULL, resco_x_NULL, resco_x_NULL,
                                                           resco_12_hrs, resco_13_subtotal, resco_x_NULL,
                                                           resco_15_total)
 
-                        row_data_list = [cel for cel in call_time_ot]
-                        print(row_data_list)
-                        my_dict = dict(zip(col_headers, row_data_list))
-                        df_bill_data = df_bill_data.append(my_dict, ignore_index=True)
-                        r_row += 1
-                    else:
-                        r_row += 1
-                # dt
-                logger.debug(f"Entering callblock DT")
-                r_row = start_r_row + info_block - 102
-                for i in range(18):
+                       row_data_list = [cel for cel in prep_time_reg]
+                       print(row_data_list)
+                       my_dict = dict(zip(col_headers, row_data_list))
+                       df_bill_data = df_bill_data.append(my_dict, ignore_index=True)
+                       r_row += 1
+                   else:
+                       r_row += 1
+               # this loop covers the first two ot rows, FULLTIME and CASUAL
+               logger.debug(f"Entering Prep Time OT")
+               r_row = bill_template.prep_row
+               for i in range(2):
                     logger.debug(f"r_row Now = {r_row}")
-                    col = 9
+                    col = 5 # this is the location of the ot time data
                     units = read_sheet.cell_value(r_row, col)
-                    if units != '':
-                        call_time_dt = myfnc.row_scrapper(read_sheet, info_block, r_row, col,
-                                                          resco_0_mos, resco_1_date, resco_2_IN,
-                                                          resco_3_OUT, resco_4_payee, resco_5_type,
+                    if units !='':
+                        prep_time_ot = myfnc.row_scrapper(read_sheet, dummy, r_row, col,
+                                                          resco_0b_mos, resco_1b_date, resco_x_NULL,
+                                                          resco_x_NULL, resco_4_payee, resco_5b_type,
                                                           resco_6_resource, resco_7_description, resco_8_unitprice,
                                                           resco_x_NULL, resco_x_NULL, resco_x_NULL,
                                                           resco_12_hrs, resco_13_subtotal, resco_x_NULL,
                                                           resco_15_total)
 
-                        row_data_list = [cel for cel in call_time_dt]
+                        row_data_list = [cel for cel in prep_time_ot]
                         print(row_data_list)
                         my_dict = dict(zip(col_headers, row_data_list))
                         df_bill_data = df_bill_data.append(my_dict, ignore_index=True)
                         r_row += 1
                     else:
                         r_row += 1
-                    
-            info_block+=33
 
-        print("-----------------------------------------------------------------------------------")
+               # this loop covers the first two dt rows, FULLTIME and CASUAL
+               logger.debug(f"Entering Prep Time DT")
+               r_row = bill_template.prep_row
+               for i in range(2):
+                    logger.debug(f"r_row Now = {r_row}")
+                    col = 9 # this is the location of the dt time data
+                    units = read_sheet.cell_value(r_row, col)
+                    if units !='':
+                        prep_time_dt = myfnc.row_scrapper(read_sheet, dummy, r_row, col,
+                                                          resco_0b_mos, resco_1b_date, resco_x_NULL,
+                                                          resco_x_NULL, resco_4_payee, resco_5b_type,
+                                                          resco_6_resource, resco_7_description, resco_8_unitprice,
+                                                          resco_x_NULL, resco_x_NULL, resco_x_NULL,
+                                                          resco_12_hrs, resco_13_subtotal, resco_x_NULL,
+                                                          resco_15_total)
+
+                        row_data_list = [cel for cel in prep_time_dt]
+                        print(row_data_list)
+                        my_dict = dict(zip(col_headers, row_data_list))
+                        df_bill_data = df_bill_data.append(my_dict, ignore_index=True)
+                        r_row += 1
+                    else:
+                        r_row += 1
+
+               # MP
+               logger.debug(f"Entering MP")
+               r_row = bill_template.mp_row
+               col = 2
+               # this list of arguments is for the row_scrapper function
+               units = read_sheet.cell_value(r_row, col)
+               if units != '':
+                    mp = myfnc.row_scrapper(read_sheet, dummy, r_row, col,
+                                            resco_0b_mos, resco_1b_date, resco_x_NULL,
+                                            resco_x_NULL, resco_4_payee, resco_x_NULL,
+                                            resco_6b_resource, resco_7_description, resco_8_unitprice,
+                                            resco_x_NULL, resco_x_NULL, resco_11b_qty,
+                                            resco_x_NULL, resco_13_subtotal, resco_x_NULL,
+                                            resco_15_total)
+
+                    row_data_list = [cel for cel in mp]
+                    print(row_data_list)
+                    my_dict = dict(zip(col_headers, row_data_list))
+                    df_bill_data = df_bill_data.append(my_dict, ignore_index=True)
+
+               # Now we come to the call blocks.
+               #
+               # first block starts at A103, last block starts at A1192
+               # blocks are 33 rows wide, useful data is 22 rows wide
+
+               start_r_row = bill_template.first_data_block_row
+               # print(f'start row is {bill_template.first_data_block_row}')
+               info_block = bill_template.first_infoblock_row # this is where the data and call info are
+
+               # this is the loop over the differnt call blocks
+               for call_loop in range(33):
+                    logger.debug(f"r_row Now = {r_row}")
+                    r_row = start_r_row + info_block - bill_template.first_infoblock_row
+                    # this is the check for running out of calls
+                    if read_sheet.cell_value(info_block, 0) == 'CALL':
+                        break
+                    else:
+                        # this is a loop over the rows within a call block
+                        # reg time
+                        logger.debug(f"Entering callblock Reg")
+                        for crew_loop in range(18):
+                            col = 1
+                            units = read_sheet.cell_value(r_row, col)
+                            if units != '':
+                                call_time_reg = myfnc.row_scrapper(read_sheet, info_block, r_row, col,
+                                                                   resco_0_mos, resco_1_date, resco_2_IN,
+                                                                   resco_3_OUT, resco_4_payee, resco_5_type,
+                                                                   resco_6_resource, resco_7_description, resco_8_unitprice,
+                                                                   resco_x_NULL, resco_x_NULL, resco_x_NULL,
+                                                                   resco_12_hrs, resco_13_subtotal, resco_x_NULL,
+                                                                   resco_15_total)
+
+                                row_data_list = [cel for cel in call_time_reg]
+                                print(row_data_list)
+                                my_dict = dict(zip(col_headers, row_data_list))
+                                df_bill_data = df_bill_data.append(my_dict, ignore_index=True)
+                                r_row += 1
+                            else:
+                                r_row += 1
+                        # ot
+                        logger.debug(f"Entering callblock OT")
+                        r_row = start_r_row + info_block - bill_template.first_infoblock_row
+                        for i in range(18):
+                            logger.debug(f"r_row Now = {r_row}")
+                            col = 5
+                            units = read_sheet.cell_value(r_row, col)
+                            if units != '':
+                                call_time_ot = myfnc.row_scrapper(read_sheet, info_block, r_row, col,
+                                                                  resco_0_mos, resco_1_date, resco_2_IN,
+                                                                  resco_3_OUT, resco_4_payee, resco_5_type,
+                                                                  resco_6_resource, resco_7_description, resco_8_unitprice,
+                                                                  resco_x_NULL, resco_x_NULL, resco_x_NULL,
+                                                                  resco_12_hrs, resco_13_subtotal, resco_x_NULL,
+                                                                  resco_15_total)
+
+                                row_data_list = [cel for cel in call_time_ot]
+                                print(row_data_list)
+                                my_dict = dict(zip(col_headers, row_data_list))
+                                df_bill_data = df_bill_data.append(my_dict, ignore_index=True)
+                                r_row += 1
+                            else:
+                                r_row += 1
+                        # dt
+                        logger.debug(f"Entering callblock DT")
+                        r_row = start_r_row + info_block - bill_template.first_infoblock_row
+                        for i in range(18):
+                            logger.debug(f"r_row Now = {r_row}")
+                            col = 9
+                            units = read_sheet.cell_value(r_row, col)
+                            if units != '':
+                                call_time_dt = myfnc.row_scrapper(read_sheet, info_block, r_row, col,
+                                                                  resco_0_mos, resco_1_date, resco_2_IN,
+                                                                  resco_3_OUT, resco_4_payee, resco_5_type,
+                                                                  resco_6_resource, resco_7_description, resco_8_unitprice,
+                                                                  resco_x_NULL, resco_x_NULL, resco_x_NULL,
+                                                                  resco_12_hrs, resco_13_subtotal, resco_x_NULL,
+                                                                  resco_15_total)
+
+                                row_data_list = [cel for cel in call_time_dt]
+                                print(row_data_list)
+                                my_dict = dict(zip(col_headers, row_data_list))
+                                df_bill_data = df_bill_data.append(my_dict, ignore_index=True)
+                                r_row += 1
+                            else:
+                                r_row += 1
+
+                    info_block+=33
+
+               print("-----------------------------------------------------------------------------------")
     else:
         print()
         print("We are done")

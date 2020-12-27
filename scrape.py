@@ -16,14 +16,13 @@ import xlrd
 # imported from local directories
 import config as cfg
 import databaseFunctions as dbfnc
-import myFunctions as myfnc
 from timesheet import TS2015, TS2011, TSCasual
 
 # TODO: make a generator loop
 
 # logging info
 logger = logging.getLogger(__name__)
-logger.setLevel(logging.INFO) # change to DEBUG when required
+logger.setLevel(logging.DEBUG) # change to DEBUG when required
 
 formatter = logging.Formatter('%(asctime)s:%(name)s:%(levelname)s:%(message)s')
 
