@@ -41,6 +41,7 @@ def resco_0_mos(read_sheet, info_block, dummy2, dummy3):
         data = "No Date data available"
         return data
 
+# TODO: Jesse wants new date format
 # this one grabs from the date in the header.  good for prep time and inventory items
 def resco_0b_mos(read_sheet, dummy1, dummy2, dummy3):
     try:
@@ -86,6 +87,7 @@ def resco_1b_date(read_sheet, dummy1, dummy2, dummy3):
         data = "No Date data available"
         return data
 
+# TODO: Jesse want new time format
 # grab the in time of a labour call
 def resco_2_IN(read_sheet, info_block, dummy2, dummy3):
     data = read_sheet.cell_value(info_block, 0)
@@ -188,6 +190,8 @@ def resco_x_NULL(dummy, dummy1, dummy2, dummy3):
 
 
 def main():
+    # TODO: jesse wants columns re-organized
+    # TODO: jesse wants new column modifier
     # set up the column headers in lists to receive the scraped data
     col_headers = ['month', 'date', 'IN_time',
                    'OUT_time', 'Payee', 'Type',
@@ -241,7 +245,7 @@ def main():
                    logger.debug(f"r_row Now = {r_row}")
                    units = read_sheet.cell_value(r_row, col)
 
-                   if units !='':
+                   if units !='' and units != 0:
                        prep_time_reg = myfnc.row_scrapper(read_sheet, dummy, r_row, col,
                                                           resco_0b_mos, resco_1b_date, resco_x_NULL,
                                                           resco_x_NULL, resco_4_payee, resco_5b_type,
@@ -264,7 +268,7 @@ def main():
                     logger.debug(f"r_row Now = {r_row}")
                     col = 5 # this is the location of the ot time data
                     units = read_sheet.cell_value(r_row, col)
-                    if units !='':
+                    if units !='' and units != 0:
                         prep_time_ot = myfnc.row_scrapper(read_sheet, dummy, r_row, col,
                                                           resco_0b_mos, resco_1b_date, resco_x_NULL,
                                                           resco_x_NULL, resco_4_payee, resco_5b_type,
@@ -288,7 +292,7 @@ def main():
                     logger.debug(f"r_row Now = {r_row}")
                     col = 9 # this is the location of the dt time data
                     units = read_sheet.cell_value(r_row, col)
-                    if units !='':
+                    if units !='' and units != 0:
                         prep_time_dt = myfnc.row_scrapper(read_sheet, dummy, r_row, col,
                                                           resco_0b_mos, resco_1b_date, resco_x_NULL,
                                                           resco_x_NULL, resco_4_payee, resco_5b_type,
@@ -308,10 +312,15 @@ def main():
                # MP
                logger.debug(f"Entering MP")
                r_row = bill_template.mp_row
-               col = 2
+
+               if bill_template.version_name == "bill_1819_version6":
+                   col =2
+               else:
+                   col = 1
+
                # this list of arguments is for the row_scrapper function
                units = read_sheet.cell_value(r_row, col)
-               if units != '':
+               if units !='' and units != 0:
                     mp = myfnc.row_scrapper(read_sheet, dummy, r_row, col,
                                             resco_0b_mos, resco_1b_date, resco_x_NULL,
                                             resco_x_NULL, resco_4_payee, resco_x_NULL,
@@ -348,7 +357,7 @@ def main():
                         for crew_loop in range(18):
                             col = 1
                             units = read_sheet.cell_value(r_row, col)
-                            if units != '':
+                            if units !='' and units != 0:
                                 call_time_reg = myfnc.row_scrapper(read_sheet, info_block, r_row, col,
                                                                    resco_0_mos, resco_1_date, resco_2_IN,
                                                                    resco_3_OUT, resco_4_payee, resco_5_type,
@@ -371,7 +380,7 @@ def main():
                             logger.debug(f"r_row Now = {r_row}")
                             col = 5
                             units = read_sheet.cell_value(r_row, col)
-                            if units != '':
+                            if units !='' and units != 0:
                                 call_time_ot = myfnc.row_scrapper(read_sheet, info_block, r_row, col,
                                                                   resco_0_mos, resco_1_date, resco_2_IN,
                                                                   resco_3_OUT, resco_4_payee, resco_5_type,
@@ -394,7 +403,7 @@ def main():
                             logger.debug(f"r_row Now = {r_row}")
                             col = 9
                             units = read_sheet.cell_value(r_row, col)
-                            if units != '':
+                            if units !='' and units != 0:
                                 call_time_dt = myfnc.row_scrapper(read_sheet, info_block, r_row, col,
                                                                   resco_0_mos, resco_1_date, resco_2_IN,
                                                                   resco_3_OUT, resco_4_payee, resco_5_type,
@@ -421,7 +430,18 @@ def main():
     print()
     print("All done! Time to save to...")
     print(f"{cfg.desktop_dir}\cpo_bills_records.xls")
-    df_bill_data.to_excel(f'{cfg.desktop_dir}\cpo_bills_records.xlsx', index=False)
+    try:
+        df_bill_data.to_excel(f'{cfg.desktop_dir}\cpo_bills_records.xlsx', index=False)
+    except:
+        print()
+        print("Uh oh.........")
+        print("The cpo_bills_records.xslx is blocked.  Do you have it open?")
+        print("I'll just wait while you close it...")
+        input()
+        df_bill_data.to_excel(f'{cfg.desktop_dir}\cpo_bills_records.xlsx', index=False)
+        print()
+        print("That did it.  Closing everything up")
+
 
 if __name__ == '__main__':
     logger.info('~~~The fiile resco_bill_scrape.py has started~~~')

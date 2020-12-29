@@ -18,7 +18,6 @@ import config as cfg
 import databaseFunctions as dbfnc
 from timesheet import TS2015, TS2011, TSCasual
 
-# TODO: make a generator loop
 
 # logging info
 logger = logging.getLogger(__name__)
@@ -229,7 +228,6 @@ def main():
 
             print("This 2011 loop was deleted during the python2 to python3 upgrade")
             print("You'll probably want to re-write this 2011 loop someday")
-            # TODO :write the 2011 loop
 
         elif read_sheet.cell_value(14, 0) == 'SUNDAY':
             print("This timesheet belongs to a casual. Begin data scrape")
