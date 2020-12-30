@@ -95,9 +95,9 @@ def resco_2_IN(read_sheet, info_block, dummy2, dummy3):
         logger.info(f'the start_time has grabbed {data} to parse')
         data = read_sheet.cell_value(info_block, 0)
         data_in_list = data.split('-')
-        just_time = data_in_list[0].split()
+        junk_w_intime = data_in_list[0].split()
         # logger.info(f'the start_time has turned it into {just_time}')
-        time_list = list(just_time)
+        time_list = list(junk_w_intime[-1])
         if len(time_list) == 3:
             time_w_colon = ''.join(time_list[0]) + ":" + ''.join(time_list[1:3])
             return time_w_colon
@@ -106,9 +106,8 @@ def resco_2_IN(read_sheet, info_block, dummy2, dummy3):
                 time_w_colon = ''.join(time_list[1]) + ":" + ''.join(time_list[2:4])
                 return time_w_colon
             else:
-                better = ''.join(time_list[0:2]) + ":" + ''.join(time_list[2:4])
+                time_w_colon = ''.join(time_list[0:2]) + ":" + ''.join(time_list[2:4])
                 return time_w_colon
-
 
 # grab the out time of a labour call
 def resco_3_OUT(read_sheet, info_block, dummy2, dummy3):
@@ -117,9 +116,9 @@ def resco_3_OUT(read_sheet, info_block, dummy2, dummy3):
         return data
     else:
         logger.info(f'the end_time has grabbed {data} to parse')
-        just_time = data.rsplit('-')
-        logger.info(f'the end_time has turned it into {just_time}')
-        time_list = list(just_time)
+        junk_w_outtime = data.rsplit('-')
+        # logger.info(f'the end_time has turned it into {just_time}')
+        time_list = list(junk_w_outtime[1])
         if len(time_list) == 3:
             time_w_colon = ''.join(time_list[0]) + ":" + ''.join(time_list[1:3])
             return time_w_colon
@@ -128,7 +127,7 @@ def resco_3_OUT(read_sheet, info_block, dummy2, dummy3):
                 time_w_colon = ''.join(time_list[1]) + ":" + ''.join(time_list[2:4])
                 return time_w_colon
             else:
-                better = ''.join(time_list[0:2]) + ":" + ''.join(time_list[2:4])
+                time_w_colon = ''.join(time_list[0:2]) + ":" + ''.join(time_list[2:4])
                 return time_w_colon
 
 # create a payee
@@ -149,19 +148,40 @@ def resco_5b_type(dummy, dummy1, dummy2, dummy3):
     data = "PREP TIME"
     return data
 
+# venue ops definition of call
+def resco_6_resource(read_sheet, dummy1, row, col):
+    data = read_sheet.cell_value(row, 0)
+    charge_out = read_sheet.cell_value(row, col +1)
+    if charge_out == 42:
+        return "JSCH Hand - Reg Time"
+    elif charge_out == 63:
+        return "JSCH Hand - OT"
+    elif charge_out == 84:
+        return "JSCH Hand - DT"
+    elif charge_out == 48:
+        if 'CASUAL' in data:
+            return "JSCH Lead - Reg Time"
+        else:
+            return "JSCH Head - Reg Time"
+    elif charge_out == 72:
+        if 'CASUAL' in data:
+            return "JSCH Lead - OT"
+        else:
+            return "JSCH Head - OT"
+    elif charge_out == 96:
+        if 'CASUAL' in data:
+            return "JSCH Lead - DT"
+        else:
+            return "JSCH Head - DT"
+
 # who is it, FULLTIME< CASUAUL etc...
-def resco_6_resource(read_sheet, dummy1, row, dummy3):
+def resco_7_description(read_sheet, dummy1, row, dummy3):
     data = read_sheet.cell_value(row, 0)
     return data
 
 # resource for an MP
-def resco_6b_resource(dummy, dummy1, dummy2, dummy3):
+def resco_7b_description(dummy, dummy1, dummy2, dummy3):
     data = "Meal Penalty"
-    return data
-
-# project title
-def resco_7_description(read_sheet, dummy1, dummy2, dummy3):
-    data = read_sheet.cell_value(0, 0)
     return data
 
 # grab cost per hour/unit
@@ -197,6 +217,11 @@ def resco_15_total(read_sheet, dummy1,row, col):
     rate_price = read_sheet.cell_value(row, col +1)
     return hrs_qty*rate_price
 
+# project title
+def resco_16_title(read_sheet, dummy1, dummy2, dummy3):
+    data = read_sheet.cell_value(0, 0)
+    return data
+
 # just grab it and return it
 def resco_x_generic(read_sheet, dummy1, row, col):
     data = read_sheet.cell_value(row, col)
@@ -217,7 +242,7 @@ def main():
                    'resource_name', 'description', 'unit_price',
                    'discount', 'adj_price', 'qty',
                    'unit_hrs', 'subtotal', 'gst',
-                   'total']
+                   'total', 'Title']
 
     # these are required for the row_scrapper
     dummy, dummy1, dummy2, dummy3 = 0, 0, 0, 0
@@ -246,7 +271,7 @@ def main():
         logger.debug("------------------------------------------------------------------------------------------------")
         read_file = (cfg.cpo_bill_dir + '\\' + read_list[i])
         print(read_file)
-        read_book = xlrd.open_workbook(read_file)
+        read_book = xlrd.open_workbook(read_file) # TODO: fix this permission denied error with a try block
         read_sheet = read_book.sheet_by_name('Entry Form')
 
         # start with this, let's find a cel unique to each template and save the data.
@@ -271,7 +296,7 @@ def main():
                                                           resco_6_resource, resco_7_description, resco_8_unitprice,
                                                           resco_x_NULL, resco_x_NULL, resco_x_NULL,
                                                           resco_12_hrs, resco_13_subtotal, resco_x_NULL,
-                                                          resco_15_total)
+                                                          resco_15_total, resco_16_title)
 
                        row_data_list = [cel for cel in prep_time_reg]
                        print(row_data_list)
@@ -294,7 +319,7 @@ def main():
                                                           resco_6_resource, resco_7_description, resco_8_unitprice,
                                                           resco_x_NULL, resco_x_NULL, resco_x_NULL,
                                                           resco_12_hrs, resco_13_subtotal, resco_x_NULL,
-                                                          resco_15_total)
+                                                          resco_15_total,resco_16_title)
 
                         row_data_list = [cel for cel in prep_time_ot]
                         print(row_data_list)
@@ -318,7 +343,7 @@ def main():
                                                           resco_6_resource, resco_7_description, resco_8_unitprice,
                                                           resco_x_NULL, resco_x_NULL, resco_x_NULL,
                                                           resco_12_hrs, resco_13_subtotal, resco_x_NULL,
-                                                          resco_15_total)
+                                                          resco_15_total,resco_16_title)
 
                         row_data_list = [cel for cel in prep_time_dt]
                         print(row_data_list)
@@ -343,10 +368,10 @@ def main():
                     mp = myfnc.row_scrapper(read_sheet, dummy, r_row, col,
                                             resco_0b_mos, resco_1b_date, resco_x_NULL,
                                             resco_x_NULL, resco_4_payee, resco_x_NULL,
-                                            resco_6b_resource, resco_7_description, resco_8_unitprice,
+                                            resco_6_resource, resco_7b_description, resco_8_unitprice,
                                             resco_x_NULL, resco_x_NULL, resco_11b_qty,
                                             resco_x_NULL, resco_13_subtotal, resco_x_NULL,
-                                            resco_15_total)
+                                            resco_15_total,resco_16_title)
 
                     row_data_list = [cel for cel in mp]
                     print(row_data_list)
@@ -383,7 +408,7 @@ def main():
                                                                    resco_6_resource, resco_7_description, resco_8_unitprice,
                                                                    resco_x_NULL, resco_x_NULL, resco_x_NULL,
                                                                    resco_12_hrs, resco_13_subtotal, resco_x_NULL,
-                                                                   resco_15_total)
+                                                                   resco_15_total,resco_16_title)
 
                                 row_data_list = [cel for cel in call_time_reg]
                                 print(row_data_list)
@@ -406,7 +431,7 @@ def main():
                                                                   resco_6_resource, resco_7_description, resco_8_unitprice,
                                                                   resco_x_NULL, resco_x_NULL, resco_x_NULL,
                                                                   resco_12_hrs, resco_13_subtotal, resco_x_NULL,
-                                                                  resco_15_total)
+                                                                  resco_15_total,resco_16_title)
 
                                 row_data_list = [cel for cel in call_time_ot]
                                 print(row_data_list)
@@ -429,7 +454,7 @@ def main():
                                                                   resco_6_resource, resco_7_description, resco_8_unitprice,
                                                                   resco_x_NULL, resco_x_NULL, resco_x_NULL,
                                                                   resco_12_hrs, resco_13_subtotal, resco_x_NULL,
-                                                                  resco_15_total)
+                                                                  resco_15_total,resco_16_title)
 
                                 row_data_list = [cel for cel in call_time_dt]
                                 print(row_data_list)
