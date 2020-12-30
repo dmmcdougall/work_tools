@@ -41,7 +41,6 @@ def resco_0_mos(read_sheet, info_block, dummy2, dummy3):
         data = "No Date data available"
         return data
 
-# TODO: Jesse wants new date format
 # this one grabs from the date in the header.  good for prep time and inventory items
 def resco_0b_mos(read_sheet, dummy1, dummy2, dummy3):
     try:
@@ -65,7 +64,7 @@ def resco_1_date(read_sheet, info_block, dummy2, dummy3):
         day = f"{shift_date_tuple[2]}"
         month = f"{shift_date_tuple[1]}"
         year = f"{shift_date_tuple[0]}"
-        shift_date = day + '-' + month + '-' + year
+        shift_date = day + '/' + month + '/' + year
         return shift_date
     except:
         data = "No Date data available"
@@ -81,13 +80,12 @@ def resco_1b_date(read_sheet, dummy1, dummy2, dummy3):
         day = f"{shift_date_tuple[2]}"
         month = f"{shift_date_tuple[1]}"
         year = f"{shift_date_tuple[0]}"
-        shift_date = day + '-' + month + '-' + year
+        shift_date = day + '/' + month + '/' + year
         return shift_date
     except:
         data = "No Date data available"
         return data
 
-# TODO: Jesse want new time format
 # grab the in time of a labour call
 def resco_2_IN(read_sheet, info_block, dummy2, dummy3):
     data = read_sheet.cell_value(info_block, 0)
@@ -96,10 +94,21 @@ def resco_2_IN(read_sheet, info_block, dummy2, dummy3):
     else:
         logger.info(f'the start_time has grabbed {data} to parse')
         data = read_sheet.cell_value(info_block, 0)
-        new = data.split('-')
-        new2 = new[0].split()
-        logger.info(f'the start_time has turned it into {new2}')
-        return new2[-1]
+        data_in_list = data.split('-')
+        just_time = data_in_list[0].split()
+        # logger.info(f'the start_time has turned it into {just_time}')
+        time_list = list(just_time)
+        if len(time_list) == 3:
+            time_w_colon = ''.join(time_list[0]) + ":" + ''.join(time_list[1:3])
+            return time_w_colon
+        else:
+            if time_list[0] == '0':
+                time_w_colon = ''.join(time_list[1]) + ":" + ''.join(time_list[2:4])
+                return time_w_colon
+            else:
+                better = ''.join(time_list[0:2]) + ":" + ''.join(time_list[2:4])
+                return time_w_colon
+
 
 # grab the out time of a labour call
 def resco_3_OUT(read_sheet, info_block, dummy2, dummy3):
@@ -108,9 +117,19 @@ def resco_3_OUT(read_sheet, info_block, dummy2, dummy3):
         return data
     else:
         logger.info(f'the end_time has grabbed {data} to parse')
-        new = data.rsplit('-')
-        logger.info(f'the end_time has turned it into {new}')
-        return new[1]
+        just_time = data.rsplit('-')
+        logger.info(f'the end_time has turned it into {just_time}')
+        time_list = list(just_time)
+        if len(time_list) == 3:
+            time_w_colon = ''.join(time_list[0]) + ":" + ''.join(time_list[1:3])
+            return time_w_colon
+        else:
+            if time_list[0] == '0':
+                time_w_colon = ''.join(time_list[1]) + ":" + ''.join(time_list[2:4])
+                return time_w_colon
+            else:
+                better = ''.join(time_list[0:2]) + ":" + ''.join(time_list[2:4])
+                return time_w_colon
 
 # create a payee
 def resco_4_payee(dummy, dummy1, dummy2, dummy3):
