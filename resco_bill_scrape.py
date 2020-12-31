@@ -4,6 +4,7 @@ a timesheet as defined by a resco
 """
 
 # imported from standard library
+import calendar
 import logging
 import os
 import pandas as pd
@@ -36,7 +37,7 @@ def resco_0_mos(read_sheet, info_block, dummy2, dummy3):
         shift_date_tuple = xlrd.xldate_as_tuple(data, 0)
         logger.info(f'the resco_0_mos has turned it into {shift_date_tuple}')
         month = f"{shift_date_tuple[1]}"
-        return month
+        return calendar.month_name[month]
     except:
         data = "No Date data available"
         return data
@@ -49,7 +50,7 @@ def resco_0b_mos(read_sheet, dummy1, dummy2, dummy3):
         shift_date_tuple = xlrd.xldate_as_tuple(data, 0)
         logger.info(f'the resco_0b_mos has turned it into {shift_date_tuple}')
         month = f"{shift_date_tuple[1]}"
-        return month
+        return calendar.month_name[month]
     except:
         data = "No Date data available"
         return data
