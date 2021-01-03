@@ -14,7 +14,7 @@ class IterRegistry(type):
     def __iter__(cls):
         return iter(cls)
 
-class SalariedHead:
+class SalariedHead: # TODO: change this to use IterRegistry
 
     headCount = 0
 
@@ -44,16 +44,6 @@ class SalariedHead:
     def email(self, domain):
         return self.first_name[0].lower() + self.last_name.lower() + domain
 
-
-# test data
-def testheads():
-    wi = SalariedHead('z', 99, 'Wonka', 'Willy', 'N/A', False)
-    print(wi)
-    print(wi.full_name())
-    print(wi.email("@chocolatefactory.com"))
-    print(f"There are/is {SalariedHead.headCount} salaried head(s)")
-
-
 class SearchDict(dict):
 
     def search_for_match(self, event):
@@ -67,4 +57,11 @@ if __name__ == '__main__':
     print("METHOD CHECK")
     print('------------')
     print()
+    def testheads():
+        wi = SalariedHead('z', 99, 'Wonka', 'Willy', 'N/A', False)
+        print(wi)
+        print(wi.full_name())
+        print(wi.email("@chocolatefactory.com"))
+        print(f"There are/is {SalariedHead.headCount} salaried head(s)")
+
     testheads()

@@ -36,8 +36,11 @@ def resco_0_mos(read_sheet, info_block, dummy2, dummy3):
         logger.info(f'the resco_0_mos has grabbed {data} to parse')
         shift_date_tuple = xlrd.xldate_as_tuple(data, 0)
         logger.info(f'the resco_0_mos has turned it into {shift_date_tuple}')
-        month = f"{shift_date_tuple[1]}"
-        return calendar.month_name[month]
+        month_num = f"{shift_date_tuple[1]}"
+        logger.info(f'the month number is {month_num}')
+        name_of_month = calendar.month_name[int(month_num)]
+        logger.info(f'the month name is {name_of_month}')
+        return name_of_month
     except:
         data = "No Date data available"
         return data
@@ -49,8 +52,11 @@ def resco_0b_mos(read_sheet, dummy1, dummy2, dummy3):
         logger.info(f'the resco_0b_mos has grabbed {data} to parse')
         shift_date_tuple = xlrd.xldate_as_tuple(data, 0)
         logger.info(f'the resco_0b_mos has turned it into {shift_date_tuple}')
-        month = f"{shift_date_tuple[1]}"
-        return calendar.month_name[month]
+        month_num = f"{shift_date_tuple[1]}"
+        logger.info(f'the month number is {month_num}')
+        name_of_month = calendar.month_name[int(month_num)]
+        logger.info(f'the month name is {name_of_month}')
+        return name_of_month
     except:
         data = "No Date data available"
         return data
