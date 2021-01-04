@@ -160,26 +160,26 @@ def resco_6_resource(read_sheet, dummy1, row, col):
     data = read_sheet.cell_value(row, 0)
     charge_out = read_sheet.cell_value(row, col +1)
     if charge_out == 42:
-        return "JSCH Hand - Reg Time"
+        return "JSCH - Stage Hand"
     elif charge_out == 63:
-        return "JSCH Hand - OT"
+        return "JSCH - Stage Hand - OT"
     elif charge_out == 84:
-        return "JSCH Hand - DT"
+        return "JSCH - Stage Hand - DT"
     elif charge_out == 48:
         if 'CASUAL' in data:
-            return "JSCH Lead - Reg Time"
+            return "JSCH Stage Lead"
         else:
-            return "JSCH Head - Reg Time"
+            return "JSCH Stage Head"
     elif charge_out == 72:
         if 'CASUAL' in data:
-            return "JSCH Lead - OT"
+            return "JSCH Stage Lead - OT"
         else:
-            return "JSCH Head - OT"
+            return "JSCH Stage Head - OT"
     elif charge_out == 96:
         if 'CASUAL' in data:
-            return "JSCH Lead - DT"
+            return "JSCH Stage Lead - DT"
         else:
-            return "JSCH Head - DT"
+            return "JSCH Stage Head - DT"
 
 # who is it, FULLTIME< CASUAUL etc...
 def resco_7_description(read_sheet, dummy1, row, dummy3):
