@@ -14,20 +14,18 @@ class IterRegistry(type):
     def __iter__(cls):
         return iter(cls)
 
-class SalariedHead: # TODO: change this to use IterRegistry
+class SalariedHead:
+    __metaclass__ = IterRegistry
+    _registry = []
 
-    headCount = 0
-
-    # the instance, 'self' in this case, is always teh first argument
-    # in it, you define the class variables, then assign thjose variables to the instance variables
     def __init__(self, head_alpha_id, head_id, last_name, first_name, dir_path, has_left):
+        self._registry.append(self)
         self.head_alpha_id = head_alpha_id
         self.head_id = head_id
         self.last_name = last_name
         self. first_name = first_name
         self.dir_path = dir_path
         self.has_left = has_left
-        SalariedHead.headCount += 1  # this increments every time an employee is created
 
     # repr allows us to print the list with 'salariedHeads(my_var)'
     def __repr__(self):
@@ -62,6 +60,6 @@ if __name__ == '__main__':
         print(wi)
         print(wi.full_name())
         print(wi.email("@chocolatefactory.com"))
-        print(f"There are/is {SalariedHead.headCount} salaried head(s)")
+        print(f"There are/is {len(SalariedHead._registry)} salaried head(s)")
 
     testheads()

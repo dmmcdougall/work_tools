@@ -241,8 +241,6 @@ def resco_x_NULL(dummy, dummy1, dummy2, dummy3):
 
 
 def main():
-    # TODO: jesse wants columns re-organized
-    # TODO: jesse wants new column modifier
     # set up the column headers in lists to receive the scraped data
     col_headers = ['month', 'date', 'IN_time',
                    'OUT_time', 'Payee', 'Type',
