@@ -213,6 +213,7 @@ def main():
         print()
         print("-----------------------------------------------------------------------------------")
         read_file = (cfg.my_dir + '\\' + read_list[i])
+        print(f'File number {i + 1} of {len(read_list)}')
         print(read_file)
         read_book = xlrd.open_workbook(read_file)
         read_sheet = read_book.sheet_by_index(0)

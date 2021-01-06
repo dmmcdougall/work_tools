@@ -282,6 +282,7 @@ def main():
         logger.debug("")
         logger.debug("------------------------------------------------------------------------------------------------")
         read_file = (cfg.cpo_bill_dir + '\\' + read_list[i])
+        print(f'File number {i+1} of {len(read_list)}')
         print(read_file)
         read_book = xlrd.open_workbook(read_file) # TODO: fix this permission denied error with a try block
         read_sheet = read_book.sheet_by_name('Entry Form')
