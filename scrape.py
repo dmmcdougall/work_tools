@@ -143,7 +143,7 @@ def create_zero(dummy, dummy1, dummy2):
     data = 0
     return data
 
-def kris_fix_in(sheet, row, my_cls, col, name_row, name_col):
+def kris_fix_in(sheet, row, my_cls, col, name_row, name_col): #TODO: can these just be in the time methods?
     data = sheet.cell_value(name_row, name_col)
     head_id = dbfnc.find_head_number2(data)
     if head_id == 3:
