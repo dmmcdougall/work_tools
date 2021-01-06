@@ -95,47 +95,53 @@ def resco_1b_date(read_sheet, dummy1, dummy2, dummy3):
 
 # grab the in time of a labour call
 def resco_2_IN(read_sheet, info_block, dummy2, dummy3):
-    data = read_sheet.cell_value(info_block, 0)
-    if "Strike" in data:
-        return data
-    else:
-        logger.info(f'the start_time has grabbed {data} to parse')
+    try:
         data = read_sheet.cell_value(info_block, 0)
-        data_in_list = data.split('-')
-        junk_w_intime = data_in_list[0].split()
-        # logger.info(f'the start_time has turned it into {just_time}')
-        time_list = list(junk_w_intime[-1])
-        if len(time_list) == 3:
-            time_w_colon = ''.join(time_list[0]) + ":" + ''.join(time_list[1:3])
-            return time_w_colon
+        if "Strike" in data:
+            return data
         else:
-            if time_list[0] == '0':
-                time_w_colon = ''.join(time_list[1]) + ":" + ''.join(time_list[2:4])
+            logger.info(f'the start_time has grabbed {data} to parse')
+            data = read_sheet.cell_value(info_block, 0)
+            data_in_list = data.split('-')
+            junk_w_intime = data_in_list[0].split()
+            # logger.info(f'the start_time has turned it into {just_time}')
+            time_list = list(junk_w_intime[-1])
+            if len(time_list) == 3:
+                time_w_colon = ''.join(time_list[0]) + ":" + ''.join(time_list[1:3])
                 return time_w_colon
             else:
-                time_w_colon = ''.join(time_list[0:2]) + ":" + ''.join(time_list[2:4])
-                return time_w_colon
+                if time_list[0] == '0':
+                    time_w_colon = ''.join(time_list[1]) + ":" + ''.join(time_list[2:4])
+                    return time_w_colon
+                else:
+                    time_w_colon = ''.join(time_list[0:2]) + ":" + ''.join(time_list[2:4])
+                    return time_w_colon
+    except:
+        return "No time data recorded"
 
 # grab the out time of a labour call
 def resco_3_OUT(read_sheet, info_block, dummy2, dummy3):
-    data = read_sheet.cell_value(info_block, 0)
-    if "Strike" in data:
-        return data
-    else:
-        logger.info(f'the end_time has grabbed {data} to parse')
-        junk_w_outtime = data.rsplit('-')
-        # logger.info(f'the end_time has turned it into {just_time}')
-        time_list = list(junk_w_outtime[1])
-        if len(time_list) == 3:
-            time_w_colon = ''.join(time_list[0]) + ":" + ''.join(time_list[1:3])
-            return time_w_colon
+    try:
+        data = read_sheet.cell_value(info_block, 0)
+        if "Strike" in data:
+            return data
         else:
-            if time_list[0] == '0':
-                time_w_colon = ''.join(time_list[1]) + ":" + ''.join(time_list[2:4])
+            logger.info(f'the end_time has grabbed {data} to parse')
+            junk_w_outtime = data.rsplit('-')
+            # logger.info(f'the end_time has turned it into {just_time}')
+            time_list = list(junk_w_outtime[1])
+            if len(time_list) == 3:
+                time_w_colon = ''.join(time_list[0]) + ":" + ''.join(time_list[1:3])
                 return time_w_colon
             else:
-                time_w_colon = ''.join(time_list[0:2]) + ":" + ''.join(time_list[2:4])
-                return time_w_colon
+                if time_list[0] == '0':
+                    time_w_colon = ''.join(time_list[1]) + ":" + ''.join(time_list[2:4])
+                    return time_w_colon
+                else:
+                    time_w_colon = ''.join(time_list[0:2]) + ":" + ''.join(time_list[2:4])
+                    return time_w_colon
+    except:
+        return "No time data recorded"
 
 # create a payee
 def resco_4_payee(dummy, dummy1, dummy2, dummy3):
@@ -256,6 +262,7 @@ def main():
     # version_name, check, prep_row, first_infoblock_row, first_data_block_row, mp_row)
     bill1 = MyBill('bill_1819_version6', "Meal Penalty", 95, 102, 104, 60)
     bill2 = MyBill('bill_1819_version5', "Long & McQuade Rental", 81, 88, 90, 43)
+    bill3 = MyBill('bill_1718_version', "Parking", 76, 83, 85, 37)
 
     # Creating empty dataframes with column names only
     df_bill_data = pd.DataFrame(columns=col_headers)
