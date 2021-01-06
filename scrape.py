@@ -115,7 +115,7 @@ def grab_11_head_acct(sheet, row,my_cls, col):
     data = my_cls.ts_15_write_acct(sheet, row, col)
     return data
 
-def grab_11_crew_acct(dummy, dummy1, dummy2):
+def grab_11_crew_acct(dummy, dummy1, my_cls):
     data = my_cls.ts_cas_write_acct()
     return data
 
