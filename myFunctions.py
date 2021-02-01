@@ -8,6 +8,12 @@ This file is where my general functions are stored
 
 # imported from local directories
 
+def convert_date_to_excel_ordinal(day, month, year) :
+    offset = 693594
+    current = dt.date(year,month,day)
+    n = current.toordinal()
+    return (n - offset)
+
 # takes a list and a list of column headers and adds it to a df
 def add_row_to_df(my_list, my_headers, my_df):
     my_dict = dict(zip(my_headers, my_list))

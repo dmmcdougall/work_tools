@@ -22,14 +22,10 @@ from timesheet import TS2015, TS2011, TSCasual
 # logging info
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.DEBUG) # change to DEBUG when required
-
 formatter = logging.Formatter('%(asctime)s:%(name)s:%(levelname)s:%(message)s')
-
 file_handler = logging.FileHandler(cfg.log_files + '\\' + 'scrape.log')
 file_handler.setFormatter(formatter)
-
 logger.addHandler(file_handler)
-
 
 
 def fnc_spinner(sheet, row, my_cls, *args, **kwargs):
@@ -131,17 +127,21 @@ def grab_14_crew_shifttype(dummy, dummy1, dummy2):
     data = 9
     return data
 
-def create_null(dummy, dummy1, dummy2):
-    data = ""
-    return data
+create_null = lambda dummy, dummy1, dummy2:""
+create_eight = lambda dummy, dummy1, dummy2:8
+create_zero = lambda dummy, dummy1, dummy2:0
 
-def create_eight(dummy, dummy1, dummy2):
-    data = 8
-    return data
+# def create_null(dummy, dummy1, dummy2):
+#     data = ""
+#     return data
 
-def create_zero(dummy, dummy1, dummy2):
-    data = 0
-    return data
+# def create_eight(dummy, dummy1, dummy2):
+#     data = 8
+#     return data
+
+# def create_zero(dummy, dummy1, dummy2):
+#     data = 0
+#     return data
 
 def kris_fix_in(sheet, row, my_cls, col, name_row, name_col): #TODO: can these just be in the time methods?
     data = sheet.cell_value(name_row, name_col)
