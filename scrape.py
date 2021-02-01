@@ -255,7 +255,7 @@ def main():
                                           grab_04_in_time1=0,
                                           grab_05_out_time1=1,
                                           grab_06_evnt_yr1=3,
-                                          grab_07_head_evnt_id1=3,
+                                          grab_07_crew_evnt_id1=3,
                                           grab_08_reg1=2,
                                           grab_09_ot1=3,
                                           grab_10_dt1=4,
