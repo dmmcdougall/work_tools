@@ -94,21 +94,52 @@ class TimeSheet:
         print("~~~~"+read_sheet.cell_value(self.name_row, self.name_column)+"~~~~")
         print()
 
+    # def ts_write_time(self, read_sheet, read_row, col_modifier):
+    #     data = read_sheet.cell_value(read_row, self.start_data_col + col_modifier)
+    #     if data == '':
+    #         shift_in_tuple = (0, 0, 0, 0, 0, 0)
+    #     else:
+    #         shift_in_tuple = xlrd.xldate_as_tuple(data, 1)
+    #     if shift_in_tuple[3] < 10:
+    #         half1_time = f"{shift_in_tuple[3]}"
+    #     else:
+    #         half1_time = f"{shift_in_tuple[3]}"
+    #     if shift_in_tuple[4] == 0:
+    #         half2_time = f"{shift_in_tuple[4]}0"
+    #     else:
+    #         half2_time = f"{shift_in_tuple[4]}"
+    #     time = half1_time + ":" + half2_time
+    #     return time
+
     def ts_write_time(self, read_sheet, read_row, col_modifier):
         data = read_sheet.cell_value(read_row, self.start_data_col + col_modifier)
-        if data == '':
-            shift_in_tuple = (0, 0, 0, 0, 0, 0)
-        else:
+        if not data:
+            time = '00:00'
+        elif ':' in data:
             shift_in_tuple = xlrd.xldate_as_tuple(data, 1)
-        if shift_in_tuple[3] < 10:
-            half1_time = f"{shift_in_tuple[3]}"
+            if shift_in_tuple[3] < 10:
+                half1_time = f"{shift_in_tuple[3]}"
+            else:
+                half1_time = f"{shift_in_tuple[3]}"
+            if shift_in_tuple[4] == 0:
+                half2_time = f"{shift_in_tuple[4]}0"
+            else:
+                half2_time = f"{shift_in_tuple[4]}"
+            time = half1_time + ":" + half2_time
         else:
-            half1_time = f"{shift_in_tuple[3]}"
-        if shift_in_tuple[4] == 0:
-            half2_time = f"{shift_in_tuple[4]}0"
-        else:
-            half2_time = f"{shift_in_tuple[4]}"
-        time = half1_time + ":" + half2_time
+            kris_str = str(data)
+            count_int = len(kris_str)
+
+            if count_int == 1:
+                kris_tuple = (0, data, 0, 0)
+            elif count_int == 2:
+                kris_tuple = (kris_str[0], kris_str[1], 0, 0)
+            elif count_int == 3:
+                kris_tuple = (0, kris_str[0], kris_str[1], kris_str[2])
+            else:
+                kris_tuple = (kris_str[0], kris_str[1], kris_str[2], kris_str[3])
+
+            time = str(kris_tuple[0]) + str(kris_tuple[1]) + ":" + str(kris_tuple[2]) + str(kris_tuple[3])
         return time
 
 
@@ -142,23 +173,23 @@ class TS2015(TimeSheet):
     # Kris changed the formatting of his timesheet to make it more flexible and subsequently
     # killed the scrapper.  This is the work around
     # this function is for writing the begin and end times of calls
-    def ts_15_kf_format(self, read_sheet, read_row, col_modifier):
-        data = read_sheet.cell_value(read_row, self.start_data_col + col_modifier)
-        kris_str = str(data)
-        count_int = len(kris_str)
-
-        if count_int == 1:
-            kris_tuple = (0, data, 0, 0)
-        elif count_int == 2:
-            kris_tuple = (kris_str[0], kris_str[1], 0, 0)
-        elif count_int == 3:
-            kris_tuple = (0, kris_str[0], kris_str[1], kris_str[2])
-        else:
-            kris_tuple = (kris_str[0], kris_str[1], kris_str[2], kris_str[3])
-
-        time = str(kris_tuple[0]) + str(kris_tuple[1]) + ":" + str(kris_tuple[2]) + str(kris_tuple[3])
-        return time
-    # TODO: some form of the kris fix is required for teh casuals
+    # def ts_15_kf_format(self, read_sheet, read_row, col_modifier):
+    #     data = read_sheet.cell_value(read_row, self.start_data_col + col_modifier)
+    #     kris_str = str(data)
+    #     count_int = len(kris_str)
+    #
+    #     if count_int == 1:
+    #         kris_tuple = (0, data, 0, 0)
+    #     elif count_int == 2:
+    #         kris_tuple = (kris_str[0], kris_str[1], 0, 0)
+    #     elif count_int == 3:
+    #         kris_tuple = (0, kris_str[0], kris_str[1], kris_str[2])
+    #     else:
+    #         kris_tuple = (kris_str[0], kris_str[1], kris_str[2], kris_str[3])
+    #
+    #     time = str(kris_tuple[0]) + str(kris_tuple[1]) + ":" + str(kris_tuple[2]) + str(kris_tuple[3])
+    #     return time
+    # # TODO: some form of the kris fix is required for teh casuals
 
     def ts_15_write_acct(self, read_sheet, read_row, col_modifier):
         # the .lower() modifier makes the acct_codes not case sensitive

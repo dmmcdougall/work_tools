@@ -21,7 +21,7 @@ from timesheet import TS2015, TS2011, TSCasual
 
 # logging info
 logger = logging.getLogger(__name__)
-logger.setLevel(logging.DEBUG) # change to DEBUG when required
+logger.setLevel(logging.INFO) # change to DEBUG when required
 formatter = logging.Formatter('%(asctime)s:%(name)s:%(levelname)s:%(message)s')
 file_handler = logging.FileHandler(cfg.log_files + '\\' + 'scrape.log')
 file_handler.setFormatter(formatter)
@@ -131,25 +131,25 @@ create_null = lambda dummy, dummy1, dummy2:""
 create_eight = lambda dummy, dummy1, dummy2:8
 create_zero = lambda dummy, dummy1, dummy2:0
 
-def kris_fix_in(sheet, row, my_cls, col, name_row, name_col): #TODO: can these just be in the time methods?
-    data = sheet.cell_value(name_row, name_col)
-    head_id = dbfnc.find_head_number2(data)
-    if head_id == 3:
-        data = my_cls.ts_15_kf_format(sheet, row, col)
-        return data
-    else:
-        data = grab_04_in_time(sheet, row, my_cls, col)
-        return data
-
-def kris_fix_out(sheet, row, my_cls, col_modifier, name_row, name_col):
-    data = sheet.cell_value(name_row, name_col)
-    head_id = dbfnc.find_head_number2(data)
-    if head_id == 3:
-        data = my_cls.ts_15_kf_format(sheet, row, col_modifier)
-        return data
-    else:
-        data = grab_04_in_time(sheet, row, my_cls, col_modifier)
-        return data
+# def kris_fix_in(sheet, row, my_cls, col, name_row, name_col): #TODO: can these just be in the time methods?
+#     data = sheet.cell_value(name_row, name_col)
+#     head_id = dbfnc.find_head_number2(data)
+#     if head_id == 3:
+#         data = my_cls.ts_15_kf_format(sheet, row, col)
+#         return data
+#     else:
+#         data = grab_04_in_time(sheet, row, my_cls, col)
+#         return data
+#
+# def kris_fix_out(sheet, row, my_cls, col_modifier, name_row, name_col):
+#     data = sheet.cell_value(name_row, name_col)
+#     head_id = dbfnc.find_head_number2(data)
+#     if head_id == 3:
+#         data = my_cls.ts_15_kf_format(sheet, row, col_modifier)
+#         return data
+#     else:
+#         data = grab_04_in_time(sheet, row, my_cls, col_modifier)
+#         return data
 
 
 # and this is the app...
@@ -346,15 +346,15 @@ def main():
 
                     head_hrs = fnc_spinner(read_sheet, r_row, ts15,
                                            grab_01_head_alpha, grab_02_head_id, grab_03_date,
-                                           kris_fix_in, kris_fix_out, grab_06_evnt_yr,
+                                           grab_04_in_time, grab_05_out_time, grab_06_evnt_yr,
                                            grab_07_head_evnt_id, grab_08_reg, grab_09_ot,
                                            grab_10_dt, grab_11_head_acct, grab_12_blacks,
                                            grab_13_MP,
                                            grab_01_head_alpha1=ts15.name_row, grab_01_head_alpha2=ts15.name_column,
                                            grab_02_head_id1=ts15.name_row, grab_02_head_id2=ts15.name_column,
                                            grab_03_date1=1,
-                                           kris_fix_in1=0, kris_fix_in2=ts15.name_row, kris_fix_in3=ts15.name_column,
-                                           kris_fix_out1=1, kris_fix_out2=ts15.name_row, kris_fix_out3=ts15.name_column,
+                                           grab_04_in_time1=0,
+                                           grab_05_out_time1=1,
                                            grab_06_evnt_yr1=1,
                                            grab_07_head_evnt_id1=6, grab_07_head_evnt_id2=1,
                                            grab_08_reg1=2,
