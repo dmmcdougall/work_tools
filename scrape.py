@@ -131,18 +131,6 @@ create_null = lambda dummy, dummy1, dummy2:""
 create_eight = lambda dummy, dummy1, dummy2:8
 create_zero = lambda dummy, dummy1, dummy2:0
 
-# def create_null(dummy, dummy1, dummy2):
-#     data = ""
-#     return data
-
-# def create_eight(dummy, dummy1, dummy2):
-#     data = 8
-#     return data
-
-# def create_zero(dummy, dummy1, dummy2):
-#     data = 0
-#     return data
-
 def kris_fix_in(sheet, row, my_cls, col, name_row, name_col): #TODO: can these just be in the time methods?
     data = sheet.cell_value(name_row, name_col)
     head_id = dbfnc.find_head_number2(data)

@@ -20,12 +20,9 @@ import myFunctions as myfnc
 # logging info
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.DEBUG) # change to DEBUG when required
-
 formatter = logging.Formatter('%(asctime)s:%(name)s:%(levelname)s:%(message)s')
-
 file_handler = logging.FileHandler(cfg.log_files + '\\' + 'resco_bill_scrape.log')
 file_handler.setFormatter(formatter)
-
 logger.addHandler(file_handler)
 
 # these methods are each one component of one complete row of data
@@ -241,9 +238,7 @@ def resco_x_generic(read_sheet, dummy1, row, col):
     return data
 
 # insert a NULL value
-def resco_x_NULL(dummy, dummy1, dummy2, dummy3):
-    data = ""
-    return data
+resco_x_NULL = lambda dummy, dummy1, dummy2, dummy3:""
 
 
 def main():
