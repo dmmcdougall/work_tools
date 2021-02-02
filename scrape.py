@@ -131,26 +131,6 @@ create_null = lambda dummy, dummy1, dummy2:""
 create_eight = lambda dummy, dummy1, dummy2:8
 create_zero = lambda dummy, dummy1, dummy2:0
 
-# def kris_fix_in(sheet, row, my_cls, col, name_row, name_col): #TODO: can these just be in the time methods?
-#     data = sheet.cell_value(name_row, name_col)
-#     head_id = dbfnc.find_head_number2(data)
-#     if head_id == 3:
-#         data = my_cls.ts_15_kf_format(sheet, row, col)
-#         return data
-#     else:
-#         data = grab_04_in_time(sheet, row, my_cls, col)
-#         return data
-#
-# def kris_fix_out(sheet, row, my_cls, col_modifier, name_row, name_col):
-#     data = sheet.cell_value(name_row, name_col)
-#     head_id = dbfnc.find_head_number2(data)
-#     if head_id == 3:
-#         data = my_cls.ts_15_kf_format(sheet, row, col_modifier)
-#         return data
-#     else:
-#         data = grab_04_in_time(sheet, row, my_cls, col_modifier)
-#         return data
-
 
 # and this is the app...
 def main():
