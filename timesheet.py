@@ -97,7 +97,6 @@ class TimeSheet:
     def ts_write_time(self, read_sheet, read_row, col_modifier):
         data = read_sheet.cell_value(read_row, self.start_data_col + col_modifier)
         if not data:
-            print("this is an empty value")
             time = '00:00'
             return time
         elif isinstance(data, float) and data < 1:
