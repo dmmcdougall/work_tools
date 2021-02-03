@@ -99,17 +99,34 @@ class TimeSheet:
         if not data:
             time = '00:00'
             return time
-        if isinstance(data, float):
-            shift_in_tuple = xlrd.xldate_as_tuple(data, 1)
-            if shift_in_tuple[3] < 10:
-                half1_time = f"{shift_in_tuple[3]}"
+        elif isinstance(data, float) and data < 1:
+            shift_tuple = xlrd.xldate_as_tuple(data, 1)
+            if shift_tuple[3] < 10:
+                half1_time = f"{shift_tuple[3]}"
             else:
-                half1_time = f"{shift_in_tuple[3]}"
-            if shift_in_tuple[4] == 0:
-                half2_time = f"{shift_in_tuple[4]}0"
+                half1_time = f"{shift_tuple[3]}"
+            if shift_tuple[4] == 0:
+                half2_time = f"{shift_tuple[4]}0"
             else:
-                half2_time = f"{shift_in_tuple[4]}"
+                half2_time = f"{shift_tuple[4]}"
             time = half1_time + ":" + half2_time
+            return time
+        elif isinstance(data, float) and data > 1:
+            my_str = str(data)
+            split_str = my_str.split(".")
+            kris_str = split_str[0]
+            count_int = len(kris_str)
+
+            if count_int == 1:
+                kris_tuple = (0, data, 0, 0)
+            elif count_int == 2:
+                kris_tuple = (kris_str[0], kris_str[1], 0, 0)
+            elif count_int == 3:
+                kris_tuple = (0, kris_str[0], kris_str[1], kris_str[2])
+            else:
+                kris_tuple = (kris_str[0], kris_str[1], kris_str[2], kris_str[3])
+
+            time = str(kris_tuple[0]) + str(kris_tuple[1]) + ":" + str(kris_tuple[2]) + str(kris_tuple[3])
             return time
         else:
             kris_str = str(data)
