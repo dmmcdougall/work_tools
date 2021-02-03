@@ -96,10 +96,10 @@ class TimeSheet:
 
     def ts_write_time(self, read_sheet, read_row, col_modifier):
         data = read_sheet.cell_value(read_row, self.start_data_col + col_modifier)
-        if not data:
+        if not data: # this is to catch the 24:00 glitch in the excel sheet
             time = '00:00'
             return time
-        elif isinstance(data, float) and data < 1:
+        elif isinstance(data, float) and data < 1: # this catches the default data
             shift_tuple = xlrd.xldate_as_tuple(data, 1)
             if shift_tuple[3] < 10:
                 half1_time = f"{shift_tuple[3]}"
@@ -111,7 +111,7 @@ class TimeSheet:
                 half2_time = f"{shift_tuple[4]}"
             time = half1_time + ":" + half2_time
             return time
-        elif isinstance(data, float) and data > 1:
+        elif isinstance(data, float) and data > 1: # this catches a float with no ':', ie '0900'
             my_str = str(data)
             split_str = my_str.split(".")
             kris_str = split_str[0]
@@ -128,7 +128,7 @@ class TimeSheet:
 
             time = str(kris_tuple[0]) + str(kris_tuple[1]) + ":" + str(kris_tuple[2]) + str(kris_tuple[3])
             return time
-        else:
+        else: # this one is for kris who turned it into a int just to be a dick
             kris_str = str(data)
             count_int = len(kris_str)
 
