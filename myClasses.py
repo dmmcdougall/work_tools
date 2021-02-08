@@ -10,10 +10,12 @@ import re
 
 # imported from local directories
 
+# this meta-class ceates a list the class instances of a class
 class IterRegistry(type):
     def __iter__(cls):
         return iter(cls)
 
+# this is for identifying individuals salaried head staff
 class SalariedHead:
     __metaclass__ = IterRegistry
     _registry = []
@@ -42,6 +44,7 @@ class SalariedHead:
     def email(self, domain):
         return self.first_name[0].lower() + self.last_name.lower() + domain
 
+#TODO: this is superceded by IterRegistry I think
 class SearchDict(dict):
 
     def search_for_match(self, event):

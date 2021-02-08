@@ -496,7 +496,7 @@ def main():
 
 
 if __name__ == '__main__':
-    logger.info('~~~The fiile resco_bill_scrape.py has started~~~')
+    logger.info('~~~~The fiile resco_bill_scrape.py has started~~~~')
     print()
     print("++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++")
     print("                resco_bill_scraper launched")
@@ -505,7 +505,7 @@ if __name__ == '__main__':
     main()
     print()
     print("++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++")
-    print("                        VICTORY!")
+    print("                          VICTORY!")
     print("++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++")
     print()
-    logger.info('~~~~The fiile resco_bill_scrape.py has finished OK~~~')
+    logger.info('~~~~The fiile resco_bill_scrape.py has finished OK~~~~')

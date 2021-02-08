@@ -8,6 +8,7 @@ This file is where my general functions are stored
 
 # imported from local directories
 
+# TODO: reorganize this doc
 def convert_date_to_excel_ordinal(day, month, year) :
     offset = 693594
     current = dt.date(year,month,day)

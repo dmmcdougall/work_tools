@@ -1,6 +1,7 @@
 """
 This file holds the classes/subclasses for bill templates
-used in the resco bill scrapper package
+used in the resco bill scrapper package.  It helps to differentiate the
+templates as they are changed over time.
 """
 
 # imported from the standard library

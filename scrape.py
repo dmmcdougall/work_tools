@@ -27,7 +27,7 @@ file_handler = logging.FileHandler(cfg.log_files + '\\' + 'scrape.log')
 file_handler.setFormatter(formatter)
 logger.addHandler(file_handler)
 
-
+# TODO: move this to myFunctions.py
 def fnc_spinner(sheet, row, my_cls, *args, **kwargs):
     for i in range(len(args)):
         func = args[i]

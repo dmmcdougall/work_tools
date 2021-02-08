@@ -227,7 +227,6 @@ def read2screen(query, conn):
     for row in cursor:
         print(row)
 
-
 # read from SQL without printing
 def read2(query, conn):
     print("Read Method")

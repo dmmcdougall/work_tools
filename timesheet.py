@@ -128,7 +128,7 @@ class TimeSheet:
 
             time = str(kris_tuple[0]) + str(kris_tuple[1]) + ":" + str(kris_tuple[2]) + str(kris_tuple[3])
             return time
-        else: # this one is for kris who turned it into a int just to be a dick
+        else: # this one is for kris who turned it into an int just to be a dick
             kris_str = str(data)
             count_int = len(kris_str)
 
