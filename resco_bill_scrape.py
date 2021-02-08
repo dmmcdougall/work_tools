@@ -19,7 +19,7 @@ import myFunctions as myfnc
 
 # logging info
 logger = logging.getLogger(__name__)
-logger.setLevel(logging.DEBUG) # change to DEBUG when required
+logger.setLevel(logging.INFO) # change to DEBUG when required
 formatter = logging.Formatter('%(asctime)s:%(name)s:%(levelname)s:%(message)s')
 file_handler = logging.FileHandler(cfg.log_files + '\\' + 'resco_bill_scrape.log')
 file_handler.setFormatter(formatter)

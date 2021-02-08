@@ -34,22 +34,22 @@ def connection(my_driver, my_server, my_db):
         "Trusted_Connection=yes;"
     )
     try:
-        logger.info('Connecting to database')
+        logger.debug('Connecting to database')
         yield connection
     except Exception:
-        logger.info('***Connection to database FAILED***')
+        logger.debug('***Connection to database FAILED***')
         connection.rollback()
         raise
     else:
         connection.commit()
     finally:
         connection.close()
-        logger.info('Closing connection to database')
+        logger.debug('Closing connection to database')
 
 # this query takes a "FirstName lastName" of a Casual Crew member and returns
 #  the numeric portion of an employee number
 def find_crew_number2(crew_name):
-    logger.info(f'the function find_crew_number2 recieved this argument: {crew_name}')
+    logger.debug(f'the function find_crew_number2 recieved this argument: {crew_name}')
     with connection(cfg.my_driver, cfg.my_server, cfg.my_db) as conn:
         mylist = (str.split(crew_name))
 
@@ -79,7 +79,7 @@ def find_crew_number2(crew_name):
 # this query takes a "FirstName lastName" of a Casual Crew member and returns
 # the Alhabetical portion of an employee number
 def find_crew_Alpha_number2(crew_name):
-    logger.info(f'the function find_crew_alpha_number2 recieved this argument: {crew_name}')
+    logger.debug(f'the function find_crew_alpha_number2 recieved this argument: {crew_name}')
     with connection(cfg.my_driver, cfg.my_server, cfg.my_db) as conn:
         mylist = (str.split(crew_name))
 
@@ -109,7 +109,7 @@ def find_crew_Alpha_number2(crew_name):
 # this query takes a "FirstName lastName" of a Salaried Head staff member and returns
 # the Alhabetical portion of an employee number
 def find_head_alpha_number2(head_name):
-    logger.info(f'the function find_head_alpha_number2 recieved this argument: {head_name}')
+    logger.debug(f'the function find_head_alpha_number2 recieved this argument: {head_name}')
     with connection(cfg.my_driver, cfg.my_server, cfg.my_db) as conn:
         mylist = (str.split(head_name))
 
@@ -139,7 +139,7 @@ def find_head_alpha_number2(head_name):
 # this query takes a "FirstName lastName" of a Salaried Head Staff member and returns
 #  the numeric portion of an employee number
 def find_head_number2(head_name):
-    logger.info(f'the function find_head_number2 recieved this argument: {head_name}')
+    logger.debug(f'the function find_head_number2 recieved this argument: {head_name}')
     with connection(cfg.my_driver, cfg.my_server, cfg.my_db) as conn:
         mylist = (str.split(head_name))
 
