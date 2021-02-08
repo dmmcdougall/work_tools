@@ -162,7 +162,7 @@ def resco_5b_type(dummy, dummy1, dummy2, dummy3):
 def resco_6_resource(read_sheet, dummy1, row, col):
     data = read_sheet.cell_value(row, 0)
     charge_out = read_sheet.cell_value(row, col +1)
-    if charge_out == 42:
+    if charge_out == 42: # TODO: change this to more bill version friendly
         return "JSCH - Stage Hand"
     elif charge_out == 63:
         return "JSCH - Stage Hand - OT"

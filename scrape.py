@@ -16,6 +16,7 @@ import xlrd
 # imported from local directories
 import config as cfg
 import databaseFunctions as dbfnc
+import myFunctions as myfnc
 from timesheet import TS2015, TS2011, TSCasual
 
 
@@ -27,22 +28,9 @@ file_handler = logging.FileHandler(cfg.log_files + '\\' + 'scrape.log')
 file_handler.setFormatter(formatter)
 logger.addHandler(file_handler)
 
+# TODO: move this to functions
+#todo: proper dosctrings
 
-def fnc_spinner(sheet, row, my_cls, *args, **kwargs):
-    for i in range(len(args)):
-        func = args[i]
-        function_name = func.__name__
-        key_list = list(kwargs.keys())
-        argument_list = [my_str for my_str in key_list if function_name in my_str]
-        sorted_keys = sorted(argument_list)
-        if not argument_list:
-            logger.info(f'the function spinner is going to pass...{function_name}({sheet}, {row})')
-            yield func(sheet, row, my_cls)
-        else:
-            my_val = [kwargs[x] for x in sorted_keys]
-            logger.info(f'arguments for this function are {my_val}')
-            logger.info(f'the function spinner is going to pass...{function_name}({sheet}, {row}, {my_val})')
-            yield func(sheet, row, my_cls, *my_val)
 
 def grab_01_head_alpha(sheet, dummy1, dummy2, name_row, name_col):
     data = sheet.cell_value(name_row, name_col)
@@ -211,7 +199,7 @@ def main():
                     data_list = [next_crew_num]
                     next_crew_num += 1
 
-                    cas_hrs = fnc_spinner(read_sheet, r_row, ts_cas,
+                    cas_hrs = myfnc.fnc_spinner(read_sheet, r_row, ts_cas,
                                           grab_01_crew_alpha, grab_02_crew_id, grab_03_date,
                                           grab_04_in_time, grab_05_out_time, grab_06_evnt_yr,
                                           grab_07_crew_evnt_id, grab_08_reg, grab_09_ot,
@@ -258,7 +246,7 @@ def main():
                     data_list = [next_head_num]
                     next_head_num += 1
 
-                    eight_hr_flg = fnc_spinner(read_sheet, r_row, ts15,
+                    eight_hr_flg = myfnc.fnc_spinner(read_sheet, r_row, ts15,
                                                grab_01_head_alpha, grab_02_head_id, grab_03_date,
                                                create_null, create_null, grab_06_evnt_yr,
                                                grab_07_head_evnt_id, create_eight,create_zero, create_zero,
@@ -291,7 +279,7 @@ def main():
                     data_list = [next_head_num]
                     next_head_num += 1
 
-                    stat_flg = fnc_spinner(read_sheet, r_row, ts15,
+                    stat_flg = myfnc.fnc_spinner(read_sheet, r_row, ts15,
                                                grab_01_head_alpha, grab_02_head_id, grab_03_date,
                                                create_null, create_null, grab_06_evnt_yr,
                                                grab_07_head_evnt_id, create_eight,create_zero, create_zero,
@@ -324,7 +312,7 @@ def main():
                     data_list = [next_head_num]
                     next_head_num += 1
 
-                    head_hrs = fnc_spinner(read_sheet, r_row, ts15,
+                    head_hrs = myfnc.fnc_spinner(read_sheet, r_row, ts15,
                                            grab_01_head_alpha, grab_02_head_id, grab_03_date,
                                            grab_04_in_time, grab_05_out_time, grab_06_evnt_yr,
                                            grab_07_head_evnt_id, grab_08_reg, grab_09_ot,
