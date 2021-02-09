@@ -17,7 +17,7 @@ import xlrd
 import config as cfg
 import db_functions as dbfnc
 from timesheet import TS2015, TS2011, TSCasual
-
+# TODO: finish docstrings
 
 # logging info
 logger = logging.getLogger(__name__)

@@ -10,7 +10,7 @@ import xlrd
 
 # imported from local directories
 import config as cfg
-
+# TODO: finish docstrings
 
 class TimeSheet:
 
