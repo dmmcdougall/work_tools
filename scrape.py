@@ -15,7 +15,7 @@ import xlrd
 
 # imported from local directories
 import config as cfg
-import databaseFunctions as dbfnc
+import db_functions as dbfnc
 from timesheet import TS2015, TS2011, TSCasual
 
 
@@ -47,23 +47,23 @@ def fnc_spinner(sheet, row, my_cls, *args, **kwargs):
 def grab_01_head_alpha(sheet, dummy1, dummy2, name_row, name_col):
     data = sheet.cell_value(name_row, name_col)
     logger.info(f'the head in question is named: {data}')
-    head_alpha = dbfnc.find_head_alpha_number2(data)
+    head_alpha = dbfnc.find_head_alpha_number(data)
     return head_alpha
 
 def grab_01_crew_alpha(sheet, dummy1, dummy2, name_row, name_col):
     data = sheet.cell_value(name_row, name_col)
     logger.info(f'the crew in question is named: {data}')
-    crew_alpha = dbfnc.find_crew_Alpha_number2(data)
+    crew_alpha = dbfnc.find_crew_Alpha_number(data)
     return crew_alpha
 
 def grab_02_head_id(sheet, dummy1, dummy2, name_row, name_col):
     data = sheet.cell_value(name_row, name_col)
-    head_id = dbfnc.find_head_number2(data)
+    head_id = dbfnc.find_head_number(data)
     return head_id
 
 def grab_02_crew_id(sheet, dummy1, dummy2, name_row, name_col):
     data = sheet.cell_value(name_row, name_col)
-    crew_id = dbfnc.find_crew_number2(data)
+    crew_id = dbfnc.find_crew_number(data)
     return crew_id
 
 def grab_03_date(sheet, row, my_cls, col):
