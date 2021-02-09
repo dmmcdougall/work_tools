@@ -45,14 +45,6 @@ class SalariedHead:
         self.dir_path = dir_path
         self.has_left = has_left
 
-    # repr allows us to print the list with 'salariedHeads(my_var)'
-    # def __repr__(self):
-    #     return f"salariedHead({self.head_id}, " \
-    #            f"'{self.last_name}', " \
-    #            f"'{self.first_name}', " \
-    #            f"'{self.dir_path}', " \
-    #            f"{self.has_left})"
-
     def full_name(self):
         """"This method returns the fullname of a member of the SalariedHeads class.
 
@@ -71,12 +63,6 @@ class SalariedHead:
         :returns: An email address of an employee as a single string
         """
         return self.first_name[0].lower() + self.last_name.lower() + domain
-
-# this is superceded by IterRegistry I think
-# class SearchDict(dict):
-#
-#     def search_for_match(self, event):
-#         return (self[key] for key in self if re.match(key, event))
 
 
 # test salaried head class
