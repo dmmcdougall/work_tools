@@ -9,14 +9,13 @@ import re
 
 # imported from local directories
 
-#
+
 class IterRegistry(type):
-    """This meta-class creates a list of the class instances of a class
+    """This meta-class creates an iterable list of the class instances of a class
     """
     def __iter__(cls):
         return iter(cls)
 
-# TODO:class restructuredtext
 class SalariedHead:
     """This class is for identifying individual salaried head staff members.
 
@@ -32,6 +31,7 @@ class SalariedHead:
     :type dir_path: string
     :param has_left: Is the employee still working for us.
     :type has_left: boolean
+
     """
     __metaclass__ = IterRegistry
     _registry = []
@@ -49,6 +49,7 @@ class SalariedHead:
         """"This method returns the fullname of a member of the SalariedHeads class.
 
         :returns: A first name and last name as a single string
+        :rtype: string
         """
         return f"{self.first_name} {self.last_name}"
 
@@ -61,6 +62,7 @@ class SalariedHead:
         :param domain: Your domain name with an @ sign.  ie @google.com.
         :type domain: string
         :returns: An email address of an employee as a single string
+        :rtype: string
         """
         return self.first_name[0].lower() + self.last_name.lower() + domain
 

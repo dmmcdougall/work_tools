@@ -16,6 +16,7 @@ import xlrd
 from bill_templates import MyBill
 import config as cfg
 import myFunctions as myfnc
+
 # TODO: finish docstrings
 # logging info
 logger = logging.getLogger(__name__)
