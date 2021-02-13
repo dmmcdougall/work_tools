@@ -26,9 +26,27 @@ file_handler = logging.FileHandler(cfg.log_files + '\\' + 'resco_bill_scrape.log
 file_handler.setFormatter(formatter)
 logger.addHandler(file_handler)
 
-# these methods are each one component of one complete row of data
-# grab the month - this first one grabs from the info block
+"""
+These methods are a component of an excel data scrape tool which includes
+a function spinner from the my_functions.py file. You will not they are numbered
+to help identify in which order the dataframe requires the data.  All require four 
+arguments as defined by the function spinner.
+"""
+
 def resco_0_mos(read_sheet, info_block, dummy2, dummy3):
+    """"This function pulls the event month from a call block header on a bill.
+
+    :param read_sheet: The active .xlsx sheet defined by xlrd.
+    :type read_sheet: object
+    :param info_block: This is the first row of the call block.
+    :type info_block: integer
+    :param dummy2: Unused variable.
+    :type first_infoblock_row: null
+    :param dummy3: Unused variable.
+    :type first_infoblock_row: null
+    :return: The calendar number of a month
+    :rtype: integer
+    """
     try:
         data = read_sheet.cell_value(info_block+1, 0)
         logger.info(f'the resco_0_mos has grabbed {data} to parse')
@@ -43,8 +61,22 @@ def resco_0_mos(read_sheet, info_block, dummy2, dummy3):
         data = "No Date data available"
         return data
 
-# this one grabs from the date in the header.  good for prep time and inventory items
+
 def resco_0b_mos(read_sheet, dummy1, dummy2, dummy3):
+    """This function grabs from the date in the header from the bill. This one
+    is for the prep time and inventory items loops.
+
+    :param read_sheet: The active .xlsx sheet defined by xlrd.
+    :type read_sheet: object
+    :param dummy1: Unused variable.
+    :type dummy1: integer
+    :param dummy2: Unused variable.
+    :type first_infoblock_row: null
+    :param dummy3: Unused variable.
+    :type first_infoblock_row: null
+    :return: The calendar number of a month
+    :rtype: integer
+        """
     try:
         data = read_sheet.cell_value(0, 10)
         logger.info(f'the resco_0b_mos has grabbed {data} to parse')
