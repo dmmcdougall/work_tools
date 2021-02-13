@@ -34,7 +34,7 @@ arguments as defined by the function spinner.
 """
 
 def resco_0_mos(read_sheet, info_block, dummy2, dummy3):
-    """"This function pulls the event month from a call block header on a bill.
+    """"This function pulls the calendar month from a call block header on a bill.
 
     :param read_sheet: The active .xlsx sheet defined by xlrd.
     :type read_sheet: object
@@ -63,20 +63,20 @@ def resco_0_mos(read_sheet, info_block, dummy2, dummy3):
 
 
 def resco_0b_mos(read_sheet, dummy1, dummy2, dummy3):
-    """This function grabs from the date in the header from the bill. This one
-    is for the prep time and inventory items loops.
+    """This function grabs the calendar month from the date in the header
+    from the bill. This one is for the prep time and inventory items loops.
 
     :param read_sheet: The active .xlsx sheet defined by xlrd.
     :type read_sheet: object
     :param dummy1: Unused variable.
-    :type dummy1: integer
+    :type dummy1: null
     :param dummy2: Unused variable.
     :type first_infoblock_row: null
     :param dummy3: Unused variable.
     :type first_infoblock_row: null
     :return: The calendar number of a month
     :rtype: integer
-        """
+    """
     try:
         data = read_sheet.cell_value(0, 10)
         logger.info(f'the resco_0b_mos has grabbed {data} to parse')
@@ -91,8 +91,22 @@ def resco_0b_mos(read_sheet, dummy1, dummy2, dummy3):
         data = "No Date data available"
         return data
 
-# grab the date - this first one grabs from the info block
+
 def resco_1_date(read_sheet, info_block, dummy2, dummy3):
+    """This function grabs the date in the header from the call block. This one
+    is for the prep time and inventory items loops.
+
+    :param read_sheet: The active .xlsx sheet defined by xlrd.
+    :type read_sheet: object
+    :param info_block: This is the first row of the call block.
+    :type info_block: integer
+    :param dummy2: Unused variable.
+    :type first_infoblock_row: null
+    :param dummy3: Unused variable.
+    :type first_infoblock_row: null
+    :return: The date as a string
+    :rtype: string
+    """
     try:
         data = read_sheet.cell_value(info_block+1, 0)
         logger.info(f'the date_grabber has grabbed {data} to parse')
@@ -109,6 +123,20 @@ def resco_1_date(read_sheet, info_block, dummy2, dummy3):
 
 # this one grabs from the date in the header.  good for prep time and inventory items
 def resco_1b_date(read_sheet, dummy1, dummy2, dummy3):
+    """This function grabs date from the header from the bill.
+    This one is for the prep time and inventory items loops.
+
+    :param read_sheet: The active .xlsx sheet defined by xlrd.
+    :type read_sheet: object
+    :param dummy1: Unused variable.
+    :type dummy1: null
+    :param dummy2: Unused variable.
+    :type first_infoblock_row: null
+    :param dummy3: Unused variable.
+    :type first_infoblock_row: null
+    :return: The date as a string
+    :rtype: string
+    """
     try:
         data = read_sheet.cell_value(0, 10)
         logger.info(f'the date_grabber has grabbed {data} to parse')
@@ -123,48 +151,77 @@ def resco_1b_date(read_sheet, dummy1, dummy2, dummy3):
         data = "No Date data available"
         return data
 
-# grab the in time of a labour call
-def resco_2_IN(read_sheet, info_block, dummy2, dummy3):
+
+def resco_2_in(read_sheet, info_block, dummy2, dummy3):
+    """This function grabs the start time of the call from the header of the call block.
+
+    :param read_sheet: The active .xlsx sheet defined by xlrd.
+    :type read_sheet: object
+    :param info_block: This is the first row of the call block.
+    :type info_block: integer
+    :param dummy2: Unused variable.
+    :type first_infoblock_row: null
+    :param dummy3: Unused variable.
+    :type first_infoblock_row: null
+    :return: The date as a string
+    :rtype: string
+    """
     try:
         data = read_sheet.cell_value(info_block, 0)
-        if "Strike" in data:
+
+        if "Strike" in data:  # a strike has no time data so just return "Strike"
             return data
         else:
             logger.info(f'the start_time has grabbed {data} to parse')
             data = read_sheet.cell_value(info_block, 0)
-            data_in_list = data.split('-')
-            junk_w_intime = data_in_list[0].split()
+            data_in_list = data.split('-')  # split to separate off the out time
+            junk_w_intime = data_in_list[0].split()  # split to separate off the in time
             # logger.info(f'the start_time has turned it into {just_time}')
             time_list = list(junk_w_intime[-1])
-            if len(time_list) == 3:
+            # adding a colon to create a the database typed
+            if len(time_list) == 3:  # if the time is prior to 1000 and no leading 0
                 time_w_colon = ''.join(time_list[0]) + ":" + ''.join(time_list[1:3])
                 return time_w_colon
             else:
-                if time_list[0] == '0':
+                if time_list[0] == '0':  # if the time is prior to 1000 with a leading 0
                     time_w_colon = ''.join(time_list[1]) + ":" + ''.join(time_list[2:4])
                     return time_w_colon
-                else:
+                else: # if time is =>1000
                     time_w_colon = ''.join(time_list[0:2]) + ":" + ''.join(time_list[2:4])
                     return time_w_colon
     except:
         return "No time data recorded"
 
 # grab the out time of a labour call
-def resco_3_OUT(read_sheet, info_block, dummy2, dummy3):
+def resco_3_out(read_sheet, info_block, dummy2, dummy3):
+    """This function grabs the end time of the call from the header of the call block.
+
+    :param read_sheet: The active .xlsx sheet defined by xlrd.
+    :type read_sheet: object
+    :param info_block: This is the first row of the call block.
+    :type info_block: integer
+    :param dummy2: Unused variable.
+    :type first_infoblock_row: null
+    :param dummy3: Unused variable.
+    :type first_infoblock_row: null
+    :return: The date as a string
+    :rtype: string
+    """
     try:
         data = read_sheet.cell_value(info_block, 0)
-        if "Strike" in data:
+        if "Strike" in data: # a strike has no time data so just return "Strike"
             return data
         else:
             logger.info(f'the end_time has grabbed {data} to parse')
-            junk_w_outtime = data.rsplit('-')
+            junk_w_outtime = data.rsplit('-') # split to separate off the out time
             # logger.info(f'the end_time has turned it into {just_time}')
             time_list = list(junk_w_outtime[1])
-            if len(time_list) == 3:
+            # adding a colon to create a the database typed
+            if len(time_list) == 3:  # if the time is prior to 1000 and no leading 0
                 time_w_colon = ''.join(time_list[0]) + ":" + ''.join(time_list[1:3])
                 return time_w_colon
             else:
-                if time_list[0] == '0':
+                if time_list[0] == '0':  # if the time is prior to 1000 with a leading 0
                     time_w_colon = ''.join(time_list[1]) + ":" + ''.join(time_list[2:4])
                     return time_w_colon
                 else:
