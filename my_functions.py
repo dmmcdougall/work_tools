@@ -10,7 +10,6 @@ This file is where my general functions are stored
 # imported from local directories
 
 
-# TODO: finish docstrings
 def add_row_to_df(my_list, my_headers, my_df):
     """ This function takes a list of elements and a list of
     dataframe column headers and adds it to an existing dataframe.
@@ -46,7 +45,6 @@ def convert_date_to_excel_ordinal(day, month, year):
     my_date = dt.date(year, month, day)
     n = my_date.toordinal()
     return (n - offset)
-
 
 """
 This group of functions is a series of generators for taking in functions and runnning them on .xlsx 
@@ -96,7 +94,6 @@ def fnc_spinner_full(sheet, row, my_cls, *args, **kwargs):
             yield func(sheet, row, my_cls, *my_val) # and return the function
 
 
-
 def fnc_spinner_simple(*args, **kwargs):
     """The fnc_spinner_simple is a generator built to assist in creating a dataframe by taking several functions
     as inputs and returning each one in order so as to create a full record set for each column of the dataframe.
@@ -121,7 +118,6 @@ def fnc_spinner_simple(*args, **kwargs):
         yield func(first_param, second_param)
 
 
-# this generator goes along a row of data and scrapes the data using the appropriate function
 def row_scrapper(read_sheet, info_block, r_row, col, *args):
     """The row_scrapper is a generator built to assist in creating a dataframe by taking several functions
     as inputs and returning each one in order so as to create a full record set for each column of the dataframe.
@@ -148,7 +144,7 @@ def row_scrapper(read_sheet, info_block, r_row, col, *args):
 
 def from_func_2_db_w_print(my_list, function, *args):
     """
-    This functions take in a single function, runs it, and appends the result to a list.  They are designed for
+    This function take in a single function, runs it, and appends the result to a list.  They are designed for
     reducing the repeats on the scrape.py loop.  This version includes a print to screen.
     args = (the list to append to, the function to run, the positional arguments of input func)
 
@@ -166,9 +162,8 @@ def from_func_2_db_w_print(my_list, function, *args):
     print(data)
 
 
-# above but without the print function
 def from_func_2_db(my_list, function, *args):
-    """This functions take in a single function, runs it, and appends the result to a list.  They are designed for
+    """This function take in a single function, runs it, and appends the result to a list.  They are designed for
     reducing the repeats on the scrape.py loop.
     args = (the list to append to, the function to run, the positional arguments of input func)
 
