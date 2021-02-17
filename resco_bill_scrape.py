@@ -71,9 +71,9 @@ def resco_0b_mos(read_sheet, dummy1, dummy2, dummy3):
     :param dummy1: Unused variable.
     :type dummy1: null
     :param dummy2: Unused variable.
-    :type first_infoblock_row: null
+    :type dummy2: null
     :param dummy3: Unused variable.
-    :type first_infoblock_row: null
+    :type dummy3: null
     :return: The calendar number of a month
     :rtype: integer
     """
@@ -101,9 +101,9 @@ def resco_1_date(read_sheet, info_block, dummy2, dummy3):
     :param info_block: This is the first row of the call block.
     :type info_block: integer
     :param dummy2: Unused variable.
-    :type first_infoblock_row: null
+    :type dummy2: null
     :param dummy3: Unused variable.
-    :type first_infoblock_row: null
+    :type dummy3: null
     :return: The date as a string
     :rtype: string
     """
@@ -121,7 +121,7 @@ def resco_1_date(read_sheet, info_block, dummy2, dummy3):
         data = "No Date data available"
         return data
 
-# this one grabs from the date in the header.  good for prep time and inventory items
+
 def resco_1b_date(read_sheet, dummy1, dummy2, dummy3):
     """This function grabs date from the header from the bill.
     This one is for the prep time and inventory items loops.
@@ -131,9 +131,9 @@ def resco_1b_date(read_sheet, dummy1, dummy2, dummy3):
     :param dummy1: Unused variable.
     :type dummy1: null
     :param dummy2: Unused variable.
-    :type first_infoblock_row: null
+    :type dummy2: null
     :param dummy3: Unused variable.
-    :type first_infoblock_row: null
+    :type dummy3: null
     :return: The date as a string
     :rtype: string
     """
@@ -160,9 +160,9 @@ def resco_2_in(read_sheet, info_block, dummy2, dummy3):
     :param info_block: This is the first row of the call block.
     :type info_block: integer
     :param dummy2: Unused variable.
-    :type first_infoblock_row: null
+    :type dummy2: null
     :param dummy3: Unused variable.
-    :type first_infoblock_row: null
+    :type dummy3: null
     :return: The date as a string
     :rtype: string
     """
@@ -192,7 +192,7 @@ def resco_2_in(read_sheet, info_block, dummy2, dummy3):
     except:
         return "No time data recorded"
 
-# grab the out time of a labour call
+
 def resco_3_out(read_sheet, info_block, dummy2, dummy3):
     """This function grabs the end time of the call from the header of the call block.
 
@@ -201,9 +201,9 @@ def resco_3_out(read_sheet, info_block, dummy2, dummy3):
     :param info_block: This is the first row of the call block.
     :type info_block: integer
     :param dummy2: Unused variable.
-    :type first_infoblock_row: null
+    :type dummy2: null
     :param dummy3: Unused variable.
-    :type first_infoblock_row: null
+    :type dummy3: null
     :return: The date as a string
     :rtype: string
     """
@@ -230,21 +230,62 @@ def resco_3_out(read_sheet, info_block, dummy2, dummy3):
     except:
         return "No time data recorded"
 
-# create a payee
+
 def resco_4_payee(dummy, dummy1, dummy2, dummy3):
+    """This function creates a string of 'Arts Commons' to
+    fill into the dataframe's 'payee' column.
+
+    :param dummy: Unused variable..
+    :type dummy: null
+    :param dummy1: Unused variable.
+    :type dummy1: null
+    :param dummy2: Unused variable.
+    :type dummy2: null
+    :param dummy3: Unused variable.
+    :type dummy3: null
+    :return: Returns 'Arts Commons'
+    :rtype: string
+    """
     data = "Arts Commons"
     return data
 
-# what type of call is it Setup, Strike...- this first one grabs from the info block
+
 def resco_5_type(read_sheet, info_block, dummy2, dummy3):
+    """This function grabs type of call (ie - Setup, Strike) from the header of the call block.
+
+    :param read_sheet: The active .xlsx sheet defined by xlrd.
+    :type read_sheet: object
+    :param info_block: This is the first row of the call block.
+    :type info_block: integer
+    :param dummy2: Unused variable.
+    :type dummy2: null
+    :param dummy3: Unused variable.
+    :type dummy3: null
+    :return: The call type as a string
+    :rtype: string
+    """
     data = read_sheet.cell_value(info_block, 0)
     logger.info(f'the grab_call_type has grabbed {data} to parse')
     call = data.rsplit(' ', 1)
     logger.info(f'the grab_call_type has turned it into {call}')
     return call[0]
 
-# this one is only for the preptime loop
+
 def resco_5b_type(dummy, dummy1, dummy2, dummy3):
+    """This function creates a string of 'PREP TIME' to fill into
+     the dataframe's 'payee' column for use in the prep time loop.
+
+    :param dummy: Unused variable..
+    :type dummy: null
+    :param dummy1: Unused variable.
+    :type dummy1: null
+    :param dummy2: Unused variable.
+    :type dummy2: null
+    :param dummy3: Unused variable.
+    :type dummy3: null
+    :return: Returns 'Arts Commons'
+    :rtype: string
+    """
     data = "PREP TIME"
     return data
 
