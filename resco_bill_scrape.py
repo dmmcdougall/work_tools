@@ -44,7 +44,7 @@ def resco_0_mos(read_sheet, info_block, dummy2, dummy3):
     :type first_infoblock_row: null
     :param dummy3: Unused variable.
     :type first_infoblock_row: null
-    :return: The calendar number of a month
+    :return: The calendar number of a month.
     :rtype: integer
     """
     try:
@@ -74,7 +74,7 @@ def resco_0b_mos(read_sheet, dummy1, dummy2, dummy3):
     :type dummy2: null
     :param dummy3: Unused variable.
     :type dummy3: null
-    :return: The calendar number of a month
+    :return: The calendar number of a month.
     :rtype: integer
     """
     try:
@@ -104,7 +104,7 @@ def resco_1_date(read_sheet, info_block, dummy2, dummy3):
     :type dummy2: null
     :param dummy3: Unused variable.
     :type dummy3: null
-    :return: The date as a string
+    :return: The date as a string.
     :rtype: string
     """
     try:
@@ -134,7 +134,7 @@ def resco_1b_date(read_sheet, dummy1, dummy2, dummy3):
     :type dummy2: null
     :param dummy3: Unused variable.
     :type dummy3: null
-    :return: The date as a string
+    :return: The date as a string.
     :rtype: string
     """
     try:
@@ -163,7 +163,7 @@ def resco_2_in(read_sheet, info_block, dummy2, dummy3):
     :type dummy2: null
     :param dummy3: Unused variable.
     :type dummy3: null
-    :return: The date as a string
+    :return: The date as a string.
     :rtype: string
     """
     try:
@@ -204,7 +204,7 @@ def resco_3_out(read_sheet, info_block, dummy2, dummy3):
     :type dummy2: null
     :param dummy3: Unused variable.
     :type dummy3: null
-    :return: The date as a string
+    :return: The date as a string.
     :rtype: string
     """
     try:
@@ -261,12 +261,12 @@ def resco_5_type(read_sheet, info_block, dummy2, dummy3):
     :type dummy2: null
     :param dummy3: Unused variable.
     :type dummy3: null
-    :return: The call type as a string
+    :return: The call type as a string.
     :rtype: string
     """
     data = read_sheet.cell_value(info_block, 0)
     logger.info(f'the grab_call_type has grabbed {data} to parse')
-    call = data.rsplit(' ', 1)
+    call = data.rsplit(' ', 1) # Seperate the call info from the time of the calls
     logger.info(f'the grab_call_type has turned it into {call}')
     return call[0]
 
@@ -283,16 +283,30 @@ def resco_5b_type(dummy, dummy1, dummy2, dummy3):
     :type dummy2: null
     :param dummy3: Unused variable.
     :type dummy3: null
-    :return: Returns 'Arts Commons'
+    :return: Returns 'Arts Commons'.
     :rtype: string
     """
     data = "PREP TIME"
     return data
 
-# venue ops definition of call
+
 def resco_6_resource(read_sheet, dummy1, row, col):
+    """This function returns a string which aligns with the labour
+    definitions as they appear on the Venue Ops bills.
+
+    :param read_sheet: The active .xlsx sheet defined by xlrd.
+    :type read_sheet: object
+    :param dummy1: Unused variable.
+    :type dummy1: null
+    :param row: The data row that is being scraped.
+    :type row: integer
+    :param col: The data column that is being scraped.
+    :type col: integer
+    :return: The labour type as defined by Venue Ops as a string.
+    :rtype: string
+    """
     data = read_sheet.cell_value(row, 0)
-    charge_out = read_sheet.cell_value(row, col +1)
+    charge_out = read_sheet.cell_value(row, col +1) # This is th payout value
     if charge_out == 42:
         return "JSCH - Stage Hand"
     elif charge_out == 63:
@@ -315,35 +329,116 @@ def resco_6_resource(read_sheet, dummy1, row, col):
         else:
             return "JSCH Stage Head - DT"
 
-# who is it, FULLTIME< CASUAUL etc...
+
 def resco_7_description(read_sheet, dummy1, row, dummy3):
+    """This function returns a string which contains the crew member who worked the call.
+
+    :param read_sheet: The active .xlsx sheet defined by xlrd.
+    :type read_sheet: object
+    :param dummy1: Unused variable.
+    :type dummy1: null
+    :param row: The data row that is being scraped.
+    :type row: integer
+    :param dummy3: Unused variable.
+    :type dummy3: null
+    :return: The crew member who worked the call as a string.
+    :rtype: string
+    """
     data = read_sheet.cell_value(row, 0)
     return data
 
-# resource for an MP
+
 def resco_7b_description(dummy, dummy1, dummy2, dummy3):
+    """This function creates a string of 'Meal Penalty' to fill into
+    the dataframe's 'description' column for use in the MP loop.
+
+    :param dummy: Unused variable..
+    :type dummy: null
+    :param dummy1: Unused variable.
+    :type dummy1: null
+    :param dummy2: Unused variable.
+    :type dummy2: null
+    :param dummy3: Unused variable.
+    :type dummy3: null
+    :return: Returns 'Arts Commons'
+    :rtype: string
+    """
     data = "Meal Penalty"
     return data
 
-# grab cost per hour/unit
-def resco_8_unitprice(read_sheet, dummy1,row, col):
-    data = read_sheet.cell_value(row, col +1)
+
+def resco_8_unitprice(read_sheet, dummy1, row, col):
+    """This function returns an integer which aligns with the unit/hourly cost of the billing item.
+
+    :param read_sheet: The active .xlsx sheet defined by xlrd.
+    :type read_sheet: object
+    :param dummy1: Unused variable.
+    :type dummy1: null
+    :param row: The data row that is being scraped.
+    :type row: integer
+    :param col: The data column that is being scraped.
+    :type col: integer
+    :return: The cost of the item.
+    :rtype: integer
+    """
+    data = read_sheet.cell_value(row, col +1) # the +1 realigns it.
     return data
 
 # 9, 10, 11 are null
 
-# this quantity is MP only
 def resco_11b_qty(read_sheet, dummy1, row, col):
+    """This function returns an integer which aligns with the quantity associated
+    with the billing item.  This is for the Meal Penalty loop only.
+
+    :param read_sheet: The active .xlsx sheet defined by xlrd.
+    :type read_sheet: object
+    :param dummy1: Unused variable.
+    :type dummy1: null
+    :param row: The data row that is being scraped.
+    :type row: integer
+    :param col: The data column that is being scraped.
+    :type col: integer
+    :return: The number or quantity of the item.
+    :rtype: integer
+    """
     data = read_sheet.cell_value(row, col)
     return data
 
-# grab the number of hours worked
+
 def resco_12_hrs(read_sheet, dummy1, row, col):
+    """This function returns an integer which aligns with the number of hours worked associated with the call.
+
+    :param read_sheet: The active .xlsx sheet defined by xlrd.
+    :type read_sheet: object
+    :param dummy1: Unused variable.
+    :type dummy1: null
+    :param row: The data row that is being scraped.
+    :type row: integer
+    :param col: The data column that is being scraped.
+    :type col: integer
+    :return: The number of hours worked in the call.
+    :rtype: integer
+    """
     data = read_sheet.cell_value(row, col)
     return data
 
-# subtotal = unit hrs * rate
+
 def resco_13_subtotal(read_sheet, dummy1, row, col):
+    """This function returns the subtotaled cost of the billing items. The number
+    cost of the billable items in the line item as a subtotal.  The
+    formula is unit hrs * rate.
+
+    :param read_sheet: The active .xlsx sheet defined by xlrd.
+    :type read_sheet: object
+    :param dummy1: Unused variable.
+    :type dummy1: null
+    :param row: The data row that is being scraped.
+    :type row: integer
+    :param col: The data column that is being scraped.
+    :type col: integer
+    :return: The number cost of the billable items in the line item is unit hrs * rate.
+    :rtype: integer
+    """
     hrs_qty = read_sheet.cell_value(row, col)
     logger.info(f'hrs_qty = {hrs_qty}')
     rate_price = read_sheet.cell_value(row, col + 1)
@@ -352,19 +447,60 @@ def resco_13_subtotal(read_sheet, dummy1, row, col):
 
 # 14 is NULL
 
-# total = unit hrs * rate
 def resco_15_total(read_sheet, dummy1,row, col):
+    """This function returns the totaled cost of the billing items. The number
+    cost of the billable items in the line item as a subtotal.  The
+    formula is unit hrs * rate.  In the future, this will distinguish itself
+    from the subtotal formula by the inclusion of applicable taxes.
+
+    :param read_sheet: The active .xlsx sheet defined by xlrd.
+    :type read_sheet: object
+    :param dummy1: Unused variable.
+    :type dummy1: null
+    :param row: The data row that is being scraped.
+    :type row: integer
+    :param col: The data column that is being scraped.
+    :type col: integer
+    :return: The number cost of the billable items in the line item is unit hrs * rate.
+    :rtype: integer
+    """
     hrs_qty = read_sheet.cell_value(row, col)
     rate_price = read_sheet.cell_value(row, col +1)
     return hrs_qty*rate_price
 
-# project title
+
 def resco_16_title(read_sheet, dummy1, dummy2, dummy3):
+    """This function grabs the event name from the header from the bill.
+
+    :param read_sheet: The active .xlsx sheet defined by xlrd.
+    :type read_sheet: object
+    :param dummy1: Unused variable.
+    :type dummy1: null
+    :param dummy2: Unused variable.
+    :type dummy2: null
+    :param dummy3: Unused variable.
+    :type dummy3: null
+    :return: The date as a string.
+    :rtype: string
+    """
     data = read_sheet.cell_value(0, 0)
     return data
 
-# just grab it and return it
+
 def resco_x_generic(read_sheet, dummy1, row, col):
+    """Just grab it and return it.
+
+    :param read_sheet: The active .xlsx sheet defined by xlrd.
+    :type read_sheet: object
+    :param dummy1: Unused variable.
+    :type dummy1: null
+    :param row: The data row that is being scraped.
+    :type row: integer
+    :param col: The data column that is being scraped.
+    :type col: integer
+    :return: The data variable.
+    :rtype: integer/string
+    """
     data = read_sheet.cell_value(row, col)
     return data
 
