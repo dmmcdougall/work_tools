@@ -1,8 +1,8 @@
 import pandas as pd
 import db_functions as dbfnc
 import config as cfg
+from datetime import date
 
-dates = pd.to_datetime(pd.Series(['20010101', '20010331']), format = '%Y%m%d')
-dates.dt.strftime('%Y-%m-%d')
+value_to_check = pd.Timestamp((date.today().year-2), date.today().month, date.today().day)
 
-print(dates)
+print(value_to_check)
