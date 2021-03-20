@@ -7,6 +7,7 @@ import logging
 import pyodbc
 import pandas as pd
 from contextlib import contextmanager
+from datetime import date
 
 # third part libraries
 import config as cfg
@@ -338,6 +339,14 @@ def fiscal_yr(my_date):
         fis_yr = str(int(cal_yr)) + "-" + str(int(cal_yr)+1)
 
     return fis_yr    
+
+def current_fiscal(my_date):
+    dt = fiscal_yr(str(date.today()))
+    fis_yr = fiscal_yr(my_date)
+    if dt == fis_yr:
+        return True
+    else:
+        return False
 
 ######## SIMPLE SQL QUERIES THAT WORK BUT ARE UNUSED FOR NOW #######
 
