@@ -15,7 +15,7 @@ import xlrd
 # imported from local directories
 from bill_templates import MyBill
 import config as cfg
-import myFunctions as myfnc
+import my_functions as myfnc
 
 # TODO: finish docstrings
 # logging info
@@ -678,8 +678,8 @@ def main():
                             units = read_sheet.cell_value(r_row, col)
                             if units !='' and units != 0:
                                 call_time_reg = myfnc.row_scrapper(read_sheet, info_block, r_row, col,
-                                                                   resco_0_mos, resco_1_date, resco_2_IN,
-                                                                   resco_3_OUT, resco_4_payee, resco_5_type,
+                                                                   resco_0_mos, resco_1_date, resco_2_in,
+                                                                   resco_3_out, resco_4_payee, resco_5_type,
                                                                    resco_6_resource, resco_7_description, resco_8_unitprice,
                                                                    resco_x_NULL, resco_x_NULL, resco_x_NULL,
                                                                    resco_12_hrs, resco_13_subtotal, resco_x_NULL,
@@ -701,8 +701,8 @@ def main():
                             units = read_sheet.cell_value(r_row, col)
                             if units !='' and units != 0:
                                 call_time_ot = myfnc.row_scrapper(read_sheet, info_block, r_row, col,
-                                                                  resco_0_mos, resco_1_date, resco_2_IN,
-                                                                  resco_3_OUT, resco_4_payee, resco_5_type,
+                                                                  resco_0_mos, resco_1_date, resco_2_in,
+                                                                  resco_3_out, resco_4_payee, resco_5_type,
                                                                   resco_6_resource, resco_7_description, resco_8_unitprice,
                                                                   resco_x_NULL, resco_x_NULL, resco_x_NULL,
                                                                   resco_12_hrs, resco_13_subtotal, resco_x_NULL,
