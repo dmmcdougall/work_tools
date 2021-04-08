@@ -310,7 +310,7 @@ def resco_6_resource(read_sheet, dummy1, row, col):
     hand_charge_out = read_sheet.cell_value(96,2)
 
     data = read_sheet.cell_value(row, 0)
-    charge_out = read_sheet.cell_value(row, col +1) # This is th payout value
+    charge_out = read_sheet.cell_value(row, col +1) # This is the payout value
     if charge_out == hand_charge_out:
         return "JSCH - Stage Hand"
     elif charge_out == hand_charge_out*1.5:
