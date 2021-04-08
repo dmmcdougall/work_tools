@@ -309,7 +309,6 @@ def resco_6_resource(read_sheet, dummy1, row, col):
     head_charge_out = read_sheet.cell_value(95,2)
     hand_charge_out = read_sheet.cell_value(96,2)
 
-
     data = read_sheet.cell_value(row, 0)
     charge_out = read_sheet.cell_value(row, col +1) # This is th payout value
     if charge_out == hand_charge_out:
