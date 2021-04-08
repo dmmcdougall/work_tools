@@ -15,7 +15,7 @@ import xlrd
 # imported from local directories
 from bill_templates import MyBill
 import config as cfg
-import myFunctions as myfnc
+import my_functions as myfnc
 
 # TODO: finish docstrings
 # logging info
@@ -305,25 +305,30 @@ def resco_6_resource(read_sheet, dummy1, row, col):
     :return: The labour type as defined by Venue Ops as a string.
     :rtype: string
     """
+
+    head_charge_out = read_sheet.cell_value(95,2)
+    hand_charge_out = read_sheet.cell_value(96,2)
+
+
     data = read_sheet.cell_value(row, 0)
     charge_out = read_sheet.cell_value(row, col +1) # This is th payout value
-    if charge_out == 42:
+    if charge_out == hand_charge_out:
         return "JSCH - Stage Hand"
-    elif charge_out == 63:
+    elif charge_out == hand_charge_out*1.5:
         return "JSCH - Stage Hand - OT"
-    elif charge_out == 84:
+    elif charge_out == hand_charge_out*2:
         return "JSCH - Stage Hand - DT"
-    elif charge_out == 48:
+    elif charge_out == head_charge_out:
         if 'CASUAL' in data:
             return "JSCH Stage Lead"
         else:
             return "JSCH Stage Head"
-    elif charge_out == 72:
+    elif charge_out == head_charge_out*1.5:
         if 'CASUAL' in data:
             return "JSCH Stage Lead - OT"
         else:
             return "JSCH Stage Head - OT"
-    elif charge_out == 96:
+    elif charge_out == head_charge_out*2:
         if 'CASUAL' in data:
             return "JSCH Stage Lead - DT"
         else:
@@ -678,8 +683,8 @@ def main():
                             units = read_sheet.cell_value(r_row, col)
                             if units !='' and units != 0:
                                 call_time_reg = myfnc.row_scrapper(read_sheet, info_block, r_row, col,
-                                                                   resco_0_mos, resco_1_date, resco_2_IN,
-                                                                   resco_3_OUT, resco_4_payee, resco_5_type,
+                                                                   resco_0_mos, resco_1_date, resco_2_in,
+                                                                   resco_3_out, resco_4_payee, resco_5_type,
                                                                    resco_6_resource, resco_7_description, resco_8_unitprice,
                                                                    resco_x_NULL, resco_x_NULL, resco_x_NULL,
                                                                    resco_12_hrs, resco_13_subtotal, resco_x_NULL,
@@ -701,8 +706,8 @@ def main():
                             units = read_sheet.cell_value(r_row, col)
                             if units !='' and units != 0:
                                 call_time_ot = myfnc.row_scrapper(read_sheet, info_block, r_row, col,
-                                                                  resco_0_mos, resco_1_date, resco_2_IN,
-                                                                  resco_3_OUT, resco_4_payee, resco_5_type,
+                                                                  resco_0_mos, resco_1_date, resco_2_in,
+                                                                  resco_3_out, resco_4_payee, resco_5_type,
                                                                   resco_6_resource, resco_7_description, resco_8_unitprice,
                                                                   resco_x_NULL, resco_x_NULL, resco_x_NULL,
                                                                   resco_12_hrs, resco_13_subtotal, resco_x_NULL,

@@ -9,6 +9,9 @@ myscratch.py
 # ignore error logs
 *.log
 
+# ignore .sql
+*.sql
+
 # ignore dir
 .idea/
 __pycache__/

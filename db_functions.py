@@ -7,6 +7,7 @@ import logging
 import pyodbc
 import pandas as pd
 from contextlib import contextmanager
+from datetime import date
 
 # third part libraries
 import config as cfg
@@ -307,6 +308,45 @@ def grabeventYR2(datestr):
             alphayr = ord('A')+yr_diff
 
     return chr(alphayr)
+
+def fiscal_q(my_date):
+    date_tup = str.split(my_date, '-')
+
+    cal_mos = int(date_tup[1])
+
+    if cal_mos >= 1 and cal_mos <=2:
+        fis_q = 2
+    elif cal_mos >= 3 and cal_mos <=5:
+        fis_q = 3
+    elif cal_mos >= 6 and cal_mos <=8:
+        fis_q = 4
+    elif cal_mos >= 9 and cal_mos <=11:
+        fis_q = 1
+    else:
+        fis_q = 2
+
+    return fis_q
+
+def fiscal_yr(my_date):
+    date_tup = str.split(my_date, '-')
+
+    cal_yr = date_tup[0]
+    cal_mos = date_tup[1]
+
+    if int(cal_mos) < 9:
+        fis_yr = str(int(cal_yr)-1) + "-" + str(cal_yr)
+    else:
+        fis_yr = str(int(cal_yr)) + "-" + str(int(cal_yr)+1)
+
+    return fis_yr    
+
+def current_fiscal(my_date):
+    dt = fiscal_yr(str(date.today()))
+    fis_yr = fiscal_yr(my_date)
+    if dt == fis_yr:
+        return True
+    else:
+        return False
 
 ######## SIMPLE SQL QUERIES THAT WORK BUT ARE UNUSED FOR NOW #######
 
