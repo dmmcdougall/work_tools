@@ -6,11 +6,10 @@
 config.py
 myscratch.py
 
-# ignore error logs
+# ignore types
 *.log
-
-# ignore .sql
 *.sql
+*.csv
 
 # ignore dir
 .idea/
