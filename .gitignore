@@ -16,3 +16,4 @@ myscratch.py
 __pycache__/
 venv/
 log/
+.ipynb_checkpoints
