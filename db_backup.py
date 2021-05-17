@@ -3,25 +3,21 @@ import pandas as pd
 import db_functions as dbfnc
 import config as cfg
 
-my_table_list =[
-    'AccessLvlTable', 'AccountingCodeTable','AdvancerTable',
-    'CPOCrewingBurnsTable', 'CrewBailoutCounterTable', 'CrewBailoutTypeTable',
-    'CrewNamesTable', 'CrewProficiencyTable', 'CrewShiftTypeTable',
-    'CrewShiftWorkedTable', 'CrewStatusTable', 'CRFcodes',
-    'HeadNamesTable', 'HeadShiftWorkedTable', 'InventoryTable',
-    'InventoryUseTable', 'PrefferedAVTable', 'PresenterTable',
-    'ProjectorTable ', 'PurchaseOrderTable', 'ScreenSetupTable',
-    'ShowStyleTable', 'ShowTable', '[tbl-11-12_dbdata]',
-    '[tbl-12-13_dbdata]', '[Tbl-BudgetingCategory]', 'tblConductorGigs',
-    'tblConductorNames', 'tblCrewCRFWork', 'tblHeadCRFwork',
-    'tblSndMaintShifts', 'tblSndMaintShiftTypes', '[Tbl-TOILpayout]',
-    'TMPtblWeeklyCrewData', 'TMPtblWeeklyHeadsData', 'UserTable',
-    'VenderTable', 'VenueTable'
-    ]
+query = ("SELECT * FROM INFORMATION_SCHEMA.TABLES\
+     WHERE TABLE_TYPE = 'BASE TABLE'")
 
-for i in my_table_list:
+with dbfnc.connection(cfg.my_driver, cfg.my_server, cfg.my_db) as conn:
+    df = pd.read_sql(query, conn)
+
+list_of_tbl = df.TABLE_NAME.to_list()
+
+new_list = []
+for tbl in list_of_tbl:
+    new_str = '['+tbl+']'
+    new_list.append(new_str)
+
+for i in new_list:
     query = (f'SELECT * FROM {i}')
-
     with dbfnc.connection(cfg.my_driver, cfg.my_server, cfg.my_db) as conn:
         df = pd.read_sql(query, conn)
     
