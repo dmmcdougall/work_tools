@@ -368,7 +368,7 @@ def main():
 
     if tbl_exist:
         with dbfnc.connection(cfg.my_driver, cfg.my_server, cfg.my_db) as conn:
-            print("let's empty Heads the table")
+            print("let's empty the Heads table")
             cur = conn.cursor()
             cur.execute("DROP Table TMPtblWeeklyHeadsData")
 
