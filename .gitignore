@@ -5,6 +5,7 @@
 # ignore config files
 config.py
 myscratch.py
+test.py
 
 # ignore types
 *.log
