@@ -10,6 +10,7 @@ import os
 from shutil import copyfile
 from win32com.client import Dispatch
 import xlsxwriter
+from tqdm import trange
 
 # imported from third party repos
 
@@ -48,11 +49,13 @@ def main():
     write_file = dir_name +"\\"+filename
     workbook.close()
 
-    print("Done setup, let's do wome work...")
+    print("Done setup, let's do some work...")
 
     # take each timesheet, place it in the write file
     xl = Dispatch("Excel.Application")
-    for i in range(num_sheets):
+    print()
+    print('Copying the files to the new sheet...')
+    for i in trange(num_sheets):
         read_file = (read_dir + '\\' + read_list[i])
         wb1 = xl.Workbooks.Open(Filename=read_file)
         wb2 = xl.Workbooks.Open(Filename=write_file)
@@ -62,7 +65,9 @@ def main():
     xl.Quit()
 
     # fix the dates in the timesheets
-    for i in range(num_sheets):
+    print()
+    print('Setting the date on the sheets...')
+    for i in trange(num_sheets):
         wb = openpyxl.load_workbook(write_file)
         sheets = wb.sheetnames
         Sheet1 = wb[sheets[i]]
@@ -72,7 +77,6 @@ def main():
     # remove the 'Sheet1' from intialization process
     wb = openpyxl.load_workbook(write_file)
     sheet_list = wb.sheetnames
-    print(sheet_list)
     wb.remove(wb['Sheet1'])
     wb.save(write_file) 
 
