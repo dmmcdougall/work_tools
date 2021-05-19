@@ -8,9 +8,9 @@ import datetime as dt
 import openpyxl
 import os
 from shutil import copyfile
+from tqdm import trange
 from win32com.client import Dispatch
 import xlsxwriter
-from tqdm import trange
 
 # imported from third party repos
 
