@@ -7,50 +7,60 @@ import os
 import xlsxwriter
 from win32com.client import Dispatch
 import datetime as dt
-from openpyxl import workbook 
-from openpyxl import load_workbook
+import openpyxl
+from shutil import copyfile
 
 # imported from third party repos
 
 # imported from local directories
 import config as cfg
 
-def remove_password_xlsx(filename):
-    xcl = Dispatch('Excel.Application')
-    pw_str = '1234'
-    wb = xcl.workbooks.open(filename)
-    wb.Unprotect(pw_str)
-    wb.UnprotectSharing(pw_str)
-    xcl.DisplayAlerts = False
-    wb.Save()
-    xcl.Quit()
+# def remove_password_xlsx(filename):
+#     xcl = Dispatch('Excel.Application')
+#     pw_str = '1234'
+#     wb = xcl.workbooks.open(filename)
+#     wb.Unprotect(pw_str)
+#     wb.UnprotectSharing(pw_str)
+#     xcl.DisplayAlerts = False
+#     wb.Save()
+#     xcl.Quit()
 
 def main():
-    # create a write book
-    my_date = input("""Give me the Date string you would like...\
+    # get the wk ending info from teh usr
+    my_date = input("""Give me the Date string you would like.  An example of the excepted fomrat is...\n
+    Sep 14, 1985
     """)
+    my_date_comma = my_date.replace(',', '')
     print()
-
-    print(f"Is {my_date} the string you want?\
-        ENTER for 'yes' CTRL+C for no")
+    print(f"Is {my_date} the string you want?")
+    print("ENTER for 'yes' CTRL+C for no")
     print()
     input()
 
-    wk_end = dt.datetime.strptime(my_date, "%B %d, %Y")
+    # create dir and copy th files
+    dir_name = f"{cfg.desktop_dir}\\Week Ends {my_date}"
+    os.mkdir(dir_name)
+
+    # create a list of the read_books
+    read_dir = cfg.my_dir  
+    read_list = os.listdir(read_dir)
+    print(read_list)
+    for my_file in read_list:
+        file_path = read_dir + '\\' + my_file
+        save_path = dir_name + '\\' + my_file
+        copyfile(file_path, save_path)
+
+    # create a write book
+    wk_end = dt.datetime.strptime(my_date, "%b %d, %Y")
     wk_begin = wk_end - dt.timedelta(days=6)
 
-    # print(my_date)
-    # print(wk_begin)
-
-    filename = f"House Crew Timesheets - Week Ends {my_date}.xlsx"
-    workbook = xlsxwriter.Workbook(cfg.desktop_dir+"\\"+filename)
-    write_file = cfg.desktop_dir+"\\"+filename
+    filename = f"House Crew Timesheets - Week Ends {my_date_comma}.xlsx"
+    workbook = xlsxwriter.Workbook(dir_name+"\\"+filename)
+    write_file = dir_name +"\\"+filename
     workbook.close()
 
     print('moving on...')
-    # create a list of the read_books
-    read_dir = cfg.my_dir  # CHANGE THIS FOR YOUR NEEDS
-    read_list = os.listdir(read_dir)
+    
 
     xl = Dispatch("Excel.Application")
 
@@ -68,25 +78,17 @@ def main():
     xl.Quit()
 
     for i in range(7):
-        wb = load_workbook(write_file)
+        wb = openpyxl.load_workbook(write_file)
         sheets = wb.sheetnames
         Sheet1 = wb[sheets[i]]
         Sheet1 .cell(row = 21, column = 1).value = wk_begin
         wb.save(write_file) 
 
-
-    # for sht in range(1,7):
-    #     try:
-    #         wb = xl.Workbooks.Open(Filename=write_file)
-    #         ws = wb.Worksheets(sht)
-    #         ws.Cells(1,21).Value = wk_begin
-    #         print('a single success')
-    #     except:
-    #         print("nOpE")
-
-    #     finally:
-    #         xl.Quit()
-        
+    wb = openpyxl.load_workbook(write_file)
+    sheet_list = wb.sheetnames
+    print(sheet_list)
+    wb.remove(wb['Sheet1'])
+    wb.save(write_file) 
 
 
 if __name__ == '__main__':
