@@ -1,25 +1,21 @@
-# import pandas as pd
-# import db_functions as dbfnc
-# import config as cfg
-# from datetime import date
+from win32com.client import Dispatch
+import xlsxwriter
+import config as cfg
 
-# # grab data from the db and input it to a df
-# # the query is HeadworkedTable joined with ShowTable joined with HeadNamesTable filtered on ShowName 'FLEX DAY'
-# sql_file=open(f'{cfg.sql_dir}\TOIL_payouts.sql')
-# query = sql_file.read()
+def remove_password_xlsx(filename):
+    xcl = Dispatch('Excel.Application')
+    pw_str = '1234'
+    wb = xcl.workbooks.open(filename)
+    wb.Unprotect(pw_str)
+    wb.UnprotectSharing(pw_str)
+    xcl.DisplayAlerts = False
+    wb.Save()
+    xcl.Quit()
 
-# with dbfnc.connection(cfg.my_driver, cfg.my_server, cfg.my_db) as conn:
-#     df = pd.read_sql(query, conn)
+my_file = cfg.desktop_dir+"\\"+"test.xlsx"
+my_book = xlsxwriter.Workbook(cfg.desktop_dir+"\\"+"test.xlsx")
+print(my_file)
 
+remove_password_xlsx(my_file)
+print('done')
 
-
-# df['Date_String'] = df['PayoutDate'].dt.strftime('%Y-%m-%d')
-# filter_mask = df.Date_String.apply(dbfnc.current_fiscal) 
-# df = df[filter_mask]
-
-# print(df.head(10))
-
-my_list= ['tagine', 'tofu' , 'risotto', 'nachos', 'sushi']
-
-for x in enumerate(my_list):
-    print(x)
