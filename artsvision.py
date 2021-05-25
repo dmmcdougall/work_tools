@@ -14,9 +14,22 @@ import config as cfg
 #     site = s.get('https://artsvision.net/main.asp')
 #     print(site.content)
 
+# # no work
+# with Session() as s:
+#     login_data = {"username": cfg.my_usr, "password": cfg.my_pswrd}
+#     s.post("https://artsvision.net/epcor.asp", login_data)
+#     home_page = s.get("https://artsvision.net/main.asp")
+#     soup = BeautifulSoup(home_page.text, "html.parser")
+#     print(soup.prettify())
+
 # no work
 with Session() as s:
     login_data = {"username": cfg.my_usr, "password": cfg.my_pswrd}
     s.post("https://artsvision.net/epcor.asp", login_data)
     home_page = s.get("https://artsvision.net/main.asp")
-    print(home_page.content)
+    soup = BeautifulSoup(home_page.text, "html.parser")
+    morp = soup.prettify()
+    # print(morp)
+
+with open('soup_file.txt', 'w') as my_file:
+    my_file.write(morp)

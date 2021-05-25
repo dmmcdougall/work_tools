@@ -1,0 +1,35 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+ <meta content="IE=100" http-equiv="X-UA-Compatible"/>
+ <meta content="text/html; CHARSET=utf-8" http-equiv="Content-Type"/>
+ <head>
+  <title>
+   ArtsVision - Arts Commons
+  </title>
+  <link href="https://www.artsvision.net/favicon.ico" rel="shortcut icon" type="image/ico"/>
+  <script type="text/javascript">
+   function doc_load() {
+	document.getElementById("toolbar").style.height="68px";
+	var t=document.getElementById("toolbar").contentWindow.document.getElementsByTagName("TABLE")[0];
+	if (t.offsetWidth > document.documentElement.clientWidth) document.getElementById("toolbar").style.height = "80px";
+	document.documentElement.style.overflow = "hidden";
+	document.getElementById("bottom").style.height = document.documentElement.clientHeight - (document.getElementById("toolbar").offsetHeight ) -10+ "px";
+}
+window.onresize=function(){doc_load();}
+  </script>
+ </head>
+ <body onload="doc_load()" style="margin:0;overflow:hidden;">
+  <form action="main.asp" method="post" name="form1" style="display:none;">
+   <input name="goToDate" type="hidden"/>
+   <input name="filter" type="hidden"/>
+   <input name="projectFilter" type="hidden"/>
+   <input name="scrollTp" type="hidden"/>
+  </form>
+  <iframe frameborder="0" id="toolbar" src="Toolbar.asp" style="height:60px;width:100%;overflow:auto;">
+  </iframe>
+  <div style="max-height:90%;max-width:100%;-webkit-overflow-scrolling: touch;overflow:auto;">
+   <iframe frameborder="0" id="bottom" name="bottom" src="calendar.asp" style="height:90%;width:100%;">
+   </iframe>
+  </div>
+ </body>
+</html>
